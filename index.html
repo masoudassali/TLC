@@ -54,17 +54,17 @@
             text-align: center;
             margin-top: 0; 
             margin-bottom: 5px;
-            font-weight: 700; /* Bold Amatic SC */
-            font-size: 3.5em; /* Larger size for impact */
+            font-weight: 700; 
+            font-size: 3.5em; 
             padding-right: 100px; 
         }
 
         .subtitle {
-            text-align: center;
             color: #795548;
+            text-align: center;
             margin-bottom: 25px;
             font-style: normal;
-            font-size: 2em; /* Readable size */
+            font-size: 2em; 
         }
 
         /* Preset Options Styling */
@@ -120,7 +120,7 @@
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 1.5em; /* Match Amatic SC scale */
+            font-size: 1.5em; 
             resize: vertical;
             min-height: 100px;
             box-sizing: border-box;
@@ -149,7 +149,7 @@
             background-color: #E64A19;
         }
 
-        /* Image Display Area (no change) */
+        /* Image Display Area */
         .image-display {
             border: 2px dashed #BDBDBD; 
             border-radius: 8px;
@@ -240,17 +240,19 @@
         const submitButton = form.querySelector('button');
         const presetsContainer = document.getElementById('presetsContainer');
 
-        // Function to render the presets dynamically
+        // Function to render the presets dynamically using RADIO BUTTONS
         function renderPresets() {
             let html = '';
             for (const category in PRESET_CATEGORIES) {
+                // Use the category name as the radio group 'name' to ensure mutual exclusion
+                const radioGroupName = category.replace(/\s/g, ''); 
+
                 html += `<div class="preset-category"><h4>${category}</h4>`;
                 PRESET_CATEGORIES[category].forEach(option => {
-                    // Use radio buttons here to ensure only one style/subject is selected from each category,
-                    // but we will use checkboxes to allow mixing of themes.
+                    // CRITICAL CHANGE: Use type="radio" and name=radioGroupName
                     html += `
                         <label>
-                            <input type="checkbox" name="preset_option" value="${option}">
+                            <input type="radio" name="${radioGroupName}" value="${option}">
                             ${option}
                         </label>
                     `;
@@ -259,16 +261,17 @@
             }
             presetsContainer.innerHTML = html;
 
-            // Attach event listener to all checkboxes
-            document.querySelectorAll('input[name="preset_option"]').forEach(checkbox => {
-                checkbox.addEventListener('change', updatePromptBox);
+            // Attach event listener to all radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', updatePromptBox);
             });
         }
 
-        // Function to update the prompt box based on selected checkboxes
+        // Function to update the prompt box based on selected radio buttons
         function updatePromptBox() {
-            const selectedOptions = Array.from(document.querySelectorAll('input[name="preset_option"]:checked'))
-                                         .map(cb => cb.value);
+            // Get the value of the single selected radio button from EACH group
+            const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
+                                         .map(radio => radio.value);
             
             // Format the combined prompt
             const newPrompt = selectedOptions.join(', ');
