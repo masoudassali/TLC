@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lined Canvas - AI Outline Generator</title>
+    <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
     <style>
         /* General Styling */
         body {
@@ -23,29 +23,29 @@
             background-color: #fff;
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            /* FLAT DESIGN CHANGE: Removed box-shadow */
+            /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */ 
             max-width: 900px;
             width: 100%;
             display: flex;
             flex-direction: column;
             gap: 30px;
-            /* CRITICAL CHANGE 1: Establish positioning context for absolute logo */
             position: relative; 
         }
 
         /* Logo Styling */
         .logo-container {
-            /* CRITICAL CHANGE 2: Position the logo absolutely at the top right */
             position: absolute; 
-            top: 20px; /* Distance from the top edge of the generator-container padding */
-            right: 20px; /* Distance from the right edge of the generator-container padding */
-            z-index: 10; /* Ensure the logo is always on top */
+            top: 20px; 
+            right: 20px; 
+            z-index: 10; 
         }
 
         .logo-container img {
-            width: 80px; /* Reduced size slightly to fit neatly in the corner */
+            width: 80px; 
             height: auto;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+            /* FLAT DESIGN CHANGE: Removed filter/shadow */
+            filter: none; 
         }
 
         /* Header Styling */
@@ -54,8 +54,8 @@
             text-align: center;
             margin-top: 0; 
             margin-bottom: 5px;
-            font-weight: 300;
-            /* Optional: Add padding to ensure H1 content doesn't sit under the logo */
+            /* UPDATED FONT WEIGHT for a slightly bolder flat title */
+            font-weight: 500; 
             padding-right: 100px; 
         }
 
@@ -64,9 +64,11 @@
             color: #795548;
             margin-bottom: 25px;
             font-style: italic;
+            /* UPDATED FONT STYLE: Subtitles often look cleaner without italics in flat design */
+            font-style: normal;
         }
 
-        /* Form and Input Styling (rest of CSS remains the same) */
+        /* Form and Input Styling (cleaned up for flat look) */
         .prompt-form {
             display: flex;
             flex-direction: column;
@@ -86,9 +88,10 @@
         }
 
         textarea:focus {
-            border-color: #FF7043; /* Bright orange-red for focus */
+            /* Kept focus shadow for usability, but can be removed for pure flatness */
+            border-color: #FF7043; 
             outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 112, 67, 0.2);
+            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5); /* Thinner focus glow */
         }
 
         button {
@@ -100,20 +103,17 @@
             cursor: pointer;
             font-size: 18px;
             font-weight: bold;
-            transition: background-color 0.3s, transform 0.1s;
+            /* Removed active transformation for flatness */
+            transition: background-color 0.3s;
         }
 
         button:hover {
             background-color: #E64A19;
         }
 
-        button:active {
-            transform: translateY(1px);
-        }
-
         /* Image Display Area */
         .image-display {
-            border: 2px dashed #BDBDBD; /* Light grey dashed border */
+            border: 2px dashed #BDBDBD; 
             border-radius: 8px;
             min-height: 350px;
             display: flex;
@@ -134,7 +134,7 @@
             max-width: 100%;
             max-height: 350px;
             border-radius: 6px;
-            display: none; /* Hidden by default, show with JavaScript */
+            display: none; 
         }
     </style>
 </head>
@@ -145,8 +145,8 @@
             <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo"> 
         </div>
         
-        <h1>Generate Your Canvas Outline</h1>
-        <p class="subtitle">Describe the image you want to paint, and our AI will create a complex outline for you.</p>
+        <h1>The Lined Canvas</h1>
+        <p class="subtitle">Generate the outline for your next masterpiece, and we'll ship it to your door.</p>
 
         <form class="prompt-form" id="imageGenerationForm">
             <label for="prompt">What complex design do you want an outline of?</label>
