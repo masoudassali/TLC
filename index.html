@@ -142,7 +142,8 @@
 
     <script>
         // *** JAVASCRIPT FOR FORM SUBMISSION ***
-        // You will need to replace the 'YOUR_N8N_WEBHOOK_URL' with your actual n8n webhook URL.
+        // 🚨 UPDATED: Your n8n webhook URL is now set here.
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/74161287-0f76-4b39-b5b6-66393e16ca91';
         const form = document.getElementById('imageGenerationForm');
         const promptTextarea = document.getElementById('prompt');
         const placeholderText = document.getElementById('placeholderText');
@@ -164,11 +165,12 @@
 
             try {
                 // 2. Send prompt to n8n webhook
-                const response = await fetch('YOUR_N8N_WEBHOOK_URL', {
+                const response = await fetch(N8N_WEBHOOK_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    // Send the prompt as a JSON object
                     body: JSON.stringify({ prompt: prompt }),
                 });
 
@@ -176,10 +178,11 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                // Assuming n8n returns a JSON object with the image URL/data
+                // 3. Assuming n8n returns a JSON object with the image URL/data
+                // Your n8n workflow must return a JSON response like: { "imageUrl": "..." }
                 const result = await response.json();
                 
-                // 3. Update UI with the result (Placeholder: assuming 'result.imageUrl' holds the image link)
+                // 4. Update UI with the result
                 if (result && result.imageUrl) {
                     generatedImage.src = result.imageUrl;
                     generatedImage.alt = prompt;
@@ -192,14 +195,15 @@
                         generatedImage.style.display = 'none';
                     };
                 } else {
-                    placeholderText.textContent = 'Generation failed. No image URL received.';
+                    // Handle case where n8n responds successfully but without the expected URL
+                    placeholderText.textContent = 'Generation completed, but no image URL was received from the workflow. Check your n8n setup.';
                 }
 
             } catch (error) {
                 console.error('Generation Error:', error);
-                placeholderText.textContent = 'An error occurred during generation. Please check the console.';
+                placeholderText.textContent = `An error occurred: ${error.message}. Please check the console and n8n workflow.`;
             } finally {
-                // 4. Reset button state
+                // 5. Reset button state
                 submitButton.textContent = 'Generate Outline';
                 submitButton.disabled = false;
             }
