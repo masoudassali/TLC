@@ -130,7 +130,7 @@
             font-size: 1.5em;
             font-weight: 700;
             transition: opacity 0.3s ease-in-out;
-            opacity: 0; /* Hidden by default */
+            opacity: 0; 
         }
 
         .status-bar.visible {
@@ -231,11 +231,11 @@
                 <h4>Busyness Gauge</h4>
                 <label>
                     <input type="radio" name="busyness" value="large, open geometric tiles" checked>
-                    Minimally Busy
+                    Minimally Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
                 </label>
                 <label>
                     <input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles">
-                    Super Busy
+                    Super Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Smaller, many tiles)</span>
                 </label>
             </div>
             
@@ -263,25 +263,57 @@
     </div>
 
     <script>
-        // *** PRESET DATA ***
+        // *** PRESET DATA UPDATED WITH AI DESCRIPTIONS (VALUE) AND DISPLAY NAMES ***
         const PRESET_CATEGORIES = {
-            // Art Style on top, uses 'ArtStyle' as its radio group name
             "Art Style": [
-                "Realism", "Impressionism", "Abstract Art", "Surrealism", "Pop Art"
+                { display: "Realism", value: "highly detailed, realistic shading, accurate form" },
+                { display: "Impressionism", value: "broad, visible brushstrokes, light and color focused, loose forms" },
+                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, pure color focus" },
+                { display: "Surrealism", value: "dreamlike, illogical juxtaposition, unexpected elements" },
+                { display: "Pop Art", value: "bold, graphic, thick black outlines, primary colors, commercial imagery" }
             ],
-            // Cities, Animals, Landscapes grouped under 'Category', all share 'Category' as the radio group name
             "Category": {
                 "Cities": [
-                    "New York City", "San Francisco", "Rio de Janeiro", "Istanbul", "Hong Kong", "Mecca", 
-                    "Dubai", "Macau", "Tehran", "London", "Paris", "Kuala Lumpur", "Bangkok", "Sydney", "Tokyo"
+                    { display: "New York City", value: "a complex cityscape with famous landmarks, towering skyscrapers, detailed traffic" },
+                    { display: "San Francisco", value: "a dense, hilly city with Victorian houses and the Golden Gate Bridge" },
+                    { display: "Rio de Janeiro", value: "lush mountains, beaches, and the Christ the Redeemer statue" },
+                    { display: "Istanbul", value: "historic mosques and markets, complex patterns, bustling waterfront" },
+                    { display: "Hong Kong", value: "vertical dense architecture, harbor view, illuminated city grid" },
+                    { display: "Mecca", value: "highly detailed Islamic architecture, complex geometric patterns, focus on the Kaaba" },
+                    { display: "Dubai", value: "futuristic architecture, tall glass buildings, sharp geometric design" },
+                    { display: "Macau", value: "blend of Portuguese and modern Chinese architecture, casino lights, detailed paving" },
+                    { display: "Tehran", value: "dense urban sprawl, distant mountains, intricate Persian tile work" },
+                    { display: "London", value: "historic architecture, Big Ben, red phone booths, detailed brickwork" },
+                    { display: "Paris", value: "Eiffel Tower, ornate Haussmann buildings, Seine River view, detailed ironwork" },
+                    { display: "Kuala Lumpur", value: "Petronas Twin Towers, lush tropical setting, detailed city foliage" },
+                    { display: "Bangkok", value: "detailed temples, winding canals, busy street scenes, complex rooftop lines" },
+                    { display: "Sydney", value: "Sydney Opera House, harbor views, intricate yacht rigging" },
+                    { display: "Tokyo", value: "neon signs, dense pedestrian streets, futuristic buildings, busy intersections" }
                 ],
                 "Animals": [
-                    "Bunny", "Fox", "Panda", "Quokka", "Hedgehog", "Penguin", "Sloth", "Seal", "Puppy", "Kitten"
+                    { display: "Bunny", value: "a cute bunny in a whimsical field, intricate fur and whisker detail" },
+                    { display: "Fox", value: "a clever fox in a forest, detailed brush and branch work" },
+                    { display: "Panda", value: "a large panda eating bamboo, detailed leaf and fur texture" },
+                    { display: "Quokka", value: "a smiling quokka, detailed island foliage" },
+                    { display: "Hedgehog", value: "a tiny hedgehog, complex spine patterns, detailed ground cover" },
+                    { display: "Penguin", value: "a penguin on ice, crisp black and white contrast, detailed snow texture" },
+                    { display: "Sloth", value: "a slow sloth hanging from a branch, detailed vine and bark texture" },
+                    { display: "Seal", value: "a sleek seal basking on rocks, wet skin texture, detailed water reflections" },
+                    { display: "Puppy", value: "a playful puppy, soft fur texture, detailed toy lines" },
+                    { display: "Kitten", value: "a curious kitten, detailed fur and playful pose lines" }
                 ],
                 "Landscapes": [
-                    "The Swiss Alps", "The Rocky Mountains", "The Grand Canyon", "Mount Rushmore", "Zhangye Danxia Geopark", 
-                    "The Norwegian Fjords", "The Grand Canal of Venice", "The Redwood Forests", "The Japanese Cherry Blossoms", 
-                    "The Serengeti", "The Sahara Desert"
+                    { display: "The Swiss Alps", value: "sweeping mountain landscape, jagged peaks, small chalets, detailed snow texture" },
+                    { display: "The Rocky Mountains", value: "rugged peaks, dense pine forests, detailed rock formations" },
+                    { display: "The Grand Canyon", value: "vast, layered rock formations, deep shadows, dry texture" },
+                    { display: "Mount Rushmore", value: "detailed presidential faces carved into rock, precise light and shadow" },
+                    { display: "Zhangye Danxia Geopark", value: "colorful, striped rock mountains, sweeping geological layers" },
+                    { display: "The Norwegian Fjords", value: "sheer cliffs, calm dark water, small fishing villages, detailed reflections" },
+                    { display: "The Grand Canal of Venice", value: "historic buildings, detailed boat lines, water reflections, complex shadows" },
+                    { display: "The Redwood Forests", value: "towering trees, sunbeams filtering through, detailed bark and canopy" },
+                    { display: "The Japanese Cherry Blossoms", value: "delicate floral patterns, sweeping tree branches, soft, scattered petals" },
+                    { display: "The Serengeti", value: "wide open savanna, scattered acacia trees, detailed grasses and animal silhouettes" },
+                    { display: "The Sahara Desert", value: "rolling sand dunes, extreme shadows, sparse dry plants, detailed sand patterns" }
                 ]
             }
         };
@@ -297,15 +329,15 @@
         const statusBar = document.getElementById('statusBar');
         const statusMessage = document.getElementById('statusMessage');
 
-        // Status Bar Steps
+        // Status Bar Steps (UPDATED)
         const STATUS_STEPS = [
-            "Sending prompt to n8n Webhook...",
-            "n8n received prompt. Now enforcing style constraints...",
-            "Sending final prompt to AI Image Model...",
-            "AI is generating the complex line art (This may take 5-15 seconds)...",
-            "Converting and preparing binary PNG file...",
-            "Sending image data back to your browser...",
-            "Image received and loading..."
+            "5% - Sending your descriptions to our magician, Tony ...",
+            "18% - Tony received your descriptions. Now figuring out the style...",
+            "22% - Tony is adding the final touches...",
+            "41% - This may take 5-15 seconds...",
+            "67% - Converting everything into a PNG file...",
+            "93% - Sending image data back to your browser...",
+            "100% - Serving up your order now..."
         ];
 
         // Status Bar Control
@@ -323,12 +355,12 @@
             const cycleStatus = () => {
                 statusMessage.innerHTML = STATUS_STEPS[stepIndex];
                 stepIndex = (stepIndex + 1) % STATUS_STEPS.length;
-                // Freeze on the main generation step for longer
+                // Freeze on the main generation step (41%) for longer
                 if (stepIndex === 4) stepIndex = 3; 
             };
 
             cycleStatus();
-            statusInterval = setInterval(cycleStatus, 3000); // Cycle every 3 seconds
+            statusInterval = setInterval(cycleStatus, 3000); 
         }
 
         // Function to render the presets dynamically using RADIO BUTTONS
@@ -337,34 +369,32 @@
             
             for (const categoryName in PRESET_CATEGORIES) {
                 const categoryData = PRESET_CATEGORIES[categoryName];
-                
+                const radioGroupName = categoryName.replace(/\s/g, ''); 
+
                 html += `<div class="preset-category"><h4>${categoryName}</h4>`;
                 
                 if (Array.isArray(categoryData)) {
-                    // Handles simple array (Art Style)
-                    const radioGroupName = categoryName.replace(/\s/g, ''); 
-                    categoryData.forEach(option => {
+                    // Simple array (Art Style)
+                    categoryData.forEach(item => {
                         html += `
                             <label>
-                                <input type="radio" name="${radioGroupName}" value="${option}">
-                                ${option}
+                                <input type="radio" name="${radioGroupName}" value="${item.value}">
+                                ${item.display} <span style="font-size: 0.9em; color: #9E9E9E;">(${item.display} art style)</span>
                             </label>
                         `;
                     });
                 } else if (typeof categoryData === 'object') {
-                    // Handles nested object (Category: Cities, Animals, Landscapes)
-                    const radioGroupName = categoryName.replace(/\s/g, ''); 
-                    
+                    // Nested object (Category: Cities, Animals, Landscapes)
                     for (const subCategoryName in categoryData) {
                         html += `
                             <p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${subCategoryName}:</p>
                         `;
-                        categoryData[subCategoryName].forEach(option => {
+                        categoryData[subCategoryName].forEach(item => {
                             // All sub-options share the same 'Category' radio group name
                             html += `
                                 <label>
-                                    <input type="radio" name="${radioGroupName}" value="${option}">
-                                    ${option}
+                                    <input type="radio" name="${radioGroupName}" value="${item.value}">
+                                    ${item.display} <span style="font-size: 0.9em; color: #9E9E9E;">(${item.value})</span>
                                 </label>
                             `;
                         });
@@ -383,7 +413,7 @@
 
         // Function to update the prompt box based on selected radio buttons
         function updatePromptBox() {
-            // Get the value of the single selected radio button from EACH group: ArtStyle, Category, Busyness
+            // Collects the 'value' of all checked radio buttons (which are the new descriptive strings)
             const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
                                          .map(radio => radio.value);
             
@@ -393,7 +423,7 @@
         
         // Initial setup
         renderPresets();
-        // Set default busyness state in the prompt box on load
+        // Ensure default busyness state is set in the prompt box on load
         document.querySelector('input[name="busyness"][value="large, open geometric tiles"]').checked = true;
         updatePromptBox(); 
 
