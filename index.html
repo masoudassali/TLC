@@ -227,7 +227,6 @@
             display: block;
             width: 100px;
             text-align: center;
-            /* Use a span to avoid applying button style to the link */
         }
         .more-button:hover {
             background: #eee;
@@ -253,7 +252,7 @@
             <div class="busyness-gauge">
                 <h4>Busyness Gauge</h4>
                 <label>
-                    <input type="radio" name="busyness" value="large, open geometric tiles" checked>
+                    <input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" checked>
                     Minimally Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
                 </label>
                 <label>
@@ -286,7 +285,7 @@
     </div>
 
     <script>
-        // *** PRESET DATA: Realism has been removed from Art Style ***
+        // *** PRESET DATA ***
         const PRESET_CATEGORIES = {
             "Art Style": [
                 { display: "Impressionism", value: "broad, visible brushstrokes, light and color focused, loose forms" },
@@ -304,7 +303,7 @@
                     { display: "Mecca", value: "highly detailed Islamic architecture, complex geometric patterns, focus on the Kaaba" },
                     { display: "Dubai", value: "futuristic architecture, tall glass buildings, sharp geometric design" },
                     { display: "Macau", value: "blend of Portuguese and modern Chinese architecture, casino lights, detailed paving" },
-                    { display: "Tehran", value: "dense urban sprawl, distant mountains, intricate Persian tile work" }, // City 9 (index 8). Last visible before "more"
+                    { display: "Tehran", value: "dense urban sprawl, distant mountains, intricate Persian tile work" }, // City 9 (index 8). Last visible city.
                     { display: "London", value: "historic architecture, Big Ben, red phone booths, detailed brickwork" },
                     { display: "Paris", value: "Eiffel Tower, ornate Haussmann buildings, Seine River view, detailed ironwork" },
                     { display: "Kuala Lumpur", value: "Petronas Twin Towers, lush tropical setting, detailed city foliage" },
@@ -397,7 +396,7 @@
                 html += `<div class="preset-category"><h4>${categoryName}</h4>`;
                 
                 if (Array.isArray(categoryData)) {
-                    // Simple array (Art Style)
+                    // Simple array (Art Style) - ALWAYS VISIBLE
                     categoryData.forEach(item => {
                         html += `
                             <label>
@@ -406,47 +405,50 @@
                             </label>
                         `;
                     });
-                } else if (typeof categoryData === 'object') {
-                    // Nested object (Category: Cities, Animals, Landscapes)
+                } else if (typeof categoryData === 'object' && categoryName === 'Category') {
+                    // Complex object (Category: Cities, Animals, Landscapes)
+
+                    let visibleHtml = '';
+                    let hiddenHtml = '';
+                    
                     for (const subCategoryName in categoryData) {
-                        html += `
-                            <p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${subCategoryName}:</p>
-                        `;
-                        
                         const items = categoryData[subCategoryName];
-
-                        // Special logic for Cities to hide options
-                        if (subCategoryName === 'Cities' && items.length > CITIES_VISIBLE_COUNT) {
-                            
-                            // 1. Render the first N visible items
-                            for (let i = 0; i < CITIES_VISIBLE_COUNT; i++) {
-                                html += `
-                                    <label>
-                                        <input type="radio" name="${radioGroupName}" value="${items[i].value}">
-                                        ${items[i].display}
-                                    </label>
-                                `;
-                            }
-
-                            // 2. Add the 'more' button
-                            html += `<a href="#" class="more-button" id="moreCitiesButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCitiesContainer');">more...</a>`;
-
-                            // 3. Start the hidden container and render the remaining items
-                            html += `<div id="hiddenCitiesContainer" class="hidden-preset">`;
-                            for (let i = CITIES_VISIBLE_COUNT; i < items.length; i++) {
-                                html += `
-                                    <label>
-                                        <input type="radio" name="${radioGroupName}" value="${items[i].value}">
-                                        ${items[i].display}
-                                    </label>
-                                `;
-                            }
-                            html += `</div>`;
                         
+                        // Start of the subcategory section heading
+                        let sectionHtml = `<p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${subCategoryName}:</p>`;
+
+                        if (subCategoryName === 'Cities') {
+                            
+                            // Visible Cities (first 9)
+                            visibleHtml += sectionHtml; // Add the Cities heading to the visible block
+                            for (let i = 0; i < CITIES_VISIBLE_COUNT; i++) {
+                                visibleHtml += `
+                                    <label>
+                                        <input type="radio" name="${radioGroupName}" value="${items[i].value}">
+                                        ${items[i].display}
+                                    </label>
+                                `;
+                            }
+                            
+                            // Hidden Cities (remaining) - Go into the main hidden container
+                            if (items.length > CITIES_VISIBLE_COUNT) {
+                                hiddenHtml += sectionHtml; // Add the Cities heading again to the hidden block
+                                for (let i = CITIES_VISIBLE_COUNT; i < items.length; i++) {
+                                    hiddenHtml += `
+                                        <label>
+                                            <input type="radio" name="${radioGroupName}" value="${items[i].value}">
+                                            ${items[i].display}
+                                        </label>
+                                    `;
+                                }
+                            }
+
                         } else {
-                            // Render all items for other categories
+                            // Animals and Landscapes: ENTIRELY HIDDEN
+                            hiddenHtml += sectionHtml; // Add the heading to the hidden block
+
                             items.forEach(item => {
-                                html += `
+                                hiddenHtml += `
                                     <label>
                                         <input type="radio" name="${radioGroupName}" value="${item.value}">
                                         ${item.display}
@@ -455,6 +457,13 @@
                             });
                         }
                     }
+
+                    // Assemble the final Category HTML: Visible Content + Toggle + Hidden Content
+                    html += visibleHtml;
+                    html += `<a href="#" class="more-button" id="moreCategoryButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCategoryContainer', 'moreCategoryButton');">more...</a>`;
+                    html += `<div id="hiddenCategoryContainer" class="hidden-preset">`;
+                    html += hiddenHtml;
+                    html += `</div>`;
                 }
                 
                 html += `</div>`;
@@ -467,10 +476,10 @@
             });
         }
         
-        // New function to toggle hidden presets
-        function toggleHiddenPresets(containerId) {
+        // New function to toggle hidden presets, accepting button ID
+        function toggleHiddenPresets(containerId, buttonId) {
             const container = document.getElementById(containerId);
-            const button = document.getElementById('moreCitiesButton');
+            const button = document.getElementById(buttonId);
 
             if (container.classList.contains('hidden-preset')) {
                 container.classList.remove('hidden-preset');
@@ -494,7 +503,7 @@
         // Initial setup
         renderPresets();
         // Ensure default busyness state is set in the prompt box on load
-        document.querySelector('input[name="busyness"][value="large, open geometric tiles"]').checked = true;
+        document.querySelector('input[name="busyness"][value="simple, minimal geometric tiles, low density"]').checked = true;
         updatePromptBox(); 
 
 
