@@ -209,6 +209,29 @@
             border-radius: 6px;
             display: none; 
         }
+        
+        /* New Styles for 'More' Functionality */
+        .hidden-preset {
+            display: none;
+        }
+
+        .more-button {
+            background: #f8f8f8;
+            border: 1px solid #ccc;
+            color: #FF7043;
+            font-size: 1.1em;
+            padding: 5px 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            display: block;
+            width: 100px;
+            text-align: center;
+            /* Use a span to avoid applying button style to the link */
+        }
+        .more-button:hover {
+            background: #eee;
+        }
     </style>
 </head>
 <body>
@@ -230,7 +253,7 @@
             <div class="busyness-gauge">
                 <h4>Busyness Gauge</h4>
                 <label>
-                    <input type="radio" name="busyness" value="extremely low detail, simple lines, approximately 70% fewer lines, large open areas" checked>
+                    <input type="radio" name="busyness" value="large, open geometric tiles" checked>
                     Minimally Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
                 </label>
                 <label>
@@ -281,7 +304,7 @@
                     { display: "Mecca", value: "highly detailed Islamic architecture, complex geometric patterns, focus on the Kaaba" },
                     { display: "Dubai", value: "futuristic architecture, tall glass buildings, sharp geometric design" },
                     { display: "Macau", value: "blend of Portuguese and modern Chinese architecture, casino lights, detailed paving" },
-                    { display: "Tehran", value: "dense urban sprawl, distant mountains, intricate Persian tile work" },
+                    { display: "Tehran", value: "dense urban sprawl, distant mountains, intricate Persian tile work" }, // City 9 (index 8). Last visible before "more"
                     { display: "London", value: "historic architecture, Big Ben, red phone booths, detailed brickwork" },
                     { display: "Paris", value: "Eiffel Tower, ornate Haussmann buildings, Seine River view, detailed ironwork" },
                     { display: "Kuala Lumpur", value: "Petronas Twin Towers, lush tropical setting, detailed city foliage" },
@@ -365,6 +388,7 @@
         // Function to render the presets dynamically using RADIO BUTTONS (Only showing display names)
         function renderPresets() {
             let html = '';
+            const CITIES_VISIBLE_COUNT = 9; // Number of cities to show before the "more..." button
             
             for (const categoryName in PRESET_CATEGORIES) {
                 const categoryData = PRESET_CATEGORIES[categoryName];
@@ -388,15 +412,48 @@
                         html += `
                             <p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${subCategoryName}:</p>
                         `;
-                        categoryData[subCategoryName].forEach(item => {
-                            // All sub-options share the same 'Category' radio group name
-                            html += `
-                                <label>
-                                    <input type="radio" name="${radioGroupName}" value="${item.value}">
-                                    ${item.display}
-                                </label>
-                            `;
-                        });
+                        
+                        const items = categoryData[subCategoryName];
+
+                        // Special logic for Cities to hide options
+                        if (subCategoryName === 'Cities' && items.length > CITIES_VISIBLE_COUNT) {
+                            
+                            // 1. Render the first N visible items
+                            for (let i = 0; i < CITIES_VISIBLE_COUNT; i++) {
+                                html += `
+                                    <label>
+                                        <input type="radio" name="${radioGroupName}" value="${items[i].value}">
+                                        ${items[i].display}
+                                    </label>
+                                `;
+                            }
+
+                            // 2. Add the 'more' button
+                            html += `<a href="#" class="more-button" id="moreCitiesButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCitiesContainer');">more...</a>`;
+
+                            // 3. Start the hidden container and render the remaining items
+                            html += `<div id="hiddenCitiesContainer" class="hidden-preset">`;
+                            for (let i = CITIES_VISIBLE_COUNT; i < items.length; i++) {
+                                html += `
+                                    <label>
+                                        <input type="radio" name="${radioGroupName}" value="${items[i].value}">
+                                        ${items[i].display}
+                                    </label>
+                                `;
+                            }
+                            html += `</div>`;
+                        
+                        } else {
+                            // Render all items for other categories
+                            items.forEach(item => {
+                                html += `
+                                    <label>
+                                        <input type="radio" name="${radioGroupName}" value="${item.value}">
+                                        ${item.display}
+                                    </label>
+                                `;
+                            });
+                        }
                     }
                 }
                 
@@ -408,6 +465,20 @@
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.addEventListener('change', updatePromptBox);
             });
+        }
+        
+        // New function to toggle hidden presets
+        function toggleHiddenPresets(containerId) {
+            const container = document.getElementById(containerId);
+            const button = document.getElementById('moreCitiesButton');
+
+            if (container.classList.contains('hidden-preset')) {
+                container.classList.remove('hidden-preset');
+                button.textContent = 'less...';
+            } else {
+                container.classList.add('hidden-preset');
+                button.textContent = 'more...';
+            }
         }
 
         // Function to update the prompt box based on selected radio buttons
@@ -423,7 +494,7 @@
         // Initial setup
         renderPresets();
         // Ensure default busyness state is set in the prompt box on load
-        document.querySelector('input[name="busyness"][value="extremely low detail, simple lines, approximately 70% fewer lines, large open areas"]').checked = true;
+        document.querySelector('input[name="busyness"][value="large, open geometric tiles"]').checked = true;
         updatePromptBox(); 
 
 
