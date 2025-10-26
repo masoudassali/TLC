@@ -1,13 +1,27 @@
+This is a substantial set of updates\! Changing the font to **Amatic SC** and implementing the **preset checkboxes** requires updates across the CSS, HTML structure, and JavaScript functionality.
+
+Here is the complete, updated HTML file reflecting all your changes:
+
+-----
+
+## Updated HTML with Amatic SC Font and Presets
+
+The code below imports the Amatic SC font, updates the text, and introduces a new preset options section with JavaScript logic to populate the prompt box.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    
     <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
     <style>
         /* General Styling */
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            /* FONT CHANGE: Apply Amatic SC to the entire body */
+            font-family: 'Amatic SC', cursive;
             background-color: #f4f7f6;
             color: #333;
             margin: 0;
@@ -23,8 +37,6 @@
             background-color: #fff;
             padding: 40px;
             border-radius: 12px;
-            /* FLAT DESIGN CHANGE: Removed box-shadow */
-            /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */ 
             max-width: 900px;
             width: 100%;
             display: flex;
@@ -44,18 +56,17 @@
         .logo-container img {
             width: 80px; 
             height: auto;
-            /* FLAT DESIGN CHANGE: Removed filter/shadow */
             filter: none; 
         }
 
         /* Header Styling */
         h1 {
-            color: #5D4037; /* Earthy brown */
+            color: #5D4037; 
             text-align: center;
             margin-top: 0; 
             margin-bottom: 5px;
-            /* UPDATED FONT WEIGHT for a slightly bolder flat title */
-            font-weight: 500; 
+            font-weight: 700; /* Bold Amatic SC */
+            font-size: 3.5em; /* Larger size for impact */
             padding-right: 100px; 
         }
 
@@ -63,24 +74,64 @@
             text-align: center;
             color: #795548;
             margin-bottom: 25px;
-            font-style: italic;
-            /* UPDATED FONT STYLE: Subtitles often look cleaner without italics in flat design */
             font-style: normal;
+            font-size: 2em; /* Readable size */
         }
 
-        /* Form and Input Styling (cleaned up for flat look) */
+        /* Preset Options Styling */
+        .preset-options {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        .preset-options h3 {
+            font-size: 2em;
+            color: #FF7043;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .preset-category {
+            margin-bottom: 15px;
+        }
+
+        .preset-category h4 {
+            font-size: 1.5em;
+            color: #5D4037;
+            margin: 5px 0;
+            text-decoration: underline;
+        }
+
+        .preset-category label {
+            display: inline-block;
+            margin-right: 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+            line-height: 1.5;
+        }
+
+        /* Form and Input Styling */
         .prompt-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
+        .prompt-example {
+            font-size: 1.2em;
+            color: #795548;
+            margin-bottom: 5px;
+        }
+        
         textarea {
             width: 100%;
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 1.5em; /* Match Amatic SC scale */
             resize: vertical;
             min-height: 100px;
             box-sizing: border-box;
@@ -88,10 +139,9 @@
         }
 
         textarea:focus {
-            /* Kept focus shadow for usability, but can be removed for pure flatness */
             border-color: #FF7043; 
             outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5); /* Thinner focus glow */
+            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5); 
         }
 
         button {
@@ -101,9 +151,8 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 1.8em;
             font-weight: bold;
-            /* Removed active transformation for flatness */
             transition: background-color 0.3s;
         }
 
@@ -111,7 +160,7 @@
             background-color: #E64A19;
         }
 
-        /* Image Display Area */
+        /* Image Display Area (no change) */
         .image-display {
             border: 2px dashed #BDBDBD; 
             border-radius: 8px;
@@ -127,7 +176,7 @@
         .image-placeholder {
             color: #9E9E9E;
             font-style: italic;
-            font-size: 18px;
+            font-size: 1.5em;
         }
 
         .generated-image {
@@ -148,9 +197,18 @@
         <h1>The Lined Canvas</h1>
         <p class="subtitle">Generate the outline for your next masterpiece, and we'll ship it to your door.</p>
 
+        <div class="preset-options">
+            <h3>Choose a Category or Style!</h3>
+            
+            <div id="presetsContainer">
+                </div>
+            
+            <p class="prompt-example">Example: *A whimsical cat reading a book in a cozy, sunlit cafe with a steaming mug.*</p>
+        </div>
+
         <form class="prompt-form" id="imageGenerationForm">
-            <label for="prompt">What complex design do you want an outline of?</label>
-            <textarea id="prompt" name="prompt" placeholder="E.g., A whimsical cat reading a book in a cozy, sunlit cafe with a steaming mug." required></textarea>
+            <label for="prompt" style="font-size: 1.5em;">Choose from the options or add your own descriptions here:</label>
+            <textarea id="prompt" name="prompt" placeholder="Start typing your description..." required></textarea>
             <button type="submit">Generate Outline</button>
         </form>
 
@@ -165,15 +223,74 @@
     </div>
 
     <script>
-        // *** JAVASCRIPT FOR FORM SUBMISSION ***
-        // 🚨 IMPORTANT: Ensure this URL is correct for your active n8n webhook
+        // *** PRESET DATA ***
+        const PRESET_CATEGORIES = {
+            "Cities": [
+                "New York City", "San Francisco", "Rio de Janeiro", "Istanbul", "Hong Kong", "Mecca", 
+                "Dubai", "Macau", "Tehran", "London", "Paris", "Kuala Lumpur", "Bangkok", "Sydney", "Tokyo"
+            ],
+            "Animals": [
+                "Bunny", "Fox", "Panda", "Quokka", "Hedgehog", "Penguin", "Sloth", "Seal", "Puppy", "Kitten"
+            ],
+            "Landscapes": [
+                "The Swiss Alps", "The Rocky Mountains", "The Grand Canyon", "Mount Rushmore", "Zhangye Danxia Geopark", 
+                "The Norwegian Fjords", "The Grand Canal of Venice", "The Redwood Forests", "The Japanese Cherry Blossoms", 
+                "The Serengeti", "The Sahara Desert"
+            ],
+            "Art Style": [
+                "Realism", "Impressionism", "Abstract Art", "Surrealism", "Pop Art"
+            ]
+        };
+        
+        // *** JAVASCRIPT FOR FORM SUBMISSION AND PRESETS ***
         const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/74161287-0f76-4b39-b5b6-66393e16ca91';
         const form = document.getElementById('imageGenerationForm');
         const promptTextarea = document.getElementById('prompt');
         const placeholderText = document.getElementById('placeholderText');
         const generatedImage = document.getElementById('generatedImage');
         const submitButton = form.querySelector('button');
+        const presetsContainer = document.getElementById('presetsContainer');
 
+        // Function to render the presets dynamically
+        function renderPresets() {
+            let html = '';
+            for (const category in PRESET_CATEGORIES) {
+                html += `<div class="preset-category"><h4>${category}</h4>`;
+                PRESET_CATEGORIES[category].forEach(option => {
+                    // Use radio buttons here to ensure only one style/subject is selected from each category,
+                    // but we will use checkboxes to allow mixing of themes.
+                    html += `
+                        <label>
+                            <input type="checkbox" name="preset_option" value="${option}">
+                            ${option}
+                        </label>
+                    `;
+                });
+                html += `</div>`;
+            }
+            presetsContainer.innerHTML = html;
+
+            // Attach event listener to all checkboxes
+            document.querySelectorAll('input[name="preset_option"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updatePromptBox);
+            });
+        }
+
+        // Function to update the prompt box based on selected checkboxes
+        function updatePromptBox() {
+            const selectedOptions = Array.from(document.querySelectorAll('input[name="preset_option"]:checked'))
+                                         .map(cb => cb.value);
+            
+            // Format the combined prompt
+            const newPrompt = selectedOptions.join(', ');
+            promptTextarea.value = newPrompt;
+        }
+        
+        // Initial render of presets
+        renderPresets();
+
+
+        // Form Submission Logic (Binary File Handling)
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -215,7 +332,6 @@
                     generatedImage.onload = () => {
                         placeholderText.style.display = 'none';
                         generatedImage.style.display = 'block';
-                        // Revoke the temporary URL after the image has loaded to free up memory
                         URL.revokeObjectURL(imageUrl); 
                     };
 
@@ -241,3 +357,4 @@
 
 </body>
 </html>
+```
