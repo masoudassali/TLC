@@ -9,6 +9,7 @@
     <style>
         /* General Styling */
         body {
+            /* FONT CHANGE: Apply Amatic SC to the entire body */
             font-family: 'Amatic SC', cursive;
             background-color: #f4f7f6;
             color: #333;
@@ -25,6 +26,7 @@
             background-color: #fff;
             padding: 40px;
             border-radius: 12px;
+            /* FLAT DESIGN: No box-shadow */
             max-width: 900px;
             width: 100%;
             display: flex;
@@ -35,6 +37,7 @@
 
         /* Logo Styling */
         .logo-container {
+            /* POSITIONING: Absolute top-right */
             position: absolute; 
             top: 20px; 
             right: 20px; 
@@ -44,6 +47,7 @@
         .logo-container img {
             width: 80px; 
             height: auto;
+            /* FLAT DESIGN: No filter/shadow */
             filter: none; 
         }
 
@@ -113,8 +117,24 @@
         
         .busyness-gauge h4 {
             margin: 0;
-            min-width: 100px; /* Ensure alignment */
+            min-width: 100px; 
             font-size: 1.5em;
+        }
+
+        /* Status Bar Styling */
+        .status-bar {
+            text-align: center;
+            min-height: 20px;
+            margin-top: -15px;
+            color: #FF7043; 
+            font-size: 1.5em;
+            font-weight: 700;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0; /* Hidden by default */
+        }
+
+        .status-bar.visible {
+            opacity: 1;
         }
 
         /* Form and Input Styling */
@@ -230,6 +250,10 @@
 
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
 
+        <div class="status-bar" id="statusBar">
+            <span id="statusMessage"></span>
+        </div>
+
         <h2>Your Generated Outline Preview</h2>
 
         <div class="image-display">
@@ -239,15 +263,14 @@
     </div>
 
     <script>
-        // *** PRESET DATA UPDATED FOR NEW STRUCTURE ***
+        // *** PRESET DATA ***
         const PRESET_CATEGORIES = {
-            // 1. Art Style on top
+            // Art Style on top, uses 'ArtStyle' as its radio group name
             "Art Style": [
                 "Realism", "Impressionism", "Abstract Art", "Surrealism", "Pop Art"
             ],
-            // 2. Cities, Animals, Landscapes grouped under one category
+            // Cities, Animals, Landscapes grouped under 'Category', all share 'Category' as the radio group name
             "Category": {
-                // Nested structure to display sub-options but enforce single selection across all
                 "Cities": [
                     "New York City", "San Francisco", "Rio de Janeiro", "Istanbul", "Hong Kong", "Mecca", 
                     "Dubai", "Macau", "Tehran", "London", "Paris", "Kuala Lumpur", "Bangkok", "Sydney", "Tokyo"
@@ -263,7 +286,7 @@
             }
         };
         
-        // *** JAVASCRIPT FOR FORM SUBMISSION AND PRESETS ***
+        // *** CORE DOM ELEMENTS ***
         const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/74161287-0f76-4b39-b5b6-66393e16ca91';
         const form = document.getElementById('imageGenerationForm');
         const promptTextarea = document.getElementById('prompt');
@@ -271,19 +294,54 @@
         const generatedImage = document.getElementById('generatedImage');
         const submitButton = form.querySelector('button');
         const presetsContainer = document.getElementById('presetsContainer');
+        const statusBar = document.getElementById('statusBar');
+        const statusMessage = document.getElementById('statusMessage');
+
+        // Status Bar Steps
+        const STATUS_STEPS = [
+            "Sending prompt to n8n Webhook...",
+            "n8n received prompt. Now enforcing style constraints...",
+            "Sending final prompt to AI Image Model...",
+            "AI is generating the complex line art (This may take 5-15 seconds)...",
+            "Converting and preparing binary PNG file...",
+            "Sending image data back to your browser...",
+            "Image received and loading..."
+        ];
+
+        // Status Bar Control
+        let statusInterval;
+        function updateStatus(start) {
+            if (!start) {
+                clearInterval(statusInterval);
+                statusBar.classList.remove('visible');
+                return;
+            }
+
+            let stepIndex = 0;
+            statusBar.classList.add('visible');
+            
+            const cycleStatus = () => {
+                statusMessage.innerHTML = STATUS_STEPS[stepIndex];
+                stepIndex = (stepIndex + 1) % STATUS_STEPS.length;
+                // Freeze on the main generation step for longer
+                if (stepIndex === 4) stepIndex = 3; 
+            };
+
+            cycleStatus();
+            statusInterval = setInterval(cycleStatus, 3000); // Cycle every 3 seconds
+        }
 
         // Function to render the presets dynamically using RADIO BUTTONS
         function renderPresets() {
             let html = '';
             
-            // Loop through the top-level categories
             for (const categoryName in PRESET_CATEGORIES) {
                 const categoryData = PRESET_CATEGORIES[categoryName];
                 
                 html += `<div class="preset-category"><h4>${categoryName}</h4>`;
                 
                 if (Array.isArray(categoryData)) {
-                    // Simple array (e.g., Art Style) - all options use categoryName as group name
+                    // Handles simple array (Art Style)
                     const radioGroupName = categoryName.replace(/\s/g, ''); 
                     categoryData.forEach(option => {
                         html += `
@@ -294,8 +352,7 @@
                         `;
                     });
                 } else if (typeof categoryData === 'object') {
-                    // Nested object (e.g., Category: Cities, Animals, Landscapes)
-                    // All sub-options must share the SAME radio group name: "Category"
+                    // Handles nested object (Category: Cities, Animals, Landscapes)
                     const radioGroupName = categoryName.replace(/\s/g, ''); 
                     
                     for (const subCategoryName in categoryData) {
@@ -303,6 +360,7 @@
                             <p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${subCategoryName}:</p>
                         `;
                         categoryData[subCategoryName].forEach(option => {
+                            // All sub-options share the same 'Category' radio group name
                             html += `
                                 <label>
                                     <input type="radio" name="${radioGroupName}" value="${option}">
@@ -317,7 +375,7 @@
             }
             presetsContainer.innerHTML = html;
 
-            // Attach event listener to all radio buttons, including the new 'busyness' group
+            // Attach event listener to all radio buttons
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.addEventListener('change', updatePromptBox);
             });
@@ -325,17 +383,19 @@
 
         // Function to update the prompt box based on selected radio buttons
         function updatePromptBox() {
-            // Get the value of the single selected radio button from EACH group
+            // Get the value of the single selected radio button from EACH group: ArtStyle, Category, Busyness
             const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
                                          .map(radio => radio.value);
             
-            // Format the combined prompt (separated by commas)
             const newPrompt = selectedOptions.join(', ');
             promptTextarea.value = newPrompt;
         }
         
-        // Initial render of presets
+        // Initial setup
         renderPresets();
+        // Set default busyness state in the prompt box on load
+        document.querySelector('input[name="busyness"][value="large, open geometric tiles"]').checked = true;
+        updatePromptBox(); 
 
 
         // Form Submission Logic (Binary File Handling)
@@ -348,9 +408,12 @@
             // 1. Update UI for 'Loading' state
             submitButton.textContent = 'Generating... Please wait.';
             submitButton.disabled = true;
-            placeholderText.textContent = 'Generating your unique outline... (Expecting PNG data)';
+            placeholderText.textContent = 'Generating your unique outline...';
             placeholderText.style.display = 'block';
             generatedImage.style.display = 'none';
+            
+            // START STATUS BAR
+            updateStatus(true); 
 
             try {
                 // 2. Send prompt to n8n webhook
@@ -359,7 +422,6 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    // Send the prompt as a JSON object
                     body: JSON.stringify({ prompt: prompt }),
                 });
 
@@ -367,7 +429,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
-                // *** Handle the incoming binary image data (PNG) ***
+                // Handle the incoming binary image data (PNG)
                 const imageBlob = await response.blob(); 
                 
                 if (imageBlob.type && imageBlob.type.startsWith('image/')) {
@@ -378,21 +440,29 @@
                     generatedImage.alt = prompt;
                     
                     generatedImage.onload = () => {
+                        // STOP STATUS BAR on successful load
+                        updateStatus(false); 
                         placeholderText.style.display = 'none';
                         generatedImage.style.display = 'block';
                         URL.revokeObjectURL(imageUrl); 
                     };
 
                     generatedImage.onerror = () => {
+                        // STOP STATUS BAR on error
+                        updateStatus(false); 
                         placeholderText.textContent = 'Error loading image data. The response might not be a valid image.';
                         generatedImage.style.display = 'none';
                     };
                 } else {
+                    // STOP STATUS BAR on file type error
+                    updateStatus(false);
                     const errorText = await imageBlob.text(); 
                     placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
                 }
 
             } catch (error) {
+                // STOP STATUS BAR on fetch error
+                updateStatus(false); 
                 console.error('Generation Error:', error);
                 placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
             } finally {
