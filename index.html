@@ -9,7 +9,6 @@
     <style>
         /* General Styling */
         body {
-            /* FONT CHANGE: Apply Amatic SC to the entire body */
             font-family: 'Amatic SC', cursive;
             background-color: #f4f7f6;
             color: #333;
@@ -102,6 +101,22 @@
             line-height: 1.5;
         }
 
+        /* Busyness Gauge Styling */
+        .busyness-gauge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+        }
+        
+        .busyness-gauge h4 {
+            margin: 0;
+            min-width: 100px; /* Ensure alignment */
+            font-size: 1.5em;
+        }
+
         /* Form and Input Styling */
         .prompt-form {
             display: flex;
@@ -187,10 +202,22 @@
         <p class="subtitle">Generate the outline for your next masterpiece, and we'll ship it to your door.</p>
 
         <div class="preset-options">
-            <h3>Choose a Category or Style!</h3>
+            <h3>Choose Options</h3>
             
             <div id="presetsContainer">
                 </div>
+
+            <div class="busyness-gauge">
+                <h4>Busyness Gauge</h4>
+                <label>
+                    <input type="radio" name="busyness" value="large, open geometric tiles" checked>
+                    Minimally Busy
+                </label>
+                <label>
+                    <input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles">
+                    Super Busy
+                </label>
+            </div>
             
             <p class="prompt-example">Example: *A whimsical cat reading a book in a cozy, sunlit cafe with a steaming mug.*</p>
         </div>
@@ -212,23 +239,28 @@
     </div>
 
     <script>
-        // *** PRESET DATA ***
+        // *** PRESET DATA UPDATED FOR NEW STRUCTURE ***
         const PRESET_CATEGORIES = {
-            "Cities": [
-                "New York City", "San Francisco", "Rio de Janeiro", "Istanbul", "Hong Kong", "Mecca", 
-                "Dubai", "Macau", "Tehran", "London", "Paris", "Kuala Lumpur", "Bangkok", "Sydney", "Tokyo"
-            ],
-            "Animals": [
-                "Bunny", "Fox", "Panda", "Quokka", "Hedgehog", "Penguin", "Sloth", "Seal", "Puppy", "Kitten"
-            ],
-            "Landscapes": [
-                "The Swiss Alps", "The Rocky Mountains", "The Grand Canyon", "Mount Rushmore", "Zhangye Danxia Geopark", 
-                "The Norwegian Fjords", "The Grand Canal of Venice", "The Redwood Forests", "The Japanese Cherry Blossoms", 
-                "The Serengeti", "The Sahara Desert"
-            ],
+            // 1. Art Style on top
             "Art Style": [
                 "Realism", "Impressionism", "Abstract Art", "Surrealism", "Pop Art"
-            ]
+            ],
+            // 2. Cities, Animals, Landscapes grouped under one category
+            "Category": {
+                // Nested structure to display sub-options but enforce single selection across all
+                "Cities": [
+                    "New York City", "San Francisco", "Rio de Janeiro", "Istanbul", "Hong Kong", "Mecca", 
+                    "Dubai", "Macau", "Tehran", "London", "Paris", "Kuala Lumpur", "Bangkok", "Sydney", "Tokyo"
+                ],
+                "Animals": [
+                    "Bunny", "Fox", "Panda", "Quokka", "Hedgehog", "Penguin", "Sloth", "Seal", "Puppy", "Kitten"
+                ],
+                "Landscapes": [
+                    "The Swiss Alps", "The Rocky Mountains", "The Grand Canyon", "Mount Rushmore", "Zhangye Danxia Geopark", 
+                    "The Norwegian Fjords", "The Grand Canal of Venice", "The Redwood Forests", "The Japanese Cherry Blossoms", 
+                    "The Serengeti", "The Sahara Desert"
+                ]
+            }
         };
         
         // *** JAVASCRIPT FOR FORM SUBMISSION AND PRESETS ***
@@ -243,25 +275,49 @@
         // Function to render the presets dynamically using RADIO BUTTONS
         function renderPresets() {
             let html = '';
-            for (const category in PRESET_CATEGORIES) {
-                // Use the category name as the radio group 'name' to ensure mutual exclusion
-                const radioGroupName = category.replace(/\s/g, ''); 
-
-                html += `<div class="preset-category"><h4>${category}</h4>`;
-                PRESET_CATEGORIES[category].forEach(option => {
-                    // CRITICAL CHANGE: Use type="radio" and name=radioGroupName
-                    html += `
-                        <label>
-                            <input type="radio" name="${radioGroupName}" value="${option}">
-                            ${option}
-                        </label>
-                    `;
-                });
+            
+            // Loop through the top-level categories
+            for (const categoryName in PRESET_CATEGORIES) {
+                const categoryData = PRESET_CATEGORIES[categoryName];
+                
+                html += `<div class="preset-category"><h4>${categoryName}</h4>`;
+                
+                if (Array.isArray(categoryData)) {
+                    // Simple array (e.g., Art Style) - all options use categoryName as group name
+                    const radioGroupName = categoryName.replace(/\s/g, ''); 
+                    categoryData.forEach(option => {
+                        html += `
+                            <label>
+                                <input type="radio" name="${radioGroupName}" value="${option}">
+                                ${option}
+                            </label>
+                        `;
+                    });
+                } else if (typeof categoryData === 'object') {
+                    // Nested object (e.g., Category: Cities, Animals, Landscapes)
+                    // All sub-options must share the SAME radio group name: "Category"
+                    const radioGroupName = categoryName.replace(/\s/g, ''); 
+                    
+                    for (const subCategoryName in categoryData) {
+                        html += `
+                            <p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${subCategoryName}:</p>
+                        `;
+                        categoryData[subCategoryName].forEach(option => {
+                            html += `
+                                <label>
+                                    <input type="radio" name="${radioGroupName}" value="${option}">
+                                    ${option}
+                                </label>
+                            `;
+                        });
+                    }
+                }
+                
                 html += `</div>`;
             }
             presetsContainer.innerHTML = html;
 
-            // Attach event listener to all radio buttons
+            // Attach event listener to all radio buttons, including the new 'busyness' group
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.addEventListener('change', updatePromptBox);
             });
@@ -273,7 +329,7 @@
             const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
                                          .map(radio => radio.value);
             
-            // Format the combined prompt
+            // Format the combined prompt (separated by commas)
             const newPrompt = selectedOptions.join(', ');
             promptTextarea.value = newPrompt;
         }
