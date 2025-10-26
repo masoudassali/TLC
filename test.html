@@ -1,1 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lined Canvas Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #5d5c61;
+            margin-bottom: 30px;
+        }
+        /* --- FIX: ENFORCE CAPITALIZATION --- */
+        h2, label {
+            text-transform: capitalize; /* Ensures proper title casing for headers and labels */
+        }
+        h2 {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            color: #7395ae;
+        }
+        .option-group {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        .option-group label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            resize: vertical;
+            min-height: 100px;
+            font-size: 16px;
+        }
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #5d5c61;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        .submit-button:hover {
+            background-color: #7395ae;
+        }
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="container">
+        <h1>The Lined Canvas Generator</h1>
+        
+        <div id="prompt-box-section">
+            <h2>Your Vision (Free Text Description)</h2>
+            <textarea id="vision-prompt" placeholder="e.g., A futuristic Tokyo cityscape with flying cars, a gentle portrait of a wolf in the snow, a bowl of colorful fruit..."></textarea>
+        </div>
+        
+        <form id="outline-generator-form">
+            <h2>Choose Options</h2>
+
+            <div class="option-group" id="style-options">
+                <label>Art Style</label>
+                <label><input type="radio" name="style" value="broad, visible brushstrokes, light and color focused, loose forms" required>Impressionism</label>
+                <label><input type="radio" name="style" value="bold, graphic, thick black outlines, primary colors, commercial imagery" required>Pop Art</label>
+                <label><input type="radio" name="style" value="geometric shapes, strong colors, cubism influence" required>Art Deco</label>
+            </div>
+
+            <div class="option-group" id="subject-options">
+                <label>Subject Focus</label>
+                <label><input type="radio" name="subject" value="a New York City cityscape with famous landmarks, towering skyscrapers, detailed traffic" required>New York City</label>
+                <label><input type="radio" name="subject" value="a dense, hilly San Francisco city and landmarks with Victorian houses and the Golden Gate Bridge" required>San Francisco</label>
+                <label><input type="radio" name="subject" value="a rustic European village by the coast with cobblestone streets and old world charm" required>European Village</label>
+            </div>
+
+            <div class="option-group" id="busyness-options">
+                <label>Busyness Gauge (Line Density)</label>
+                <label><input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" required>Minimally Busy</label>
+                <label><input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles" required>Super Busy</label>
+            </div>
+
+            <button type="submit" class="submit-button">Generate Outline</button>
+        </form>
+
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('outline-generator-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const style = form.elements['style'].value;
+            const subject = form.elements['subject'].value;
+            const busyness = form.elements['busyness'].value;
+            const visionPrompt = document.getElementById('vision-prompt').value.trim();
+            
+            // Build the final prompt string that the n8n Code Node is expecting.
+            // It combines the user's free text and the selected option tags.
+            const rawPrompt = `${visionPrompt}, ${style}, ${subject}, ${busyness}`;
+
+            const data = {
+                prompt: rawPrompt.trim()
+            };
+
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = 'Generating outline... Please wait.';
+
+            try {
+                // --- REPLACE THIS URL WITH YOUR ACTUAL N8N WEBHOOK URL ---
+                const webhookUrl = 'YOUR_N8N_WEBHOOK_URL'; 
+
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    messageDiv.textContent = 'Successfully submitted! Check your n8n workflow for the result.';
+                    form.reset();
+                    document.getElementById('vision-prompt').value = '';
+                } else {
+                    const errorText = await response.text();
+                    messageDiv.textContent = `Error submitting form: ${response.status} - ${errorText.substring(0, 100)}...`;
+                }
+            } catch (error) {
+                messageDiv.textContent = `A network error occurred: ${error.message}`;
+            }
+        });
+    </script>
+
+</body>
+</html>
