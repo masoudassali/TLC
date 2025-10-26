@@ -122,10 +122,10 @@
 
     <div class="generator-container">
         <h1>Generate Your Canvas Outline</h1>
-        <p class="subtitle">Describe the fun image you want to paint, and our AI will create a beautiful A3-sized outline for you.</p>
+        <p class="subtitle">Describe the image you want to paint, and our AI will create a complex outline for you.</p>
 
         <form class="prompt-form" id="imageGenerationForm">
-            <label for="prompt">What image do you want an outline of?</label>
+            <label for="prompt">What complex design do you want an outline of?</label>
             <textarea id="prompt" name="prompt" placeholder="E.g., A whimsical cat reading a book in a cozy, sunlit cafe with a steaming mug." required></textarea>
             <button type="submit">Generate Outline</button>
         </form>
@@ -142,7 +142,7 @@
 
     <script>
         // *** JAVASCRIPT FOR FORM SUBMISSION ***
-        // 🚨 UPDATED: Your n8n webhook URL is now set here.
+        // 🚨 IMPORTANT: Ensure this URL is correct for your active n8n webhook
         const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/74161287-0f76-4b39-b5b6-66393e16ca91';
         const form = document.getElementById('imageGenerationForm');
         const promptTextarea = document.getElementById('prompt');
@@ -159,7 +159,7 @@
             // 1. Update UI for 'Loading' state
             submitButton.textContent = 'Generating... Please wait.';
             submitButton.disabled = true;
-            placeholderText.textContent = 'Generating your unique outline...';
+            placeholderText.textContent = 'Generating your unique outline... (Expecting PNG data)';
             placeholderText.style.display = 'block';
             generatedImage.style.display = 'none';
 
@@ -177,33 +177,42 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
-                // 3. Assuming n8n returns a JSON object with the image URL/data
-                // Your n8n workflow must return a JSON response like: { "imageUrl": "..." }
-                const result = await response.json();
                 
-                // 4. Update UI with the result
-                if (result && result.imageUrl) {
-                    generatedImage.src = result.imageUrl;
+                // *** CRITICAL FIX: Handle the incoming binary image data (PNG) ***
+                // Read the response as a binary data blob
+                const imageBlob = await response.blob(); 
+                
+                // Check if the blob is an image (optional, but good practice)
+                if (imageBlob.type && imageBlob.type.startsWith('image/')) {
+                    // Create a temporary URL that the browser can use to display the image
+                    const imageUrl = URL.createObjectURL(imageBlob); 
+                    
+                    // 3. Update UI with the result
+                    generatedImage.src = imageUrl;
                     generatedImage.alt = prompt;
+                    
                     generatedImage.onload = () => {
                         placeholderText.style.display = 'none';
                         generatedImage.style.display = 'block';
+                        // Revoke the temporary URL after the image has loaded to free up memory
+                        URL.revokeObjectURL(imageUrl); 
                     };
+
                     generatedImage.onerror = () => {
-                        placeholderText.textContent = 'Error loading image. Try a different prompt.';
+                        placeholderText.textContent = 'Error loading image data. The response might not be a valid image.';
                         generatedImage.style.display = 'none';
                     };
                 } else {
-                    // Handle case where n8n responds successfully but without the expected URL
-                    placeholderText.textContent = 'Generation completed, but no image URL was received from the workflow. Check your n8n setup.';
+                     // This handles the case where n8n returns something other than a file
+                    const errorText = await imageBlob.text(); 
+                    placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
                 }
 
             } catch (error) {
                 console.error('Generation Error:', error);
-                placeholderText.textContent = `An error occurred: ${error.message}. Please check the console and n8n workflow.`;
+                placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
             } finally {
-                // 5. Reset button state
+                // 4. Reset button state
                 submitButton.textContent = 'Generate Outline';
                 submitButton.disabled = false;
             }
