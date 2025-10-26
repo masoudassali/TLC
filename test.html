@@ -24,9 +24,10 @@
             color: #5d5c61;
             margin-bottom: 30px;
         }
-        /* --- FIX: ENFORCE CAPITALIZATION --- */
+        /* --- FIX: REMOVED FORCED CAPITALIZATION --- */
+        /* Text elements will now appear in their natural case */
         h2, label {
-            text-transform: capitalize; /* Ensures proper title casing for headers and labels */
+            text-transform: none; 
         }
         h2 {
             border-bottom: 2px solid #ddd;
@@ -131,8 +132,6 @@
             const busyness = form.elements['busyness'].value;
             const visionPrompt = document.getElementById('vision-prompt').value.trim();
             
-            // Build the final prompt string that the n8n Code Node is expecting.
-            // It combines the user's free text and the selected option tags.
             const rawPrompt = `${visionPrompt}, ${style}, ${subject}, ${busyness}`;
 
             const data = {
