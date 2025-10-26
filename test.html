@@ -1,585 +1,588 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
-    
-    <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
-    <style>
-        /* General Styling */
-        body {
-            /* FONT CHANGE: Apply Amatic SC to the entire body */
-            font-family: 'Amatic SC', cursive;
-            background-color: #f4f7f6;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
+    <style>
+        /* General Styling */
+        body {
+            /* FONT CHANGE: Apply Amatic SC to the entire body */
+            font-family: 'Amatic SC', cursive;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
 
-        /* Container for the App */
-        .generator-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            /* FLAT DESIGN: No box-shadow */
-            max-width: 900px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            position: relative; 
-        }
+        /* Container for the App */
+        .generator-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            /* FLAT DESIGN: No box-shadow */
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: relative; 
+        }
 
-        /* Logo Styling */
-        .logo-container {
-            /* POSITIONING: Absolute top-right */
-            position: absolute; 
-            top: 20px; 
-            right: 20px; 
-            z-index: 10; 
-        }
+        /* Logo Styling */
+        .logo-container {
+            /* POSITIONING: Absolute top-right */
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 10; 
+        }
 
-        .logo-container img {
-            width: 80px; 
-            height: auto;
-            /* FLAT DESIGN: No filter/shadow */
-            filter: none; 
-        }
+        .logo-container img {
+            width: 80px; 
+            height: auto;
+            /* FLAT DESIGN: No filter/shadow */
+            filter: none; 
+        }
 
-        /* Header Styling */
-        h1 {
-            color: #5D4037; 
-            text-align: center;
-            margin-top: 0; 
-            margin-bottom: 5px;
-            font-weight: 700; 
-            font-size: 3.5em; 
-            padding-right: 100px; 
-        }
+        /* Header Styling */
+        h1 {
+            color: #5D4037; 
+            text-align: center;
+            margin-top: 0; 
+            margin-bottom: 5px;
+            font-weight: 700; 
+            font-size: 3.5em; 
+            padding-right: 100px; 
+        }
 
-        .subtitle {
-            color: #795548;
-            text-align: center;
-            margin-bottom: 25px;
-            font-style: normal;
-            font-size: 2em; 
-        }
+        .subtitle {
+            color: #795548;
+            text-align: center;
+            margin-bottom: 25px;
+            font-style: normal;
+            font-size: 2em; 
+        }
 
-        /* Preset Options Styling */
-        .preset-options {
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fafafa;
-        }
+        /* Preset Options Styling */
+        .preset-options {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
 
-        .preset-options h3 {
-            font-size: 2em;
-            color: #FF7043;
-            margin-top: 0;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
+        .preset-options h3 {
+            font-size: 2em;
+            color: #FF7043;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
 
-        .preset-category {
-            margin-bottom: 15px;
-        }
+        .preset-category {
+            margin-bottom: 15px;
+        }
 
-        .preset-category h4 {
-            font-size: 1.5em;
-            color: #5D4037;
-            margin: 5px 0;
-            text-decoration: underline;
-        }
+        .preset-category h4 {
+            font-size: 1.5em;
+            color: #5D4037;
+            margin: 5px 0;
+            text-decoration: underline;
+        }
 
-        .preset-category label {
-            display: inline-block;
-            margin-right: 15px;
-            cursor: pointer;
-            font-size: 1.2em;
-            line-height: 1.5;
-        }
+        .preset-category label {
+            display: inline-block;
+            margin-right: 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+            line-height: 1.5;
+        }
 
-        /* Busyness Gauge Styling */
-        .busyness-gauge {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-            margin-top: 15px;
-        }
-        
-        .busyness-gauge h4 {
-            margin: 0;
-            min-width: 100px; 
-            font-size: 1.5em;
-        }
+        /* Busyness Gauge Styling */
+        .busyness-gauge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+        }
+        
+        .busyness-gauge h4 {
+            margin: 0;
+            min-width: 100px; 
+            font-size: 1.5em;
+        }
 
-        /* Status Bar Styling */
-        .status-bar {
-            text-align: center;
-            min-height: 20px;
-            margin-top: -15px;
-            color: #FF7043; 
-            font-size: 1.5em;
-            font-weight: 700;
-            transition: opacity 0.3s ease-in-out;
-            opacity: 0; 
-        }
+        /* Status Bar Styling */
+        .status-bar {
+            text-align: center;
+            min-height: 20px;
+            margin-top: -15px;
+            color: #FF7043; 
+            font-size: 1.5em;
+            font-weight: 700;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0; 
+        }
 
-        .status-bar.visible {
-            opacity: 1;
-        }
+        .status-bar.visible {
+            opacity: 1;
+        }
 
-        /* Form and Input Styling */
-        .prompt-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        /* Form and Input Styling */
+        .prompt-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-        .prompt-example {
-            font-size: 1.2em;
-            color: #795548;
-            margin-bottom: 5px;
-        }
-        
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1.5em; 
-            resize: vertical;
-            min-height: 100px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
+        .prompt-example {
+            font-size: 1.2em;
+            color: #795548;
+            margin-bottom: 5px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.5em; 
+            resize: vertical;
+            min-height: 100px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
 
-        textarea:focus {
-            border-color: #FF7043; 
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5); 
-        }
+        textarea:focus {
+            border-color: #FF7043; 
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5); 
+        }
 
-        button {
-            background-color: #FF7043;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.8em;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
+        button {
+            background-color: #FF7043;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.8em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
 
-        button:hover {
-            background-color: #E64A19;
-        }
+        button:hover {
+            background-color: #E64A19;
+        }
 
-        /* Image Display Area */
-        .image-display {
-            border: 2px dashed #BDBDBD; 
-            border-radius: 8px;
-            min-height: 350px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            background-color: #FAFAFA;
-        }
+        /* Image Display Area */
+        .image-display {
+            border: 2px dashed #BDBDBD; 
+            border-radius: 8px;
+            min-height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background-color: #FAFAFA;
+        }
 
-        .image-placeholder {
-            color: #9E9E9E;
-            font-style: italic;
-            font-size: 1.5em;
-        }
+        .image-placeholder {
+            color: #9E9E9E;
+            font-style: italic;
+            font-size: 1.5em;
+        }
 
-        .generated-image {
-            max-width: 100%;
-            max-height: 350px;
-            border-radius: 6px;
-            display: none; 
-        }
-        
-        /* New Styles for 'More' Functionality */
-        .hidden-preset {
-            display: none;
-        }
+        .generated-image {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 6px;
+            display: none; 
+        }
+        
+        /* New Styles for 'More' Functionality */
+        .hidden-preset {
+            display: none;
+        }
 
-        .more-button {
-            background: #f8f8f8;
-            border: 1px solid #ccc;
-            color: #FF7043;
-            font-size: 1.1em;
-            padding: 5px 10px;
-            margin: 10px 0;
-            cursor: pointer;
-            border-radius: 4px;
-            display: block;
-            width: 100px;
-            text-align: center;
-        }
-        .more-button:hover {
-            background: #eee;
-        }
-    </style>
+        .more-button {
+            background: #f8f8f8;
+            border: 1px solid #ccc;
+            color: #FF7043;
+            font-size: 1.1em;
+            padding: 5px 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            display: block;
+            width: 100px;
+            text-align: center;
+        }
+        .more-button:hover {
+            background: #eee;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="generator-container">
-        <div class="logo-container">
-            <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo"> 
-        </div>
-        
-        <h1>The Lined Canvas</h1>
-        <p class="subtitle">Generate the outline for your next masterpiece, and we'll ship it to your door.</p>
+    <div class="generator-container">
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo"> 
+        </div>
+        
+        <h1>The Lined Canvas</h1>
+        <p class="subtitle">Generate the outline for your next masterpiece, and we'll ship it to your door.</p>
 
-                <form class="prompt-form" id="imageGenerationForm">
-            <label for="prompt" style="font-size: 1.5em;">Choose from the options or add your own descriptions here:</label>
-            <textarea id="prompt" name="prompt" placeholder="Start typing your description..." required></textarea>
-                        <p class="prompt-example">Example: *A whimsical cat reading a book in a cozy, sunlit cafe with a steaming mug.*</p>
-            <button type="submit">Generate Outline</button>
-        </form>
-                <div class="preset-options">
-            <h3>Choose Options</h3>
-            
-            <div id="presetsContainer">
-                </div>
+        <div class="preset-options">
+            <h3>Choose Options</h3>
+            
+            <div id="presetsContainer">
+                </div>
 
-            <div class="busyness-gauge">
-                <h4>Busyness Gauge</h4>
-                <label>
-                    <input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" checked>
-                    Minimally Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
-                </label>
-                <label>
-                    <input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles">
-                    Super Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Smaller, many tiles)</span>
-                </label>
-            </div>
-        </div>
-                <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
+            <div class="busyness-gauge">
+                <h4>Busyness Gauge</h4>
+                <label>
+                    <input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" checked>
+                    Minimally Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
+                </label>
+                <label>
+                    <input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles">
+                    Super Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Smaller, many tiles)</span>
+                </label>
+            </div>
+            
+            <p class="prompt-example">Example: *A whimsical cat reading a book in a cozy, sunlit cafe with a steaming mug.*</p>
+        </div>
 
-        <div class="status-bar" id="statusBar">
-            <span id="statusMessage"></span>
-        </div>
+        <form class="prompt-form" id="imageGenerationForm">
+            <label for="prompt" style="font-size: 1.5em;">Choose from the options or add your own descriptions here:</label>
+            <textarea id="prompt" name="prompt" placeholder="Start typing your description..." required></textarea>
+            <button type="submit">Generate Outline</button>
+        </form>
 
-        <h2>Your Generated Outline Preview</h2>
+        <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
 
-        <div class="image-display">
-            <p class="image-placeholder" id="placeholderText">Your AI-generated outline preview will appear here.</p>
-            <img src="" alt="AI Generated Outline" class="generated-image" id="generatedImage">
-        </div>
-    </div>
+        <div class="status-bar" id="statusBar">
+            <span id="statusMessage"></span>
+        </div>
 
-    <script>
-        // *** PRESET DATA ***
-        const PRESET_CATEGORIES = {
-            "Art Style": [
-                { display: "Impressionism", value: "broad, visible short brushstrokes, light focused, loose forms, en plein air and outdoors to capture the fleeting effects of natural light, depicting everyday subjects and scenes of modern life, a sense of spontaneity, an emphasis on capturing a momentary impressions, and open compositions with unusual visual angles." },
-                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, non-representational nature, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
-                { display: "Surrealism", value: "dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
-                { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
-            ],
-            "Category": {
-                "Cities": [
-                    { display: "New York City", value: "a New York City cityscape with famous landmarks, towering skyscrapers, detailed traffic" },
-                    { display: "San Francisco", value: "a dense, hilly San Francisco city and landmarks with Victorian houses and the Golden Gate Bridge" },
-                    { display: "Rio de Janeiro", value: "Rio de Janeiro's lush mountains, beaches, and the Christ the Redeemer statue" },
-                    { display: "Istanbul", value: "Istanbul's historic mosques and markets, complex patterns, bustling waterfront" },
-                    { display: "Hong Kong", value: "Hong Kong's vertical architecture, harbor view, illuminated city grid" },
-                    { display: "Mecca", value: "Mecca's highly detailed Islamic architecture, complex geometric patterns, focus on the Kaaba" },
-                    { display: "Dubai", value: "Dubai's futuristic architecture, tall glass buildings, sharp geometric design" },
-                    { display: "Macau", value: "Macau's blend of Portuguese and modern Chinese architecture, casino lights, detailed paving" },
-                    { display: "Tehran", value: "Tehran's landmarks, choose between the Azadi Tower or the Milad Tower, and urban sprawl, distant mountains, intricate Persian tile work" }, // City 9 (index 8). Last visible city.
-                    { display: "London", value: "London's historic architecture, Big Ben, red phone booths, detailed brickwork" },
-                    { display: "Paris", value: "Paris's Eiffel Tower, ornate Haussmann buildings, Seine River view, detailed ironwork" },
-                    { display: "Kuala Lumpur", value: "Kuala Lumpur's Petronas Twin Towers, lush tropical setting, detailed city foliage" },
-                    { display: "Bangkok", value: "Bangkok's detailed temples, winding canals, busy street scenes, complex rooftop lines" },
-                    { display: "Sydney", value: "Sydney's Opera House, harbor views, intricate yacht rigging" },
-                    { display: "Tokyo", value: "neon signs, dense pedestrian streets, futuristic buildings, busy intersections" },
-                    { display: "Beijing", value: "Beijing's landmarks and the Great Wall of China, urban streets, historic buildings, and Chinese architecture" }
-                ],
-                "Animals": [
-                    { display: "Bunny", value: "a cute bunny in a whimsical field, intricate fur and whisker detail" },
-                    { display: "Fox", value: "a clever fox in a forest, detailed brush and branch work" },
-                    { display: "Panda", value: "a large panda eating bamboo, detailed leaf and fur texture" },
-                    { display: "Quokka", value: "a smiling quokka, detailed island foliage" },
-                    { display: "Hedgehog", value: "a tiny hedgehog, complex spine patterns, detailed ground cover" },
-                    { display: "Penguin", value: "a penguin on ice, crisp black and white contrast, detailed snow texture" },
-                    { display: "Sloth", value: "a slow sloth hanging from a branch, detailed vine and bark texture" },
-                    { display: "Seal", value: "a sleek seal basking on rocks, wet skin texture, detailed water reflections" },
-                    { display: "Puppy", value: "a playful puppy, soft fur texture, detailed toy lines" },
-                    { display: "Kitten", value: "a curious kitten, detailed fur and playful pose lines" }
-                ],
-                "Landscapes": [
-                    { display: "The Swiss Alps", value: "The Swiss Alps, sweeping mountain landscape, jagged peaks, small chalets, detailed snow texture" },
-                    { display: "The Rocky Mountains", value: "The Rocky Mountains, rugged peaks, dense pine forests, detailed rock formations" },
-                    { display: "The Grand Canyon", value: "The Grand Canyon, vast, layered rock formations, deep shadows, dry texture" },
-                    { display: "Mount Rushmore", value: "Mount Rushmore, detailed presidential faces carved into rock, precise light and shadow" },
-                    { display: "Zhangye Danxia Geopark", value: "Zhangye Danxia Geopark, striped rock mountains, sweeping geological layers" },
-                    { display: "The Norwegian Fjords", value: "The Norwegian Fjords, sheer cliffs, calm dark water, small fishing villages, detailed reflections" },
-                    { display: "The Grand Canal of Venice", value: "The Grand Canal of Venice, historic buildings, detailed boat lines, water reflections, complex shadows" },
-                    { display: "The Redwood Forests", value: "The Redwood Forests, towering trees, sunbeams filtering through, detailed bark and canopy" },
-                    { display: "The Japanese Cherry Blossoms", value: "The Japanese Cherry Blossoms, delicate floral patterns, sweeping tree branches, soft, scattered petals" },
-                    { display: "The Serengeti", value: "The Serengeti, wide open savanna, scattered acacia trees, detailed grasses and animal silhouettes" },
-                    { display: "The Sahara Desert", value: "The Sahara Desert, rolling sand dunes, extreme shadows, sparse dry plants, detailed sand patterns" }
-                ]
-            }
-        };
-        
-        // *** CORE DOM ELEMENTS ***
-        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/74161287-0f76-4b39-b5b6-66393e16ca91';
-        const form = document.getElementById('imageGenerationForm');
-        const promptTextarea = document.getElementById('prompt');
-        const placeholderText = document.getElementById('placeholderText');
-        const generatedImage = document.getElementById('generatedImage');
-        const submitButton = form.querySelector('button');
-        const presetsContainer = document.getElementById('presetsContainer');
-        const statusBar = document.getElementById('statusBar');
-        const statusMessage = document.getElementById('statusMessage');
+        <h2>Your Generated Outline Preview</h2>
 
-        // Status Bar Steps
-        const STATUS_STEPS = [
-            "5% - Sending your descriptions to our magician, Tony ...",
-            "18% - Tony received your descriptions. Now figuring out the style...",
-            "22% - Tony is adding the final touches...",
-            "41% - This may take 5-15 seconds...",
-            "67% - Converting everything into a PNG file...",
-            "93% - Sending image data back to your browser...",
-            "100% - Serving up your order now..."
-        ];
+        <div class="image-display">
+            <p class="image-placeholder" id="placeholderText">Your AI-generated outline preview will appear here.</p>
+            <img src="" alt="AI Generated Outline" class="generated-image" id="generatedImage">
+        </div>
+    </div>
 
-        // Status Bar Control
-        let statusInterval;
-        function updateStatus(start) {
-            if (!start) {
-                clearInterval(statusInterval);
-                statusBar.classList.remove('visible');
-                return;
-            }
+    <script>
+        // *** PRESET DATA ***
+        const PRESET_CATEGORIES = {
+            "Art Style": [
+                { display: "Impressionism", value: "broad, visible short brushstrokes, light focused, loose forms, en plein air and outdoors to capture the fleeting effects of natural light, depicting everyday subjects and scenes of modern life, a sense of spontaneity, an emphasis on capturing a momentary impressions, and open compositions with unusual visual angles." },
+                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, non-representational nature, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
+                { display: "Surrealism", value: "dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
+                { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
+            ],
+            "Category": {
+                "Cities": [
+                    { display: "New York City", value: "a New York City cityscape with famous landmarks, towering skyscrapers, detailed traffic" },
+                    { display: "San Francisco", value: "a dense, hilly San Francisco city and landmarks with Victorian houses and the Golden Gate Bridge" },
+                    { display: "Rio de Janeiro", value: "Rio de Janeiro's lush mountains, beaches, and the Christ the Redeemer statue" },
+                    { display: "Istanbul", value: "Istanbul's historic mosques and markets, complex patterns, bustling waterfront" },
+                    { display: "Hong Kong", value: "Hong Kong's vertical architecture, harbor view, illuminated city grid" },
+                    { display: "Mecca", value: "Mecca's highly detailed Islamic architecture, complex geometric patterns, focus on the Kaaba" },
+                    { display: "Dubai", value: "Dubai's futuristic architecture, tall glass buildings, sharp geometric design" },
+                    { display: "Macau", value: "Macau's blend of Portuguese and modern Chinese architecture, casino lights, detailed paving" },
+                    { display: "Tehran", value: "Tehran's landmarks, choose between the Azadi Tower or the Milad Tower, and urban sprawl, distant mountains, intricate Persian tile work" }, // City 9 (index 8). Last visible city.
+                    { display: "London", value: "London's historic architecture, Big Ben, red phone booths, detailed brickwork" },
+                    { display: "Paris", value: "Paris's Eiffel Tower, ornate Haussmann buildings, Seine River view, detailed ironwork" },
+                    { display: "Kuala Lumpur", value: "Kuala Lumpur's Petronas Twin Towers, lush tropical setting, detailed city foliage" },
+                    { display: "Bangkok", value: "Bangkok's detailed temples, winding canals, busy street scenes, complex rooftop lines" },
+                    { display: "Sydney", value: "Sydney's Opera House, harbor views, intricate yacht rigging" },
+                    { display: "Tokyo", value: "neon signs, dense pedestrian streets, futuristic buildings, busy intersections" }, // <-- MISSING COMMA FIXED HERE
+                    { display: "Beijing", value: "Beijing's landmarks and the Great Wall of China, urban streets, historic buildings, and Chinese architecture" }
+                ],
+                "Animals": [
+                    { display: "Bunny", value: "a cute bunny in a whimsical field, intricate fur and whisker detail" },
+                    { display: "Fox", value: "a clever fox in a forest, detailed brush and branch work" },
+                    { display: "Panda", value: "a large panda eating bamboo, detailed leaf and fur texture" },
+                    { display: "Quokka", value: "a smiling quokka, detailed island foliage" },
+                    { display: "Hedgehog", value: "a tiny hedgehog, complex spine patterns, detailed ground cover" },
+                    { display: "Penguin", value: "a penguin on ice, crisp black and white contrast, detailed snow texture" },
+                    { display: "Sloth", value: "a slow sloth hanging from a branch, detailed vine and bark texture" },
+                    { display: "Seal", value: "a sleek seal basking on rocks, wet skin texture, detailed water reflections" },
+                    { display: "Puppy", value: "a playful puppy, soft fur texture, detailed toy lines" },
+                    { display: "Kitten", value: "a curious kitten, detailed fur and playful pose lines" }
+                ],
+                "Landscapes": [
+                    { display: "The Swiss Alps", value: "The Swiss Alps, sweeping mountain landscape, jagged peaks, small chalets, detailed snow texture" },
+                    { display: "The Rocky Mountains", value: "The Rocky Mountains, rugged peaks, dense pine forests, detailed rock formations" },
+                    { display: "The Grand Canyon", value: "The Grand Canyon, vast, layered rock formations, deep shadows, dry texture" },
+                    { display: "Mount Rushmore", value: "Mount Rushmore, detailed presidential faces carved into rock, precise light and shadow" },
+                    { display: "Zhangye Danxia Geopark", value: "Zhangye Danxia Geopark, striped rock mountains, sweeping geological layers" },
+                    { display: "The Norwegian Fjords", value: "The Norwegian Fjords, sheer cliffs, calm dark water, small fishing villages, detailed reflections" },
+                    { display: "The Grand Canal of Venice", value: "The Grand Canal of Venice, historic buildings, detailed boat lines, water reflections, complex shadows" },
+                    { display: "The Redwood Forests", value: "The Redwood Forests, towering trees, sunbeams filtering through, detailed bark and canopy" },
+                    { display: "The Japanese Cherry Blossoms", value: "The Japanese Cherry Blossoms, delicate floral patterns, sweeping tree branches, soft, scattered petals" },
+                    { display: "The Serengeti", value: "The Serengeti, wide open savanna, scattered acacia trees, detailed grasses and animal silhouettes" },
+                    { display: "The Sahara Desert", value: "The Sahara Desert, rolling sand dunes, extreme shadows, sparse dry plants, detailed sand patterns" }
+                ]
+            }
+        };
+        
+        // *** CORE DOM ELEMENTS ***
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/74161287-0f76-4b39-b5b6-66393e16ca91';
+        const form = document.getElementById('imageGenerationForm');
+        const promptTextarea = document.getElementById('prompt');
+        const placeholderText = document.getElementById('placeholderText');
+        const generatedImage = document.getElementById('generatedImage');
+        const submitButton = form.querySelector('button');
+        const presetsContainer = document.getElementById('presetsContainer');
+        const statusBar = document.getElementById('statusBar');
+        const statusMessage = document.getElementById('statusMessage');
 
-            let stepIndex = 0;
-            statusBar.classList.add('visible');
-            
-            const cycleStatus = () => {
-                statusMessage.innerHTML = STATUS_STEPS[stepIndex];
-                stepIndex = (stepIndex + 1) % STATUS_STEPS.length;
-                // Freeze on the main generation step (41%) for longer
-                if (stepIndex === 4) stepIndex = 3; 
-            };
+        // Status Bar Steps
+        const STATUS_STEPS = [
+            "5% - Sending your descriptions to our magician, Tony ...",
+            "18% - Tony received your descriptions. Now figuring out the style...",
+            "22% - Tony is adding the final touches...",
+            "41% - This may take 5-15 seconds...",
+            "67% - Converting everything into a PNG file...",
+            "93% - Sending image data back to your browser...",
+            "100% - Serving up your order now..."
+        ];
 
-            cycleStatus();
-            statusInterval = setInterval(cycleStatus, 3000); 
-        }
+        // Status Bar Control
+        let statusInterval;
+        function updateStatus(start) {
+            if (!start) {
+                clearInterval(statusInterval);
+                statusBar.classList.remove('visible');
+                return;
+            }
 
-        // Function to render the presets dynamically using RADIO BUTTONS (Only showing display names)
-        function renderPresets() {
-            let html = '';
-            const CITIES_VISIBLE_COUNT = 9; // Number of cities to show before the "more..." button
-            
-            for (const categoryName in PRESET_CATEGORIES) {
-                const categoryData = PRESET_CATEGORIES[categoryName];
-                const radioGroupName = categoryName.replace(/\s/g, ''); 
+            let stepIndex = 0;
+            statusBar.classList.add('visible');
+            
+            const cycleStatus = () => {
+                statusMessage.innerHTML = STATUS_STEPS[stepIndex];
+                stepIndex = (stepIndex + 1) % STATUS_STEPS.length;
+                // Freeze on the main generation step (41%) for longer
+                if (stepIndex === 4) stepIndex = 3; 
+            };
 
-                html += `<div class="preset-category"><h4>${categoryName}</h4>`;
-                
-                if (Array.isArray(categoryData)) {
-                    // Simple array (Art Style) - ALWAYS VISIBLE
-                    categoryData.forEach(item => {
-                        html += `
-                            <label>
-                                <input type="radio" name="${radioGroupName}" value="${item.value}">
-                                ${item.display}
-                            </label>
-                        `;
-                    });
-                } else if (typeof categoryData === 'object' && categoryName === 'Category') {
-                    // Complex object (Category: Cities, Animals, Landscapes)
+            cycleStatus();
+            statusInterval = setInterval(cycleStatus, 3000); 
+        }
 
-                    let visibleHtml = '';
-                    let hiddenHtml = '';
-                    
-                    for (const subCategoryName in categoryData) {
-                        const items = categoryData[subCategoryName];
-                        
-                        // Start of the subcategory section heading
-                        let sectionHtml = `<p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${subCategoryName}:</p>`;
+        // Function to render the presets dynamically using RADIO BUTTONS (Only showing display names)
+        function renderPresets() {
+            let html = '';
+            const CITIES_VISIBLE_COUNT = 9; // Number of cities to show before the "more..." button
+            
+            for (const categoryName in PRESET_CATEGORIES) {
+                const categoryData = PRESET_CATEGORIES[categoryName];
+                const radioGroupName = categoryName.replace(/\s/g, ''); 
 
-                        if (subCategoryName === 'Cities') {
-                            
-                            // Visible Cities (first 9)
-                            visibleHtml += sectionHtml; // Add the Cities heading to the visible block
-                            for (let i = 0; i < CITIES_VISIBLE_COUNT; i++) {
-                                visibleHtml += `
-                                    <label>
-                                        <input type="radio" name="${radioGroupName}" value="${items[i].value}">
-                                        ${items[i].display}
-                                    </label>
-                                `;
-                            }
-                            
-                            // Hidden Cities (remaining) - Go into the main hidden container
-                            if (items.length > CITIES_VISIBLE_COUNT) {
-                                hiddenHtml += sectionHtml; // Add the Cities heading again to the hidden block
-                                for (let i = CITIES_VISIBLE_COUNT; i < items.length; i++) {
-                                    hiddenHtml += `
-                                        <label>
-                                            <input type="radio" name="${radioGroupName}" value="${items[i].value}">
-                                            ${items[i].display}
-                                        </label>
-                                    `;
-                                }
-                            }
+                html += `<div class="preset-category"><h4>${categoryName}</h4>`;
+                
+                if (Array.isArray(categoryData)) {
+                    // Simple array (Art Style) - ALWAYS VISIBLE
+                    categoryData.forEach(item => {
+                        html += `
+                            <label>
+                                <input type="radio" name="${radioGroupName}" value="${item.value}">
+                                ${item.display}
+                            </label>
+                        `;
+                    });
+                } else if (typeof categoryData === 'object' && categoryName === 'Category') {
+                    // Complex object (Category: Cities, Animals, Landscapes)
 
-                        } else {
-                            // Animals and Landscapes: ENTIRELY HIDDEN
-                            hiddenHtml += sectionHtml; // Add the heading to the hidden block
+                    let visibleHtml = '';
+                    let hiddenHtml = '';
+                    
+                    for (const subCategoryName in categoryData) {
+                        const items = categoryData[subCategoryName];
+                        
+                        // Start of the subcategory section heading
+                        let sectionHtml = `<p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${subCategoryName}:</p>`;
 
-                            items.forEach(item => {
-                                hiddenHtml += `
-                                    <label>
-                                        <input type="radio" name="${radioGroupName}" value="${item.value}">
-                                        ${item.display}
-                                    </label>
-                                `;
-                            });
-                        }
-                    }
+                        if (subCategoryName === 'Cities') {
+                            
+                            // Visible Cities (first 9)
+                            visibleHtml += sectionHtml; // Add the Cities heading to the visible block
+                            for (let i = 0; i < CITIES_VISIBLE_COUNT; i++) {
+                                visibleHtml += `
+                                    <label>
+                                        <input type="radio" name="${radioGroupName}" value="${items[i].value}">
+                                        ${items[i].display}
+                                    </label>
+                                `;
+                            }
+                            
+                            // Hidden Cities (remaining) - Go into the main hidden container
+                            if (items.length > CITIES_VISIBLE_COUNT) {
+                                hiddenHtml += sectionHtml; // Add the Cities heading again to the hidden block
+                                for (let i = CITIES_VISIBLE_COUNT; i < items.length; i++) {
+                                    hiddenHtml += `
+                                        <label>
+                                            <input type="radio" name="${radioGroupName}" value="${items[i].value}">
+                                            ${items[i].display}
+                                        </label>
+                                    `;
+                                }
+                            }
 
-                    // Assemble the final Category HTML: Visible Content + Toggle + Hidden Content
-                    html += visibleHtml;
-                    // THE MORE BUTTON IS ADDED HERE
-                    html += `<a href="#" class="more-button" id="moreCategoryButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCategoryContainer', 'moreCategoryButton');">more...</a>`;
-                    html += `<div id="hiddenCategoryContainer" class="hidden-preset">`;
-                    html += hiddenHtml;
-                    html += `</div>`;
-                }
-                
-                html += `</div>`;
-            }
-            presetsContainer.innerHTML = html;
+                        } else {
+                            // Animals and Landscapes: ENTIRELY HIDDEN
+                            hiddenHtml += sectionHtml; // Add the heading to the hidden block
 
-            // Attach event listener to all radio buttons
-            document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.addEventListener('change', updatePromptBox);
-            });
-        }
-        
-        // New function to toggle hidden presets, accepting button ID
-        function toggleHiddenPresets(containerId, buttonId) {
-            const container = document.getElementById(containerId);
-            const button = document.getElementById(buttonId);
+                            items.forEach(item => {
+                                hiddenHtml += `
+                                    <label>
+                                        <input type="radio" name="${radioGroupName}" value="${item.value}">
+                                        ${item.display}
+                                    </label>
+                                `;
+                            });
+                        }
+                    }
 
-            if (container.classList.contains('hidden-preset')) {
-                container.classList.remove('hidden-preset');
-                button.textContent = 'less...';
-            } else {
-                container.classList.add('hidden-preset');
-                button.textContent = 'more...';
-            }
-        }
+                    // Assemble the final Category HTML: Visible Content + Toggle + Hidden Content
+                    html += visibleHtml;
+                    // THE MORE BUTTON IS ADDED HERE
+                    html += `<a href="#" class="more-button" id="moreCategoryButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCategoryContainer', 'moreCategoryButton');">more...</a>`;
+                    html += `<div id="hiddenCategoryContainer" class="hidden-preset">`;
+                    html += hiddenHtml;
+                    html += `</div>`;
+                }
+                
+                html += `</div>`;
+            }
+            presetsContainer.innerHTML = html;
 
-        // Function to update the prompt box based on selected radio buttons
-        function updatePromptBox() {
-            // Collects the 'value' of all checked radio buttons (which are the descriptive strings)
-            const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
-                                         .map(radio => radio.value);
-            
-            const newPrompt = selectedOptions.join(', ');
-            promptTextarea.value = newPrompt;
-        }
-        
-        // Initial setup
-        renderPresets();
-        // Ensure default busyness state is set in the prompt box on load
-        document.querySelector('input[name="busyness"][value="simple, minimal geometric tiles, low density"]').checked = true;
-        updatePromptBox(); 
+            // Attach event listener to all radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', updatePromptBox);
+            });
+        }
+        
+        // New function to toggle hidden presets, accepting button ID
+        function toggleHiddenPresets(containerId, buttonId) {
+            const container = document.getElementById(containerId);
+            const button = document.getElementById(buttonId);
+
+            if (container.classList.contains('hidden-preset')) {
+                container.classList.remove('hidden-preset');
+                button.textContent = 'less...';
+            } else {
+                container.classList.add('hidden-preset');
+                button.textContent = 'more...';
+            }
+        }
+
+        // Function to update the prompt box based on selected radio buttons
+        function updatePromptBox() {
+            // Collects the 'value' of all checked radio buttons (which are the descriptive strings)
+            const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
+                                         .map(radio => radio.value);
+            
+            const newPrompt = selectedOptions.join(', ');
+            promptTextarea.value = newPrompt;
+        }
+        
+        // Initial setup
+        renderPresets();
+        // Ensure default busyness state is set in the prompt box on load
+        document.querySelector('input[name="busyness"][value="simple, minimal geometric tiles, low density"]').checked = true;
+        updatePromptBox(); 
 
 
-        // Form Submission Logic (Binary File Handling)
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // Form Submission Logic (Binary File Handling)
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-            const prompt = promptTextarea.value.trim();
-            if (!prompt) return;
+            const prompt = promptTextarea.value.trim();
+            if (!prompt) return;
 
-            // 1. Update UI for 'Loading' state
-            submitButton.textContent = 'Generating... Please wait.';
-            submitButton.disabled = true;
-            placeholderText.textContent = 'Generating your unique outline...';
-            placeholderText.style.display = 'block';
-            generatedImage.style.display = 'none';
-            
-            // START STATUS BAR
-            updateStatus(true); 
+            // 1. Update UI for 'Loading' state
+            submitButton.textContent = 'Generating... Please wait.';
+            submitButton.disabled = true;
+            placeholderText.textContent = 'Generating your unique outline...';
+            placeholderText.style.display = 'block';
+            generatedImage.style.display = 'none';
+            
+            // START STATUS BAR
+            updateStatus(true); 
 
-            try {
-                // 2. Send prompt to n8n webhook
-                const response = await fetch(N8N_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ prompt: prompt }),
-                });
+            try {
+                // 2. Send prompt to n8n webhook
+                const response = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt: prompt }),
+                });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                // Handle the incoming binary image data (PNG)
-                const imageBlob = await response.blob(); 
-                
-                if (imageBlob.type && imageBlob.type.startsWith('image/')) {
-                    const imageUrl = URL.createObjectURL(imageBlob); 
-                    
-                    // 3. Update UI with the result
-                    generatedImage.src = imageUrl;
-                    generatedImage.alt = prompt;
-                    
-                    generatedImage.onload = () => {
-                        // STOP STATUS BAR on successful load
-                        updateStatus(false); 
-                        placeholderText.style.display = 'none';
-                        generatedImage.style.display = 'block';
-                        URL.revokeObjectURL(imageUrl); 
-                    };
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Handle the incoming binary image data (PNG)
+                const imageBlob = await response.blob(); 
+                
+                if (imageBlob.type && imageBlob.type.startsWith('image/')) {
+                    const imageUrl = URL.createObjectURL(imageBlob); 
+                    
+                    // 3. Update UI with the result
+                    generatedImage.src = imageUrl;
+                    generatedImage.alt = prompt;
+                    
+                    generatedImage.onload = () => {
+                        // STOP STATUS BAR on successful load
+                        updateStatus(false); 
+                        placeholderText.style.display = 'none';
+                        generatedImage.style.display = 'block';
+                        URL.revokeObjectURL(imageUrl); 
+                    };
 
-                    generatedImage.onerror = () => {
-                        // STOP STATUS BAR on error
-                        updateStatus(false); 
-                        placeholderText.textContent = 'Error loading image data. The response might not be a valid image.';
-                        generatedImage.style.display = 'none';
-                    };
-                } else {
-                    // STOP STATUS BAR on file type error
-                    updateStatus(false);
-                    const errorText = await imageBlob.text(); 
-                    placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
-                }
+                    generatedImage.onerror = () => {
+                        // STOP STATUS BAR on error
+                        updateStatus(false); 
+                        placeholderText.textContent = 'Error loading image data. The response might not be a valid image.';
+                        generatedImage.style.display = 'none';
+                    };
+                } else {
+                    // STOP STATUS BAR on file type error
+                    updateStatus(false);
+                    const errorText = await imageBlob.text(); 
+                    placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
+                }
 
-            } catch (error) {
-                // STOP STATUS BAR on fetch error
-                updateStatus(false); 
-                console.error('Generation Error:', error);
-                placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
-            } finally {
-                // 4. Reset button state
-                submitButton.textContent = 'Generate Outline';
-                submitButton.disabled = false;
-            }
-        });
-    </script>
+            } catch (error) {
+                // STOP STATUS BAR on fetch error
+                updateStatus(false); 
+                console.error('Generation Error:', error);
+                placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
+            } finally {
+                // 4. Reset button state
+                submitButton.textContent = 'Generate Outline';
+                submitButton.disabled = false;
+            }
+        });
+    </script>
 
 </body>
 </html>
