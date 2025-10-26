@@ -230,7 +230,7 @@
             <div class="busyness-gauge">
                 <h4>Busyness Gauge</h4>
                 <label>
-                    <input type="radio" name="busyness" value="large, open geometric tiles" checked>
+                    <input type="radio" name="busyness" value="extremely low detail, simple lines, approximately 70% fewer lines, large open areas" checked>
                     Minimally Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
                 </label>
                 <label>
@@ -263,10 +263,9 @@
     </div>
 
     <script>
-        // *** PRESET DATA UPDATED WITH AI DESCRIPTIONS (VALUE) AND DISPLAY NAMES ***
+        // *** PRESET DATA: Realism has been removed from Art Style ***
         const PRESET_CATEGORIES = {
             "Art Style": [
-                { display: "Realism", value: "highly detailed, realistic shading, accurate form" },
                 { display: "Impressionism", value: "broad, visible brushstrokes, light and color focused, loose forms" },
                 { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, pure color focus" },
                 { display: "Surrealism", value: "dreamlike, illogical juxtaposition, unexpected elements" },
@@ -329,7 +328,7 @@
         const statusBar = document.getElementById('statusBar');
         const statusMessage = document.getElementById('statusMessage');
 
-        // Status Bar Steps (UPDATED)
+        // Status Bar Steps
         const STATUS_STEPS = [
             "5% - Sending your descriptions to our magician, Tony ...",
             "18% - Tony received your descriptions. Now figuring out the style...",
@@ -363,7 +362,7 @@
             statusInterval = setInterval(cycleStatus, 3000); 
         }
 
-        // Function to render the presets dynamically using RADIO BUTTONS
+        // Function to render the presets dynamically using RADIO BUTTONS (Only showing display names)
         function renderPresets() {
             let html = '';
             
@@ -379,7 +378,7 @@
                         html += `
                             <label>
                                 <input type="radio" name="${radioGroupName}" value="${item.value}">
-                                ${item.display} <span style="font-size: 0.9em; color: #9E9E9E;">(${item.display} art style)</span>
+                                ${item.display}
                             </label>
                         `;
                     });
@@ -394,7 +393,7 @@
                             html += `
                                 <label>
                                     <input type="radio" name="${radioGroupName}" value="${item.value}">
-                                    ${item.display} <span style="font-size: 0.9em; color: #9E9E9E;">(${item.value})</span>
+                                    ${item.display}
                                 </label>
                             `;
                         });
@@ -413,7 +412,7 @@
 
         // Function to update the prompt box based on selected radio buttons
         function updatePromptBox() {
-            // Collects the 'value' of all checked radio buttons (which are the new descriptive strings)
+            // Collects the 'value' of all checked radio buttons (which are the descriptive strings)
             const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
                                          .map(radio => radio.value);
             
@@ -424,7 +423,7 @@
         // Initial setup
         renderPresets();
         // Ensure default busyness state is set in the prompt box on load
-        document.querySelector('input[name="busyness"][value="large, open geometric tiles"]').checked = true;
+        document.querySelector('input[name="busyness"][value="extremely low detail, simple lines, approximately 70% fewer lines, large open areas"]').checked = true;
         updatePromptBox(); 
 
 
