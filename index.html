@@ -29,14 +29,34 @@
             display: flex;
             flex-direction: column;
             gap: 30px;
+            /* CRITICAL CHANGE 1: Establish positioning context for absolute logo */
+            position: relative; 
+        }
+
+        /* Logo Styling */
+        .logo-container {
+            /* CRITICAL CHANGE 2: Position the logo absolutely at the top right */
+            position: absolute; 
+            top: 20px; /* Distance from the top edge of the generator-container padding */
+            right: 20px; /* Distance from the right edge of the generator-container padding */
+            z-index: 10; /* Ensure the logo is always on top */
+        }
+
+        .logo-container img {
+            width: 80px; /* Reduced size slightly to fit neatly in the corner */
+            height: auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
         }
 
         /* Header Styling */
         h1 {
             color: #5D4037; /* Earthy brown */
             text-align: center;
+            margin-top: 0; 
             margin-bottom: 5px;
             font-weight: 300;
+            /* Optional: Add padding to ensure H1 content doesn't sit under the logo */
+            padding-right: 100px; 
         }
 
         .subtitle {
@@ -46,7 +66,7 @@
             font-style: italic;
         }
 
-        /* Form and Input Styling */
+        /* Form and Input Styling (rest of CSS remains the same) */
         .prompt-form {
             display: flex;
             flex-direction: column;
@@ -121,6 +141,10 @@
 <body>
 
     <div class="generator-container">
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo"> 
+        </div>
+        
         <h1>Generate Your Canvas Outline</h1>
         <p class="subtitle">Describe the image you want to paint, and our AI will create a complex outline for you.</p>
 
@@ -178,13 +202,10 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
-                // *** CRITICAL FIX: Handle the incoming binary image data (PNG) ***
-                // Read the response as a binary data blob
+                // *** Handle the incoming binary image data (PNG) ***
                 const imageBlob = await response.blob(); 
                 
-                // Check if the blob is an image (optional, but good practice)
                 if (imageBlob.type && imageBlob.type.startsWith('image/')) {
-                    // Create a temporary URL that the browser can use to display the image
                     const imageUrl = URL.createObjectURL(imageBlob); 
                     
                     // 3. Update UI with the result
@@ -203,7 +224,6 @@
                         generatedImage.style.display = 'none';
                     };
                 } else {
-                     // This handles the case where n8n returns something other than a file
                     const errorText = await imageBlob.text(); 
                     placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
                 }
