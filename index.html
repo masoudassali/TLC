@@ -309,7 +309,7 @@
                     { display: "Kuala Lumpur", value: "Kuala Lumpur's Petronas Twin Towers, lush tropical setting, detailed city foliage" },
                     { display: "Bangkok", value: "Bangkok's detailed temples, winding canals, busy street scenes, complex rooftop lines" },
                     { display: "Sydney", value: "Sydney's Opera House, harbor views, intricate yacht rigging" },
-                    { display: "Tokyo", value: "neon signs, dense pedestrian streets, futuristic buildings, busy intersections" }
+                    { display: "Tokyo", value: "neon signs, dense pedestrian streets, futuristic buildings, busy intersections" }, // <-- MISSING COMMA FIXED HERE
                     { display: "Beijing", value: "Beijing's landmarks and the Great Wall of China, urban streets, historic buildings, and Chinese architecture" }
                 ],
                 "Animals": [
@@ -461,6 +461,7 @@
 
                     // Assemble the final Category HTML: Visible Content + Toggle + Hidden Content
                     html += visibleHtml;
+                    // THE MORE BUTTON IS ADDED HERE
                     html += `<a href="#" class="more-button" id="moreCategoryButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCategoryContainer', 'moreCategoryButton');">more...</a>`;
                     html += `<div id="hiddenCategoryContainer" class="hidden-preset">`;
                     html += hiddenHtml;
