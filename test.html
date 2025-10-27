@@ -20,7 +20,7 @@
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            line-height: 1.25; /* sensible default to avoid cramped text with Handlee */
+            line-height: 1.25;
         }
 
         /* Container for the App */
@@ -37,11 +37,48 @@
             box-sizing: border-box;
         }
 
+        /* ------------------------------------------- */
+        /* HEADER SECTION WITH BACKGROUND IMAGE */
+        /* ------------------------------------------- */
+        .header-section {
+            /* Use negative margins to pull the header out to the edges of the container padding (40px) */
+            margin: -40px -40px 30px -40px;
+            /* Re-apply internal padding, reduce bottom padding to pull content closer */
+            padding: 40px 40px 20px 40px;
+
+            /* Background Image Setup */
+            background-image: url('https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/Header.jpg');
+            background-size: cover;
+            background-position: 50% 35%; 
+            background-repeat: no-repeat;
+            
+            height: 180px; 
+            
+            position: relative; 
+            border-radius: 12px 12px 0 0; 
+            overflow: hidden; 
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        /* Styling for the new wrapper spans */
+        .header-text-highlight {
+            background-color: rgba(255, 255, 255, 0.9); /* Solid white background with slight transparency */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle lift */
+            padding: 5px 10px;
+            line-height: 1; /* Reset line-height inherited from block element */
+            box-decoration-break: clone; /* Allows padding/bg to wrap multi-line text cleanly */
+            display: inline-block; /* Essential for padding/bg to wrap text */
+        }
+
         /* Logo Styling */
         .logo-container {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 30px;
+            right: 30px;
             z-index: 10;
         }
 
@@ -52,27 +89,35 @@
             display: block;
         }
 
-        /* Header Styling */
-        h1 {
-            font-family: 'Amatic SC', cursive; /* KEEP title font */
-            color: #5D4037;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 5px;
+        /* Header Title Styling */
+        .header-section h1 {
+            font-family: 'Amatic SC', cursive;
+            color: #222; 
+            text-align: left;
+            margin-top: 5px; /* Adjusted margin */
+            margin-bottom: 0;
             font-weight: 700;
-            font-size: 3.5em;
-            padding-right: 100px;
-            line-height: 1; /* ensure title spacing remains tight */
+            font-size: 3.8em;
+            padding-right: 120px; 
+            line-height: 1.2; /* Allows for space around the span background */
+            text-shadow: none; /* Removed old shadow */
         }
 
-        .subtitle {
-            color: #795548;
-            text-align: center;
-            margin-bottom: 25px;
+        .header-section .subtitle {
+            color: #444; 
+            text-align: left;
+            margin-top: 5px; /* Added top margin for separation */
+            margin-bottom: 0;
             font-style: normal;
-            font-size: 2em;
-            line-height: 1.05; /* stable spacing */
+            font-size: 2.2em;
+            line-height: 1.2;
+            padding-right: 120px; 
+            text-shadow: none; /* Removed old shadow */
         }
+        /* ------------------------------------------- */
+        /* END HEADER SECTION STYLES */
+        /* ------------------------------------------- */
+
 
         /* Prompt Form Styling */
         .prompt-form {
@@ -90,7 +135,7 @@
             font-size: 1.5em;
             color: #5D4037;
             margin: 0;
-            line-height: 1.1; /* explicit line height */
+            line-height: 1.1;
         }
 
         textarea {
@@ -103,8 +148,15 @@
             min-height: 100px;
             box-sizing: border-box;
             transition: border-color 0.3s;
-            font-family: 'Handlee', cursive; /* ensure textarea uses Handlee */
-            line-height: 1.25; /* avoid crowding */
+            font-family: 'Handlee', cursive;
+            line-height: 1.25;
+        }
+
+        /* Placeholder styles (carried over from previous request) */
+        textarea::placeholder {
+            font-size: 1.0em; /* Reduced size */
+            color: #9e9e9e;
+            opacity: 1;
         }
 
         textarea:focus {
@@ -145,7 +197,6 @@
         .preset-header {
             display: flex;
             align-items: center;
-            /* CHANGE: Removed gap and made flex-grow push the button to the right */
             border-bottom: 1px solid #eee;
             margin-bottom: 12px;
             padding-bottom: 5px;
@@ -155,15 +206,13 @@
             font-size: 2em;
             color: #FF7043;
             margin: 0;
-            /* CHANGE: Added right margin to separate the heading and the button */
-            margin-right: 15px; 
+            margin-right: 15px; 
             line-height: 1;
             font-family: 'Handlee', cursive;
         }
         
         /* New button style for the main toggle */
         .main-toggle-button {
-            /* NEW: Use flex-grow to push the button to the right end */
             margin-left: auto;
             background: #FF7043;
             border: none;
@@ -176,7 +225,7 @@
             line-height: 1;
             transition: background-color 0.2s;
             font-family: 'Handlee', cursive;
-            flex-shrink: 0; 
+            flex-shrink: 0; 
         }
 
         .main-toggle-button:hover {
@@ -302,24 +351,31 @@
 
         /* Responsive tweaks */
         @media (max-width: 600px) {
-            h1 { font-size: 2.8em; padding-right: 40px; }
+            .header-section h1 { font-size: 2.8em; padding-right: 40px; margin-top: 5px; }
+            .header-section .subtitle { font-size: 1.8em; padding-right: 40px; }
             .preset-options h3 { font-size: 1.6em; }
             .busyness-gauge h4 { min-width: 120px; font-size: 1.2em; }
             .preset-category label, .busyness-gauge label { font-size: 1.05em; }
             textarea { font-size: 1.15em; }
+            textarea::placeholder { font-size: 0.9em; } 
         }
     </style>
 </head>
 <body>
 
     <div class="generator-container">
-        <div class="logo-container">
-            <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
+        
+        <div class="header-section">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
+            </div>
+            <h1>
+                <span class="header-text-highlight">The Lined Canvas</span>
+            </h1>
+            <p class="subtitle">
+                <span class="header-text-highlight">Let Tony cook you the outline for your next masterpiece, and he'll ship it to your door too.</span>
+            </p>
         </div>
-
-        <h1>The Lined Canvas</h1>
-        <p class="subtitle">Let Tony cook you a unique outline for your next masterpiece, and he'll ship it to your door too.</p>
-
         <form class="prompt-form" id="imageGenerationForm">
             <label for="prompt" style="font-size: 1.5em;">Describe in detail what outline you'd like to get for your next masterpiece. <i>Or select below.</i></label>
             <textarea id="prompt" name="prompt" placeholder="Start typing your description... Example: A whimsical kitten. Detailed fur. Playful pose lines, geometric tiles, medium-sized tiles." required></textarea>
@@ -328,7 +384,7 @@
 
         <div class="preset-options">
             <div class="preset-header">
-                <h3>Artist's Block?</h3>
+                <h3>Artist's block?</h3>
                 <button type="button" class="main-toggle-button" id="mainToggleButton">
                     Try these ideas...
                 </button>
@@ -359,8 +415,8 @@
                         </label>
                     </div>
                 </div>
-                </div>
             </div>
+        </div>
 
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
 
@@ -381,7 +437,7 @@
         const PRESET_CATEGORIES = {
             "Art Style": [
                 { display: "Impressionism", value: "broad, visible short brushstrokes, light focused, loose forms, en plein air and outdoors to capture the fleeting effects of natural light, depicting everyday subjects and scenes of modern life, a sense of spontaneity, an emphasis on capturing a momentary impressions, and open compositions with unusual visual angles." },
-                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
+                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, non-representational nature, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
                 { display: "Surrealism", value: "dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
                 { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
             ],
@@ -453,7 +509,7 @@
                 "5% - Sending your descriptions to our magician, Tony ...",
                 "18% - Tony received your descriptions. Now figuring out the style...",
                 "22% - Tony is adding the final touches...",
-                "41% - This may take 15-20 seconds...",
+                "41% - This may take 5-15 seconds...",
                 "67% - Converting everything into a PNG file...",
                 "93% - Sending image data back to your browser...",
                 "100% - Serving up your order now..."
@@ -601,7 +657,7 @@
                 updateStatus(true);
 
                 try {
-                    // 2. Send prompt to webhook
+                    // 2. Send prompt to n8n webhook
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
                         headers: {
@@ -643,17 +699,17 @@
                         // STOP STATUS BAR on file type error
                         updateStatus(false);
                         const errorText = await imageBlob.text();
-                        placeholderText.textContent = `Generation failed. Tony did not return a valid image file. Please try again. Raw response: ${errorText.substring(0, 100)}...`;
+                        placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
                     }
 
                 } catch (error) {
                     // STOP STATUS BAR on fetch error
                     updateStatus(false);
                     console.error('Generation Error:', error);
-                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your Tony's workflow is active and configured to return a binary PNG file.`;
+                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
                 } finally {
                     // 4. Reset button state
-                    submitButton.textContent = 'Generate Outline';
+                    submitButton.textContent = 'Ok Tony, cook me an amazing outline...'; // Reset to new button text
                     submitButton.disabled = false;
                 }
             });
