@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">
     <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
     <style>
         /* General Styling */
         body {
-            font-family: 'Amatic SC', cursive;
+            font-family: 'Handlee', cursive; /* non-title font */
             background-color: #f4f7f6;
             color: #333;
             margin: 0;
@@ -17,6 +17,10 @@
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.25; /* sensible default to avoid cramped text with Handlee */
         }
 
         /* Container for the App */
@@ -45,10 +49,12 @@
             width: 80px;
             height: auto;
             filter: none;
+            display: block;
         }
 
         /* Header Styling */
         h1 {
+            font-family: 'Amatic SC', cursive; /* KEEP title font */
             color: #5D4037;
             text-align: center;
             margin-top: 0;
@@ -56,6 +62,7 @@
             font-weight: 700;
             font-size: 3.5em;
             padding-right: 100px;
+            line-height: 1; /* ensure title spacing remains tight */
         }
 
         .subtitle {
@@ -64,6 +71,7 @@
             margin-bottom: 25px;
             font-style: normal;
             font-size: 2em;
+            line-height: 1.05; /* stable spacing */
         }
 
         /* Prompt Form Styling */
@@ -75,11 +83,14 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             background-color: #fafafa;
+            box-sizing: border-box;
         }
 
         .prompt-form label {
             font-size: 1.5em;
             color: #5D4037;
+            margin: 0;
+            line-height: 1.1; /* explicit line height */
         }
 
         textarea {
@@ -92,6 +103,8 @@
             min-height: 100px;
             box-sizing: border-box;
             transition: border-color 0.3s;
+            font-family: 'Handlee', cursive; /* ensure textarea uses Handlee */
+            line-height: 1.25; /* avoid crowding */
         }
 
         textarea:focus {
@@ -110,6 +123,8 @@
             font-size: 1.8em;
             font-weight: bold;
             transition: background-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
         }
 
         button:hover {
@@ -123,14 +138,49 @@
             border-radius: 8px;
             background-color: #fafafa;
             box-sizing: border-box;
+            overflow: visible;
+        }
+
+        /* Container for the Heading and Button */
+        .preset-header {
+            display: flex;
+            align-items: center;
+            /* CHANGE: Removed gap and made flex-grow push the button to the right */
+            border-bottom: 1px solid #eee;
+            margin-bottom: 12px;
+            padding-bottom: 5px;
         }
 
         .preset-options h3 {
             font-size: 2em;
             color: #FF7043;
-            margin-top: 0;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
+            margin: 0;
+            /* CHANGE: Added right margin to separate the heading and the button */
+            margin-right: 15px; 
+            line-height: 1;
+            font-family: 'Handlee', cursive;
+        }
+        
+        /* New button style for the main toggle */
+        .main-toggle-button {
+            /* NEW: Use flex-grow to push the button to the right end */
+            margin-left: auto;
+            background: #FF7043;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 1;
+            transition: background-color 0.2s;
+            font-family: 'Handlee', cursive;
+            flex-shrink: 0; 
+        }
+
+        .main-toggle-button:hover {
+            background: #E64A19;
         }
 
         .preset-category {
@@ -142,6 +192,8 @@
             color: #5D4037;
             margin: 5px 0;
             text-decoration: underline;
+            line-height: 1.05;
+            font-family: 'Handlee', cursive;
         }
 
         .preset-category label {
@@ -151,6 +203,7 @@
             font-size: 1.2em;
             line-height: 1.5;
             vertical-align: middle;
+            font-family: 'Handlee', cursive;
         }
 
         /* Busyness Gauge Styling */
@@ -162,12 +215,37 @@
             border-top: 1px solid #eee;
             margin-top: 15px;
             flex-wrap: wrap;
+            box-sizing: border-box;
+        }
+        
+        /* Busyness radio buttons now arranged vertically for clarity */
+        .busyness-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .busyness-gauge h4 {
             margin: 0;
             min-width: 100px;
             font-size: 1.5em;
+            line-height: 1;
+            font-family: 'Handlee', cursive;
+            align-self: flex-start; /* Align title to the top */
+            padding-top: 5px; /* Visual spacing */
+        }
+
+        .busyness-gauge label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2em;
+            line-height: 1.2;
+            font-family: 'Handlee', cursive;
+        }
+
+        .busyness-gauge input[type="radio"] {
+            transform: translateY(0);
         }
 
         /* Status Bar Styling */
@@ -180,6 +258,8 @@
             font-weight: 700;
             transition: opacity 0.3s ease-in-out;
             opacity: 0;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
         }
 
         .status-bar.visible {
@@ -204,6 +284,8 @@
             color: #9E9E9E;
             font-style: italic;
             font-size: 1.5em;
+            font-family: 'Handlee', cursive;
+            line-height: 1.25;
         }
 
         .generated-image {
@@ -213,28 +295,18 @@
             display: none;
         }
 
-        /* New Styles for 'More' Functionality */
-        .hidden-preset {
+        /* Styles for hidden content */
+        .hidden-content {
             display: none;
         }
 
-        .more-button {
-            background: #f8f8f8;
-            border: 1px solid #ccc;
-            color: #FF7043;
-            font-size: 1.1em;
-            padding: 5px 10px;
-            margin: 10px 0;
-            cursor: pointer;
-            border-radius: 4px;
-            display: block;
-            width: 100px;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .more-button:hover {
-            background: #eee;
+        /* Responsive tweaks */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.8em; padding-right: 40px; }
+            .preset-options h3 { font-size: 1.6em; }
+            .busyness-gauge h4 { min-width: 120px; font-size: 1.2em; }
+            .preset-category label, .busyness-gauge label { font-size: 1.05em; }
+            textarea { font-size: 1.15em; }
         }
     </style>
 </head>
@@ -246,34 +318,49 @@
         </div>
 
         <h1>The Lined Canvas</h1>
-        <p class="subtitle">Generate the outline for your next masterpiece, and we'll ship it to your door.</p>
+        <p class="subtitle">Let Tony cook you a unique outline for your next masterpiece, and he'll ship it to your door too.</p>
 
-        <!-- MOVED PROMPT BOX ABOVE OPTIONS -->
         <form class="prompt-form" id="imageGenerationForm">
-            <label for="prompt" style="font-size: 1.5em;">Choose from the options or add your own descriptions here:</label>
-            <textarea id="prompt" name="prompt" placeholder="Start typing your description..." required></textarea>
-            <button type="submit">Generate Outline</button>
+            <label for="prompt" style="font-size: 1.5em;">Describe in detail what outline you'd like to get for your next masterpiece. <i>Or select below.</i></label>
+            <textarea id="prompt" name="prompt" placeholder="Start typing your description... Example: A whimsical kitten. Detailed fur. Playful pose lines, geometric tiles, medium-sized tiles." required></textarea>
+            <button type="submit">Ok Tony, cook me an amazing outline...</button>
         </form>
 
         <div class="preset-options">
-            <h3>Choose Options</h3>
-
-            <div id="presetsContainer"></div>
-
-            <div class="busyness-gauge">
-                <h4>Busyness Gauge</h4>
-                <label>
-                    <input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" checked>
-                    Minimally Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
-                </label>
-                <label>
-                    <input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles">
-                    Super Busy <span style="font-size: 0.9em; color: #9E9E9E;">(Smaller, many tiles)</span>
-                </label>
+            <div class="preset-header">
+                <h3>Artist's Block?</h3>
+                <button type="button" class="main-toggle-button" id="mainToggleButton">
+                    Try these ideas...
+                </button>
             </div>
+            
+            <div id="allPresetsWrapper" class="hidden-content"> 
 
-            <p class="prompt-example">Example: *A whimsical cat reading a book in a cozy, sunlit cafe with a steaming mug.*</p>
-        </div>
+                <div id="presetsContainer">
+                    </div>
+
+                <div class="busyness-gauge">
+                    <h4>Page Busyness</h4>
+                    <div class="busyness-options">
+                        <label>
+                            <input type="radio" name="busyness" value="simple, minimal geometric tiles, few large tiles, 70% of the page is empty">
+                            <span>Minimally Busy</span>
+                            <span style="font-size: 0.9em; color: #9E9E9E;">(Few large tiles, 70% empty)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="busyness" value="geometric tiles, medium-sized tiles, 55% of the page is empty">
+                            <span>Moderately Busy</span>
+                            <span style="font-size: 0.9em; color: #9E9E9E;">(Medium tiles, 55% empty)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="busyness" value="dense, intricate, numerous small geometric tiles, 40% of the page is empty">
+                            <span>Super Busy</span>
+                            <span style="font-size: 0.9em; color: #9E9E9E;">(Numerous small tiles, 40% empty)</span>
+                        </label>
+                    </div>
+                </div>
+                </div>
+            </div>
 
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
 
@@ -284,7 +371,7 @@
         <h2>Your Generated Outline Preview</h2>
 
         <div class="image-display">
-            <p class="image-placeholder" id="placeholderText">Your AI-generated outline preview will appear here.</p>
+            <p class="image-placeholder" id="placeholderText">Tony is cooking. It'd show up here once he's done.</p>
             <img src="" alt="AI Generated Outline" class="generated-image" id="generatedImage">
         </div>
     </div>
@@ -294,11 +381,11 @@
         const PRESET_CATEGORIES = {
             "Art Style": [
                 { display: "Impressionism", value: "broad, visible short brushstrokes, light focused, loose forms, en plein air and outdoors to capture the fleeting effects of natural light, depicting everyday subjects and scenes of modern life, a sense of spontaneity, an emphasis on capturing a momentary impressions, and open compositions with unusual visual angles." },
-                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, non-representational nature, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
+                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
                 { display: "Surrealism", value: "dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
                 { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
             ],
-            "Category": {
+            "Themes": { 
                 "Cities": [
                     { display: "New York City", value: "a New York City cityscape with famous landmarks, towering skyscrapers, detailed traffic" },
                     { display: "San Francisco", value: "a dense, hilly San Francisco city and landmarks with Victorian houses and the Golden Gate Bridge" },
@@ -358,13 +445,15 @@
             const presetsContainer = document.getElementById('presetsContainer');
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
+            const mainToggleButton = document.getElementById('mainToggleButton');
+            const allPresetsWrapper = document.getElementById('allPresetsWrapper');
 
             // Status Bar Steps
             const STATUS_STEPS = [
                 "5% - Sending your descriptions to our magician, Tony ...",
                 "18% - Tony received your descriptions. Now figuring out the style...",
                 "22% - Tony is adding the final touches...",
-                "41% - This may take 5-15 seconds...",
+                "41% - This may take 15-20 seconds...",
                 "67% - Converting everything into a PNG file...",
                 "93% - Sending image data back to your browser...",
                 "100% - Serving up your order now..."
@@ -393,19 +482,18 @@
                 statusInterval = setInterval(cycleStatus, 3000);
             }
 
-            // Function to render the presets dynamically using RADIO BUTTONS (Only showing display names)
+            // Function to render the presets dynamically
             function renderPresets() {
                 let html = '';
-                const CITIES_VISIBLE_COUNT = 9; // Number of cities to show before the "more..." button
 
                 for (const categoryName in PRESET_CATEGORIES) {
                     const categoryData = PRESET_CATEGORIES[categoryName];
-                    const radioGroupName = categoryName.replace(/\s/g, ''); 
+                    const radioGroupName = categoryName.replace(/\s/g, ''); 
 
                     html += `<div class="preset-category"><h4>${categoryName}</h4>`;
 
                     if (Array.isArray(categoryData)) {
-                        // Simple array (Art Style) - ALWAYS VISIBLE
+                        // Simple array (Art Style)
                         categoryData.forEach(item => {
                             html += `
                                 <label>
@@ -414,65 +502,24 @@
                                 </label>
                             `;
                         });
-                    } else if (typeof categoryData === 'object' && categoryName === 'Category') {
-                        // Complex object (Category: Cities, Animals, Landscapes)
-
-                        let visibleHtml = '';
-                        let hiddenHtml = '';
-
+                    } else if (typeof categoryData === 'object' && categoryName === 'Themes') {
+                        // Complex object (Themes: Cities, Animals, Landscapes)
                         for (const subCategoryName in categoryData) {
                             const items = categoryData[subCategoryName];
+                            
+                            // Subcategory heading
+                            html += `<p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${escapeHtml(subCategoryName)}:</p>`;
 
-                            // Start of the subcategory section heading
-                            let sectionHtml = `<p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${escapeHtml(subCategoryName)}:</p>`;
-
-                            if (subCategoryName === 'Cities') {
-
-                                // Visible Cities (first 9)
-                                visibleHtml += sectionHtml; // Add the Cities heading to the visible block
-                                for (let i = 0; i < Math.min(CITIES_VISIBLE_COUNT, items.length); i++) {
-                                    visibleHtml += `
-                                        <label>
-                                            <input type="radio" name="${radioGroupName}" value="${escapeHtml(items[i].value)}">
-                                            ${escapeHtml(items[i].display)}
-                                        </label>
-                                    `;
-                                }
-
-                                // Hidden Cities (remaining)
-                                if (items.length > CITIES_VISIBLE_COUNT) {
-                                    hiddenHtml += sectionHtml; // Add the Cities heading again to the hidden block
-                                    for (let i = CITIES_VISIBLE_COUNT; i < items.length; i++) {
-                                        hiddenHtml += `
-                                            <label>
-                                                <input type="radio" name="${radioGroupName}" value="${escapeHtml(items[i].value)}">
-                                                ${escapeHtml(items[i].display)}
-                                            </label>
-                                        `;
-                                    }
-                                }
-
-                            } else {
-                                // Animals and Landscapes: ENTIRELY HIDDEN
-                                hiddenHtml += sectionHtml; // Add the heading to the hidden block
-
-                                items.forEach(item => {
-                                    hiddenHtml += `
-                                        <label>
-                                            <input type="radio" name="${radioGroupName}" value="${escapeHtml(item.value)}">
-                                            ${escapeHtml(item.display)}
-                                        </label>
-                                    `;
-                                });
-                            }
+                            // Subcategory options
+                            items.forEach(item => {
+                                html += `
+                                    <label>
+                                        <input type="radio" name="${radioGroupName}" value="${escapeHtml(item.value)}">
+                                        ${escapeHtml(item.display)}
+                                    </label>
+                                `;
+                            });
                         }
-
-                        // Assemble the final Category HTML: Visible Content + Toggle + Hidden Content
-                        html += visibleHtml;
-                        html += `<a href="#" class="more-button" id="moreCategoryButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCategoryContainer', 'moreCategoryButton');">more...</a>`;
-                        html += `<div id="hiddenCategoryContainer" class="hidden-preset">`;
-                        html += hiddenHtml;
-                        html += `</div>`;
                     }
 
                     html += `</div>`;
@@ -485,19 +532,14 @@
                 });
             }
 
-            // New function to toggle hidden presets, accepting button ID
-            function toggleHiddenPresets(containerId, buttonId) {
-                const container = document.getElementById(containerId);
-                const button = document.getElementById(buttonId);
-
-                if (!container || !button) return;
-
-                if (container.classList.contains('hidden-preset')) {
-                    container.classList.remove('hidden-preset');
-                    button.textContent = 'less...';
+            // Function to toggle the main preset wrapper
+            function toggleMainPresets() {
+                const isHidden = allPresetsWrapper.classList.toggle('hidden-content');
+                
+                if (isHidden) {
+                    mainToggleButton.textContent = 'Try these ideas...';
                 } else {
-                    container.classList.add('hidden-preset');
-                    button.textContent = 'more...';
+                    mainToggleButton.textContent = 'Hide ideas'; // New text for visible state
                 }
             }
 
@@ -523,10 +565,23 @@
 
             // INITIALIZE UI
             renderPresets();
-            // Ensure default busyness state is set in the prompt box on load
-            const defaultBusyness = document.querySelector('input[name="busyness"][value="simple, minimal geometric tiles, low density"]');
-            if (defaultBusyness) defaultBusyness.checked = true;
-            updatePromptBox();
+            // Attach toggle listener to the main button
+            mainToggleButton.addEventListener('click', toggleMainPresets);
+            
+            // --- UPDATED INITIAL STATE LOGIC (Start Hidden and Unselected) ---
+            // 1. Ensure content starts hidden
+            allPresetsWrapper.classList.add('hidden-content');
+            // 2. Set the button text to its 'show' state
+            mainToggleButton.textContent = 'Try these ideas...';
+            
+            // 3. Clear all radio buttons (in case any were somehow set during rendering)
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 4. Ensure the prompt box starts empty after clearing selections
+            promptTextarea.value = '';
+            // -----------------------------------
 
             // Form Submission Logic (Binary File Handling)
             form.addEventListener('submit', async (e) => {
@@ -546,7 +601,7 @@
                 updateStatus(true);
 
                 try {
-                    // 2. Send prompt to n8n webhook
+                    // 2. Send prompt to webhook
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
                         headers: {
@@ -588,23 +643,20 @@
                         // STOP STATUS BAR on file type error
                         updateStatus(false);
                         const errorText = await imageBlob.text();
-                        placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
+                        placeholderText.textContent = `Generation failed. Tony did not return a valid image file. Please try again. Raw response: ${errorText.substring(0, 100)}...`;
                     }
 
                 } catch (error) {
                     // STOP STATUS BAR on fetch error
                     updateStatus(false);
                     console.error('Generation Error:', error);
-                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
+                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your Tony's workflow is active and configured to return a binary PNG file.`;
                 } finally {
                     // 4. Reset button state
                     submitButton.textContent = 'Generate Outline';
                     submitButton.disabled = false;
                 }
             });
-
-            /* Expose toggle function globally so inline onclick works */
-            window.toggleHiddenPresets = toggleHiddenPresets;
         });
     </script>
 
