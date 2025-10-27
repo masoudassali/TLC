@@ -601,7 +601,7 @@
                 updateStatus(true);
 
                 try {
-                    // 2. Send prompt to n8n webhook
+                    // 2. Send prompt to webhook
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
                         headers: {
@@ -643,14 +643,14 @@
                         // STOP STATUS BAR on file type error
                         updateStatus(false);
                         const errorText = await imageBlob.text();
-                        placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
+                        placeholderText.textContent = `Generation failed. Tony did not return a valid image file. Please try again. Raw response: ${errorText.substring(0, 100)}...`;
                     }
 
                 } catch (error) {
                     // STOP STATUS BAR on fetch error
                     updateStatus(false);
                     console.error('Generation Error:', error);
-                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
+                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your Tony's workflow is active and configured to return a binary PNG file.`;
                 } finally {
                     // 4. Reset button state
                     submitButton.textContent = 'Generate Outline';
