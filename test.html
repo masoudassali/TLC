@@ -217,6 +217,13 @@
             flex-wrap: wrap;
             box-sizing: border-box;
         }
+        
+        /* Busyness radio buttons now arranged vertically for clarity */
+        .busyness-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
         .busyness-gauge h4 {
             margin: 0;
@@ -224,6 +231,8 @@
             font-size: 1.5em;
             line-height: 1;
             font-family: 'Handlee', cursive;
+            align-self: flex-start; /* Align title to the top */
+            padding-top: 5px; /* Visual spacing */
         }
 
         .busyness-gauge label {
@@ -313,7 +322,7 @@
 
         <form class="prompt-form" id="imageGenerationForm">
             <label for="prompt" style="font-size: 1.5em;">Describe in detail what outline you'd like to get for your next masterpiece. <i>Or select below.</i></label>
-            <textarea id="prompt" name="prompt" placeholder="Start typing your description..." required></textarea>
+            <textarea id="prompt" name="prompt" placeholder="Start typing your description... Example: A whimsical, curious kitten reading a book. Detailed fur and playful pose lines, geometric tiles, medium-sized tiles, 55% of the page is empty." required></textarea>
             <button type="submit">Generate Outline</button>
         </form>
 
@@ -326,24 +335,31 @@
             </div>
             
             <div id="allPresetsWrapper" class="hidden-content"> 
+
                 <div id="presetsContainer">
                     </div>
 
                 <div class="busyness-gauge">
                     <h4>Page Busyness</h4>
-                    <label>
-                        <input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" checked>
-                        <span>Minimally Busy</span>
-                        <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles">
-                        <span>Super Busy</span>
-                        <span style="font-size: 0.9em; color: #9E9E9E;">(Smaller, many tiles)</span>
-                    </label>
+                    <div class="busyness-options">
+                        <label>
+                            <input type="radio" name="busyness" value="simple, minimal geometric tiles, few large tiles, 70% of the page is empty">
+                            <span>Minimally Busy</span>
+                            <span style="font-size: 0.9em; color: #9E9E9E;">(Few large tiles, 70% empty)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="busyness" value="geometric tiles, medium-sized tiles, 55% of the page is empty">
+                            <span>Moderately Busy</span>
+                            <span style="font-size: 0.9em; color: #9E9E9E;">(Medium tiles, 55% empty)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="busyness" value="dense, intricate, numerous small geometric tiles, 40% of the page is empty">
+                            <span>Super Busy</span>
+                            <span style="font-size: 0.9em; color: #9E9E9E;">(Numerous small tiles, 40% empty)</span>
+                        </label>
+                    </div>
                 </div>
-
-            </div>
+                </div>
             </div>
 
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
@@ -552,18 +568,20 @@
             // Attach toggle listener to the main button
             mainToggleButton.addEventListener('click', toggleMainPresets);
             
-            // --- UPDATED INITIAL STATE LOGIC ---
-            // 1. Start the content hidden
+            // --- UPDATED INITIAL STATE LOGIC (Start Hidden and Unselected) ---
+            // 1. Ensure content starts hidden
             allPresetsWrapper.classList.add('hidden-content');
             // 2. Set the button text to its 'show' state
             mainToggleButton.textContent = 'Try these ideas...';
+            
+            // 3. Clear all radio buttons (in case any were somehow set during rendering)
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 4. Ensure the prompt box starts empty after clearing selections
+            promptTextarea.value = '';
             // -----------------------------------
-
-
-            // Ensure default busyness state is set in the prompt box on load
-            const defaultBusyness = document.querySelector('input[name="busyness"][value="simple, minimal geometric tiles, low density"]');
-            if (defaultBusyness) defaultBusyness.checked = true;
-            updatePromptBox();
 
             // Form Submission Logic (Binary File Handling)
             form.addEventListener('submit', async (e) => {
