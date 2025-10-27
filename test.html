@@ -392,7 +392,7 @@
             <div class="preset-header">
                 <h3>Artist's Block?</h3>
                 <button type="button" class="main-toggle-button" id="mainToggleButton">
-                    Try these ideas...
+                    Try Tony's ideas...
                 </button>
             </div>
             
@@ -599,7 +599,8 @@
                 const isHidden = allPresetsWrapper.classList.toggle('hidden-content');
                 
                 if (isHidden) {
-                    mainToggleButton.textContent = 'Try these ideas...';
+                    // UPDATED TEXT
+                    mainToggleButton.textContent = "Try Tony's ideas...";
                 } else {
                     mainToggleButton.textContent = 'Hide ideas'; // New text for visible state
                 }
@@ -634,7 +635,8 @@
             // 1. Ensure content starts hidden
             allPresetsWrapper.classList.add('hidden-content');
             // 2. Set the button text to its 'show' state
-            mainToggleButton.textContent = 'Try these ideas...';
+            // UPDATED TEXT
+            mainToggleButton.textContent = "Try Tony's ideas...";
             
             // 3. Clear all radio buttons (in case any were somehow set during rendering)
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
