@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <!-- Title font unchanged + Handlee for everything else -->
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">
     <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
     <style>
@@ -329,7 +328,7 @@
             <div id="presetsContainer"></div>
 
             <div class="busyness-gauge">
-                <h4>Busyness Gauge</h4>
+                <h4>Page Busyness</h4>
                 <label>
                     <input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" checked>
                     <span>Minimally Busy</span>
@@ -342,7 +341,7 @@
                 </label>
             </div>
 
-            <p class="prompt-example">Example: *A whimsical cat reading a book in a cozy, sunlit cafe with a steaming mug.*</p>
+            
         </div>
 
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
@@ -368,7 +367,7 @@
                 { display: "Surrealism", value: "dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
                 { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
             ],
-            "Category": {
+            "Themes": {   // <-- CHANGED FROM "Category" TO "Themes"
                 "Cities": [
                     { display: "New York City", value: "a New York City cityscape with famous landmarks, towering skyscrapers, detailed traffic" },
                     { display: "San Francisco", value: "a dense, hilly San Francisco city and landmarks with Victorian houses and the Golden Gate Bridge" },
@@ -466,8 +465,8 @@
             // Function to render the presets dynamically using RADIO BUTTONS (Only showing display names)
             function renderPresets() {
                 let html = '';
-                const CITIES_VISIBLE_COUNT = 9; // Number of cities to show before the "more..." button
-
+                const CITIES_VISIBLE_COUNT = Number.MAX_SAFE_INTEGER; // make cities fully visible by default
+                
                 for (const categoryName in PRESET_CATEGORIES) {
                     const categoryData = PRESET_CATEGORIES[categoryName];
                     const radioGroupName = categoryName.replace(/\s/g, ''); 
@@ -484,8 +483,8 @@
                                 </label>
                             `;
                         });
-                    } else if (typeof categoryData === 'object' && categoryName === 'Category') {
-                        // Complex object (Category: Cities, Animals, Landscapes)
+                    } else if (typeof categoryData === 'object' && categoryName === 'Themes') {
+                        // Complex object (Themes: Cities, Animals, Landscapes)
 
                         let visibleHtml = '';
                         let hiddenHtml = '';
@@ -498,7 +497,7 @@
 
                             if (subCategoryName === 'Cities') {
 
-                                // Visible Cities (first 9)
+                                // Visible Cities (now show all by default)
                                 visibleHtml += sectionHtml; // Add the Cities heading to the visible block
                                 for (let i = 0; i < Math.min(CITIES_VISIBLE_COUNT, items.length); i++) {
                                     visibleHtml += `
@@ -509,7 +508,7 @@
                                     `;
                                 }
 
-                                // Hidden Cities (remaining)
+                                // Hidden Cities (remaining) - none will be hidden because CITIES_VISIBLE_COUNT is huge
                                 if (items.length > CITIES_VISIBLE_COUNT) {
                                     hiddenHtml += sectionHtml; // Add the Cities heading again to the hidden block
                                     for (let i = CITIES_VISIBLE_COUNT; i < items.length; i++) {
@@ -537,8 +536,9 @@
                             }
                         }
 
-                        // Assemble the final Category HTML: Visible Content + Toggle + Hidden Content
+                        // Assemble the final Themes HTML: Visible Content + Toggle + Hidden Content
                         html += visibleHtml;
+                        // THE MORE BUTTON IS ADDED HERE (so it appears right after Cities / Beijing)
                         html += `<a href="#" class="more-button" id="moreCategoryButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCategoryContainer', 'moreCategoryButton');">more...</a>`;
                         html += `<div id="hiddenCategoryContainer" class="hidden-preset">`;
                         html += hiddenHtml;
