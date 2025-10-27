@@ -138,18 +138,49 @@
             border-radius: 8px;
             background-color: #fafafa;
             box-sizing: border-box;
-            overflow: visible; /* ensure inner borders/lines show even if font changes */
+            overflow: visible;
+        }
+
+        /* Container for the Heading and Button */
+        .preset-header {
+            display: flex;
+            align-items: center;
+            /* CHANGE: Removed gap and made flex-grow push the button to the right */
+            border-bottom: 1px solid #eee;
+            margin-bottom: 12px;
+            padding-bottom: 5px;
         }
 
         .preset-options h3 {
             font-size: 2em;
             color: #FF7043;
-            margin-top: 0;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            margin-bottom: 12px; /* explicit spacing so Handlee metrics don't collapse it */
-            line-height: 1; /* keep heading compact */
-            font-family: 'Handlee', cursive; /* non-title heading also uses Handlee per request */
+            margin: 0;
+            /* CHANGE: Added right margin to separate the heading and the button */
+            margin-right: 15px; 
+            line-height: 1;
+            font-family: 'Handlee', cursive;
+        }
+        
+        /* New button style for the main toggle */
+        .main-toggle-button {
+            /* NEW: Use flex-grow to push the button to the right end */
+            margin-left: auto;
+            background: #FF7043;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 1;
+            transition: background-color 0.2s;
+            font-family: 'Handlee', cursive;
+            flex-shrink: 0; 
+        }
+
+        .main-toggle-button:hover {
+            background: #E64A19;
         }
 
         .preset-category {
@@ -161,12 +192,7 @@
             color: #5D4037;
             margin: 5px 0;
             text-decoration: underline;
-            line-height: 1.05; /* explicit */
-            font-family: 'Handleee', cursive; /* typo-safe fallback below */
-        }
-
-        /* Fix for potential font name typo: ensure fallback to Handlee */
-        .preset-category h4, .preset-category label {
+            line-height: 1.05;
             font-family: 'Handlee', cursive;
         }
 
@@ -177,6 +203,7 @@
             font-size: 1.2em;
             line-height: 1.5;
             vertical-align: middle;
+            font-family: 'Handlee', cursive;
         }
 
         /* Busyness Gauge Styling */
@@ -199,7 +226,6 @@
             font-family: 'Handlee', cursive;
         }
 
-        /* Keep radio labels stable */
         .busyness-gauge label {
             display: inline-flex;
             align-items: center;
@@ -210,7 +236,7 @@
         }
 
         .busyness-gauge input[type="radio"] {
-            transform: translateY(0); /* no shift */
+            transform: translateY(0);
         }
 
         /* Status Bar Styling */
@@ -260,42 +286,12 @@
             display: none;
         }
 
-        /* New Styles for 'More' Functionality */
-        .hidden-preset {
+        /* Styles for hidden content */
+        .hidden-content {
             display: none;
         }
 
-        .more-button {
-            background: #f8f8f8;
-            border: 1px solid #ccc;
-            color: #FF7043;
-            font-size: 1.1em;
-            padding: 5px 10px;
-            margin: 10px 0;
-            cursor: pointer;
-            border-radius: 4px;
-            display: block;
-            width: 100px;
-            text-align: center;
-            text-decoration: none;
-            font-family: 'Handlee', cursive;
-            line-height: 1;
-        }
-
-        .more-button:hover {
-            background: #eee;
-        }
-
-        /* Example text */
-        .prompt-example {
-            font-family: 'Handlee', cursive;
-            font-size: 1.2em;
-            color: #333;
-            margin-top: 10px;
-            line-height: 1.35;
-        }
-
-        /* Responsive tweaks (preserve existing sizes) */
+        /* Responsive tweaks */
         @media (max-width: 600px) {
             h1 { font-size: 2.8em; padding-right: 40px; }
             .preset-options h3 { font-size: 1.6em; }
@@ -315,7 +311,6 @@
         <h1>The Lined Canvas</h1>
         <p class="subtitle">Generate the outline for your next masterpiece, and we'll ship it to your door.</p>
 
-        <!-- PROMPT BOX -->
         <form class="prompt-form" id="imageGenerationForm">
             <label for="prompt" style="font-size: 1.5em;">Describe in detail what outline you'd like to get for your next masterpiece. <i>Or select below.</i></label>
             <textarea id="prompt" name="prompt" placeholder="Start typing your description..." required></textarea>
@@ -323,26 +318,33 @@
         </form>
 
         <div class="preset-options">
-            <h3>Artist's block? Try these ideas:</h3>
-
-            <div id="presetsContainer"></div>
-
-            <div class="busyness-gauge">
-                <h4>Page Busyness</h4>
-                <label>
-                    <input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" checked>
-                    <span>Minimally Busy</span>
-                    <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
-                </label>
-                <label>
-                    <input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles">
-                    <span>Super Busy</span>
-                    <span style="font-size: 0.9em; color: #9E9E9E;">(Smaller, many tiles)</span>
-                </label>
+            <div class="preset-header">
+                <h3>Artist's block?</h3>
+                <button type="button" class="main-toggle-button" id="mainToggleButton">
+                    Try these ideas...
+                </button>
             </div>
-
             
-        </div>
+            <div id="allPresetsWrapper" class="hidden-content"> 
+                <div id="presetsContainer">
+                    </div>
+
+                <div class="busyness-gauge">
+                    <h4>Page Busyness</h4>
+                    <label>
+                        <input type="radio" name="busyness" value="simple, minimal geometric tiles, low density" checked>
+                        <span>Minimally Busy</span>
+                        <span style="font-size: 0.9em; color: #9E9E9E;">(Larger, fewer tiles)</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="busyness" value="dense, intricate, tiny geometric tiles">
+                        <span>Super Busy</span>
+                        <span style="font-size: 0.9em; color: #9E9E9E;">(Smaller, many tiles)</span>
+                    </label>
+                </div>
+
+            </div>
+            </div>
 
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
 
@@ -367,7 +369,7 @@
                 { display: "Surrealism", value: "dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
                 { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
             ],
-            "Themes": {   // <-- CHANGED FROM "Category" TO "Themes"
+            "Themes": { 
                 "Cities": [
                     { display: "New York City", value: "a New York City cityscape with famous landmarks, towering skyscrapers, detailed traffic" },
                     { display: "San Francisco", value: "a dense, hilly San Francisco city and landmarks with Victorian houses and the Golden Gate Bridge" },
@@ -427,6 +429,8 @@
             const presetsContainer = document.getElementById('presetsContainer');
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
+            const mainToggleButton = document.getElementById('mainToggleButton');
+            const allPresetsWrapper = document.getElementById('allPresetsWrapper');
 
             // Status Bar Steps
             const STATUS_STEPS = [
@@ -462,19 +466,18 @@
                 statusInterval = setInterval(cycleStatus, 3000);
             }
 
-            // Function to render the presets dynamically using RADIO BUTTONS (Only showing display names)
+            // Function to render the presets dynamically
             function renderPresets() {
                 let html = '';
-                const CITIES_VISIBLE_COUNT = Number.MAX_SAFE_INTEGER; // make cities fully visible by default
-                
+
                 for (const categoryName in PRESET_CATEGORIES) {
                     const categoryData = PRESET_CATEGORIES[categoryName];
-                    const radioGroupName = categoryName.replace(/\s/g, ''); 
+                    const radioGroupName = categoryName.replace(/\s/g, ''); 
 
                     html += `<div class="preset-category"><h4>${categoryName}</h4>`;
 
                     if (Array.isArray(categoryData)) {
-                        // Simple array (Art Style) - ALWAYS VISIBLE
+                        // Simple array (Art Style)
                         categoryData.forEach(item => {
                             html += `
                                 <label>
@@ -485,64 +488,22 @@
                         });
                     } else if (typeof categoryData === 'object' && categoryName === 'Themes') {
                         // Complex object (Themes: Cities, Animals, Landscapes)
-
-                        let visibleHtml = '';
-                        let hiddenHtml = '';
-
                         for (const subCategoryName in categoryData) {
                             const items = categoryData[subCategoryName];
+                            
+                            // Subcategory heading
+                            html += `<p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${escapeHtml(subCategoryName)}:</p>`;
 
-                            // Start of the subcategory section heading
-                            let sectionHtml = `<p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${escapeHtml(subCategoryName)}:</p>`;
-
-                            if (subCategoryName === 'Cities') {
-
-                                // Visible Cities (now show all by default)
-                                visibleHtml += sectionHtml; // Add the Cities heading to the visible block
-                                for (let i = 0; i < Math.min(CITIES_VISIBLE_COUNT, items.length); i++) {
-                                    visibleHtml += `
-                                        <label>
-                                            <input type="radio" name="${radioGroupName}" value="${escapeHtml(items[i].value)}">
-                                            ${escapeHtml(items[i].display)}
-                                        </label>
-                                    `;
-                                }
-
-                                // Hidden Cities (remaining) - none will be hidden because CITIES_VISIBLE_COUNT is huge
-                                if (items.length > CITIES_VISIBLE_COUNT) {
-                                    hiddenHtml += sectionHtml; // Add the Cities heading again to the hidden block
-                                    for (let i = CITIES_VISIBLE_COUNT; i < items.length; i++) {
-                                        hiddenHtml += `
-                                            <label>
-                                                <input type="radio" name="${radioGroupName}" value="${escapeHtml(items[i].value)}">
-                                                ${escapeHtml(items[i].display)}
-                                            </label>
-                                        `;
-                                    }
-                                }
-
-                            } else {
-                                // Animals and Landscapes: ENTIRELY HIDDEN
-                                hiddenHtml += sectionHtml; // Add the heading to the hidden block
-
-                                items.forEach(item => {
-                                    hiddenHtml += `
-                                        <label>
-                                            <input type="radio" name="${radioGroupName}" value="${escapeHtml(item.value)}">
-                                            ${escapeHtml(item.display)}
-                                        </label>
-                                    `;
-                                });
-                            }
+                            // Subcategory options
+                            items.forEach(item => {
+                                html += `
+                                    <label>
+                                        <input type="radio" name="${radioGroupName}" value="${escapeHtml(item.value)}">
+                                        ${escapeHtml(item.display)}
+                                    </label>
+                                `;
+                            });
                         }
-
-                        // Assemble the final Themes HTML: Visible Content + Toggle + Hidden Content
-                        html += visibleHtml;
-                        // THE MORE BUTTON IS ADDED HERE (so it appears right after Cities / Beijing)
-                        html += `<a href="#" class="more-button" id="moreCategoryButton" onclick="event.preventDefault(); toggleHiddenPresets('hiddenCategoryContainer', 'moreCategoryButton');">more...</a>`;
-                        html += `<div id="hiddenCategoryContainer" class="hidden-preset">`;
-                        html += hiddenHtml;
-                        html += `</div>`;
                     }
 
                     html += `</div>`;
@@ -555,19 +516,14 @@
                 });
             }
 
-            // New function to toggle hidden presets, accepting button ID
-            function toggleHiddenPresets(containerId, buttonId) {
-                const container = document.getElementById(containerId);
-                const button = document.getElementById(buttonId);
-
-                if (!container || !button) return;
-
-                if (container.classList.contains('hidden-preset')) {
-                    container.classList.remove('hidden-preset');
-                    button.textContent = 'less...';
+            // Function to toggle the main preset wrapper
+            function toggleMainPresets() {
+                const isHidden = allPresetsWrapper.classList.toggle('hidden-content');
+                
+                if (isHidden) {
+                    mainToggleButton.textContent = 'Try these ideas...';
                 } else {
-                    container.classList.add('hidden-preset');
-                    button.textContent = 'more...';
+                    mainToggleButton.textContent = 'Hide ideas'; // New text for visible state
                 }
             }
 
@@ -593,6 +549,17 @@
 
             // INITIALIZE UI
             renderPresets();
+            // Attach toggle listener to the main button
+            mainToggleButton.addEventListener('click', toggleMainPresets);
+            
+            // --- UPDATED INITIAL STATE LOGIC ---
+            // 1. Start the content hidden
+            allPresetsWrapper.classList.add('hidden-content');
+            // 2. Set the button text to its 'show' state
+            mainToggleButton.textContent = 'Try these ideas...';
+            // -----------------------------------
+
+
             // Ensure default busyness state is set in the prompt box on load
             const defaultBusyness = document.querySelector('input[name="busyness"][value="simple, minimal geometric tiles, low density"]');
             if (defaultBusyness) defaultBusyness.checked = true;
@@ -672,9 +639,6 @@
                     submitButton.disabled = false;
                 }
             });
-
-            /* Expose toggle function globally so inline onclick works */
-            window.toggleHiddenPresets = toggleHiddenPresets;
         });
     </script>
 
