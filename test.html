@@ -61,12 +61,14 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            align-items: flex-start;
+            /* UPDATED: Center the text horizontally */
+            align-items: center; 
         }
 
         /* Styling for the new wrapper spans */
         .header-text-highlight {
-            background-color: rgba(255, 255, 255, 0.9); /* Solid white background with slight transparency */
+            /* UPDATED: Light Gray background */
+            background-color: rgba(240, 240, 240, 0.95); 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle lift */
             padding: 5px 10px;
             line-height: 1; /* Reset line-height inherited from block element */
@@ -93,26 +95,30 @@
         .header-section h1 {
             font-family: 'Amatic SC', cursive;
             color: #222; 
-            text-align: left;
-            margin-top: 5px; /* Adjusted margin */
+            /* UPDATED: Center text within its container */
+            text-align: center;
+            margin-top: 5px; 
             margin-bottom: 0;
             font-weight: 700;
             font-size: 3.8em;
-            padding-right: 120px; 
-            line-height: 1.2; /* Allows for space around the span background */
-            text-shadow: none; /* Removed old shadow */
+            padding-right: 0; /* Removed padding to allow centering */
+            padding-left: 0; /* Removed padding to allow centering */
+            line-height: 1.2; 
+            text-shadow: none; 
         }
 
         .header-section .subtitle {
             color: #444; 
-            text-align: left;
-            margin-top: 5px; /* Added top margin for separation */
+            /* UPDATED: Center text within its container */
+            text-align: center;
+            margin-top: 5px; 
             margin-bottom: 0;
             font-style: normal;
             font-size: 2.2em;
             line-height: 1.2;
-            padding-right: 120px; 
-            text-shadow: none; /* Removed old shadow */
+            padding-right: 0; /* Removed padding to allow centering */
+            padding-left: 0; /* Removed padding to allow centering */
+            text-shadow: none; 
         }
         /* ------------------------------------------- */
         /* END HEADER SECTION STYLES */
@@ -351,8 +357,8 @@
 
         /* Responsive tweaks */
         @media (max-width: 600px) {
-            .header-section h1 { font-size: 2.8em; padding-right: 40px; margin-top: 5px; }
-            .header-section .subtitle { font-size: 1.8em; padding-right: 40px; }
+            .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }
+            .header-section .subtitle { font-size: 1.8em; padding-right: 0; }
             .preset-options h3 { font-size: 1.6em; }
             .busyness-gauge h4 { min-width: 120px; font-size: 1.2em; }
             .preset-category label, .busyness-gauge label { font-size: 1.05em; }
@@ -386,7 +392,7 @@
             <div class="preset-header">
                 <h3>Artist's Block?</h3>
                 <button type="button" class="main-toggle-button" id="mainToggleButton">
-                    Try these ideas...
+                    Try Tony's ideas...
                 </button>
             </div>
             
@@ -709,7 +715,7 @@
                     placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
                 } finally {
                     // 4. Reset button state
-                    submitButton.textContent = 'Ok Tony, cook me an amazing outline...'; // Reset to new button text
+                    submitButton.textContent = 'Ok Tony, cook me an amazing outline...'; 
                     submitButton.disabled = false;
                 }
             });
