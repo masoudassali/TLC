@@ -251,10 +251,9 @@
             max-height: 90px;
             overflow: hidden;
             border-radius: 4px;
-            margin-top: 10px;
+            margin: 10px auto 0 auto; /* FIX: Center the preview element */
             border: 1px solid #ddd;
             display: flex; 
-            align-self: center;
             justify-content: center;
             align-items: center;
         }
@@ -524,7 +523,7 @@
                             </label>
                             <label>
                                 <input type="radio" name="busyness" value="dense, intricate, numerous small geometric tiles, 40% of the page is empty">
-                                                                <span>Super Busy</span>
+                                <span>Super Busy</span> 
                                 <span style="font-size: 0.9em; color: #9E9E9E;">(Numerous small tiles, 40% empty)</span>
                             </label>
                         </div>
@@ -583,7 +582,7 @@
             const statusMessage = document.getElementById('statusMessage');
             
             const imageUpload = document.getElementById('imageUpload');
-            const imagePreview = document.getElementById('imagePreview');
+            const imagePreview = document.getElementById('imagePreview'); // Correctly reference the img element
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
 
 
@@ -658,7 +657,7 @@
                     .replace(/</g, '&lt;')
                     .replace(/>/g, '&gt;')
                     .replace(/"/g, '&quot;')
-                    .replace(/'/g, ''); /* Removed &#039; to match the provided code */
+                    .replace(/'/g, ''); 
             }
             
             // Function to update manualTextBase ONLY on user typing
@@ -702,36 +701,46 @@
             promptTextarea.addEventListener('input', updateManualTextBaseOnly); 
 
             
-            // UPDATED image handler to manage the placeholder
+            // UPDATED image handler to manage the placeholder and show chosen thumbnail
             imageUpload.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
-                    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/tiff'];
+                    const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+                    // Accept TIFF for upload, but do not preview
                     if (!validTypes.includes(file.type)) {
-                        alert('Invalid file type. Please upload a PNG, JPEG/JPG, or TIFF image.');
-                        e.target.value = '';
-                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL; // Reset to placeholder
-                        return;
+                        if (file.type === 'image/tiff' || file.type === 'image/x-tiff') {
+                            imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
+                            imagePreview.alt = "TIFF preview not supported";
+                            return;
+                        } else {
+                            alert('Invalid file type. Please upload a PNG, JPEG, or TIFF image.');
+                            e.target.value = '';
+                            imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
+                            imagePreview.alt = "Uploaded Image Preview";
+                            return;
+                        }
                     }
                     if (file.size > MAX_FILE_SIZE_BYTES) {
                         alert(`File size exceeds 5MB limit. Please upload a smaller image.`);
                         e.target.value = '';
-                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL; // Reset to placeholder
+                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
+                        imagePreview.alt = "Uploaded Image Preview";
                         return;
                     }
-
                     const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imagePreview.src = e.target.result;
-                    }
+                    reader.onload = function(ev) {
+                        imagePreview.src = ev.target.result;
+                        imagePreview.alt = "Selected Image Thumbnail";
+                    };
                     reader.readAsDataURL(file);
                 } else {
-                    // If file input is cleared, ensure the placeholder image is displayed
                     imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
+                    imagePreview.alt = "Uploaded Image Preview";
                 }
             });
 
             // ** FORM SUBMISSION LOGIC ** form.addEventListener('submit', async (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 const prompt = promptTextarea.value.trim();
