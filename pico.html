@@ -8,7 +8,7 @@
     <style>
         /* General Styling */
         body {
-            font-family: 'Handlee', cursive; /* non-title font */
+            font-family: 'Handlee', cursive;
             background-color: #f4f7f6;
             color: #333;
             margin: 0;
@@ -22,7 +22,6 @@
             -moz-osx-font-smoothing: grayscale;
             line-height: 1.25;
         }
-
         /* Container for the App */
         .generator-container {
             background-color: #fff;
@@ -36,95 +35,68 @@
             position: relative;
             box-sizing: border-box;
         }
-
-        /* ------------------------------------------- */
         /* HEADER SECTION WITH BACKGROUND IMAGE */
-        /* ------------------------------------------- */
         .header-section {
-            /* Use negative margins to pull the header out to the edges of the container padding (40px) */
             margin: -40px -40px 30px -40px;
-            /* Re-apply internal padding, reduce bottom padding to pull content closer */
             padding: 40px 40px 20px 40px;
-
-            /* Background Image Setup */
             background-image: url('https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/Header.jpg');
             background-size: cover;
             background-position: 50% 35%; 
             background-repeat: no-repeat;
-            
             height: 180px; 
-            
-            position: relative; 
-            border-radius: 12px 12px 0 0; 
-            overflow: hidden; 
-            
+            position: relative;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            /* UPDATED: Center the text horizontally */
-            align-items: center; 
+            align-items: center;
         }
-
-        /* Styling for the new wrapper spans */
         .header-text-highlight {
-            /* UPDATED: Light Gray background */
-            background-color: rgba(240, 240, 240, 0.95); 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle lift */
+            background-color: rgba(240, 240, 240, 0.95);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 5px 10px;
-            line-height: 1; /* Reset line-height inherited from block element */
-            box-decoration-break: clone; /* Allows padding/bg to wrap multi-line text cleanly */
-            display: inline-block; /* Essential for padding/bg to wrap text */
+            line-height: 1;
+            box-decoration-break: clone;
+            display: inline-block;
         }
-
-        /* Logo Styling */
         .logo-container {
             position: absolute;
             top: 30px;
             right: 30px;
             z-index: 10;
         }
-
         .logo-container img {
             width: 80px;
             height: auto;
             filter: none;
             display: block;
         }
-
-        /* Header Title Styling */
         .header-section h1 {
             font-family: 'Amatic SC', cursive;
-            color: #222; 
-            /* UPDATED: Center text within its container */
+            color: #222;
             text-align: center;
-            margin-top: 5px; 
+            margin-top: 5px;
             margin-bottom: 0;
             font-weight: 700;
             font-size: 3.8em;
-            padding-right: 0; /* Removed padding to allow centering */
-            padding-left: 0; /* Removed padding to allow centering */
-            line-height: 1.2; 
-            text-shadow: none; 
+            padding-right: 0;
+            padding-left: 0;
+            line-height: 1.2;
+            text-shadow: none;
         }
-
         .header-section .subtitle {
-            color: #444; 
-            /* UPDATED: Center text within its container */
+            color: #444;
             text-align: center;
-            margin-top: 5px; 
+            margin-top: 5px;
             margin-bottom: 0;
             font-style: normal;
             font-size: 2.2em;
             line-height: 1.2;
-            padding-right: 0; /* Removed padding to allow centering */
-            padding-left: 0; /* Removed padding to allow centering */
-            text-shadow: none; 
+            padding-right: 0;
+            padding-left: 0;
+            text-shadow: none;
         }
-        /* ------------------------------------------- */
-        /* END HEADER SECTION STYLES */
-        /* ------------------------------------------- */
-
-
         /* Prompt Form Styling */
         .prompt-form {
             display: flex;
@@ -136,14 +108,12 @@
             background-color: #fafafa;
             box-sizing: border-box;
         }
-
         .prompt-form label {
             font-size: 1.5em;
             color: #5D4037;
             margin: 0;
             line-height: 1.1;
         }
-
         textarea {
             width: 100%;
             padding: 15px;
@@ -156,22 +126,19 @@
             transition: border-color 0.3s;
             font-family: 'Handlee', cursive;
             line-height: 1.25;
-            margin-bottom: 10px; 
+            margin-bottom: 10px;
         }
-
         /* Placeholder styles */
         textarea::placeholder {
-            font-size: 1.0em; /* Reduced size */
+            font-size: 1.0em;
             color: #9e9e9e;
             opacity: 1;
         }
-
         textarea:focus {
             border-color: #FF7043;
             outline: none;
             box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5);
         }
-
         /* --- UPLOAD STYLES --- */
         .upload-options-wrapper {
             margin-bottom: 20px;
@@ -179,31 +146,27 @@
             padding: 20px;
             border-radius: 8px;
             background-color: #fffaf7;
-            /* UPDATED: Use flex to simplify centering the upload section and preview */
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center content inside wrapper */
+            align-items: center;
         }
-
         .upload-options-wrapper h3 {
             font-size: 1.8em;
             color: #E64A19;
             margin-top: 0;
-            margin-bottom: 5px; /* Reduced margin to fit info text */
+            margin-bottom: 5px;
             text-align: center;
             line-height: 1.1;
         }
-        
         /* New style for the info text */
         .upload-info {
             display: block;
             text-align: center;
-            font-size: 1em; /* Adjusted size */
+            font-size: 1em;
             color: #757575;
             margin-bottom: 15px;
             font-style: italic;
         }
-
         .upload-section {
             border: 1px solid #FF7043;
             padding: 15px;
@@ -214,11 +177,9 @@
             align-items: center;
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            /* NEW: Set a max-width to keep the upload box neat */
             max-width: 300px;
             width: 100%;
         }
-        
         .upload-section label {
             font-size: 1.3em;
             color: #E64A19;
@@ -228,11 +189,9 @@
             cursor: pointer;
             margin-bottom: 5px;
         }
-
         input[type="file"] {
-            display: none; 
+            display: none;
         }
-
         .custom-file-upload {
             background-color: #FF7043;
             color: white;
@@ -245,14 +204,10 @@
             line-height: 1;
             display: inline-block;
         }
-
         .custom-file-upload:hover {
             background-color: #E64A19;
         }
-
-        /* ADJUSTMENT: Set size and display for thumbnail */
         .image-upload-preview {
-            /* Set fixed dimensions for a thumbnail */
             width: 90px;
             height: 90px;
             max-width: 90px;
@@ -261,24 +216,17 @@
             border-radius: 4px;
             margin-top: 10px;
             border: 1px solid #ddd;
-            /* CHANGED: display: none; -> display: flex; to show the placeholder on load */
-            display: flex; 
-            /* Center the preview box itself */
+            display: flex;
             align-self: center;
-            /* Ensure content inside is centered/fits */
             justify-content: center;
             align-items: center;
         }
-
         .image-upload-preview img {
-            /* Ensure the image covers the fixed 90x90 area */
             width: 100%;
             height: 100%;
-            object-fit: cover; /* This makes it fill the container without distortion (cropping if necessary) */
+            object-fit: cover;
             display: block;
         }
-        /* -------------------------- */
-        
         button {
             background-color: #FF7043;
             color: white;
@@ -291,19 +239,15 @@
             transition: background-color 0.3s;
             font-family: 'Handlee', cursive;
             line-height: 1;
-            margin-top: 0; 
+            margin-top: 0;
         }
-
         button:hover {
             background-color: #E64A19;
         }
-        
-        /* Centering the generate button */
         .submit-button-wrapper {
             margin-top: 20px;
-            text-align: center; 
+            text-align: center;
         }
-
         /* Preset Options Styling (Style Preferences Section) */
         .preset-options {
             padding: 15px;
@@ -313,21 +257,17 @@
             box-sizing: border-box;
             overflow: visible;
         }
-
-        /* Preset header (Style Preferences) */
         .preset-options h3 {
             font-size: 2em;
             color: #FF7043;
-            margin: 0 0 15px 0; 
+            margin: 0 0 15px 0;
             line-height: 1;
             font-family: 'Handlee', cursive;
-            text-align: center; 
+            text-align: center;
         }
-        
         .preset-category {
             margin-bottom: 15px;
         }
-
         .preset-category h4 {
             font-size: 1.5em;
             color: #5D4037;
@@ -336,7 +276,6 @@
             line-height: 1.05;
             font-family: 'Handlee', cursive;
         }
-
         .preset-category label {
             display: inline-block;
             margin-right: 15px;
@@ -346,8 +285,6 @@
             vertical-align: middle;
             font-family: 'Handlee', cursive;
         }
-
-        /* Busyness Gauge Styling */
         .busyness-gauge {
             display: flex;
             align-items: center;
@@ -358,24 +295,20 @@
             flex-wrap: wrap;
             box-sizing: border-box;
         }
-        
-        /* Busyness radio buttons now arranged vertically for clarity */
         .busyness-options {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-
         .busyness-gauge h4 {
             margin: 0;
             min-width: 100px;
             font-size: 1.5em;
             line-height: 1;
             font-family: 'Handlee', cursive;
-            align-self: flex-start; /* Align title to the top */
-            padding-top: 5px; /* Visual spacing */
+            align-self: flex-start;
+            padding-top: 5px;
         }
-
         .busyness-gauge label {
             display: inline-flex;
             align-items: center;
@@ -384,12 +317,9 @@
             line-height: 1.2;
             font-family: 'Handlee', cursive;
         }
-
         .busyness-gauge input[type="radio"] {
             transform: translateY(0);
         }
-
-        /* Status Bar Styling */
         .status-bar {
             text-align: center;
             min-height: 20px;
@@ -402,12 +332,9 @@
             font-family: 'Handlee', cursive;
             line-height: 1;
         }
-
         .status-bar.visible {
             opacity: 1;
         }
-
-        /* Image Display Area */
         .image-display {
             border: 2px dashed #BDBDBD;
             border-radius: 8px;
@@ -420,7 +347,6 @@
             background-color: #FAFAFA;
             box-sizing: border-box;
         }
-
         .image-placeholder {
             color: #9E9E9E;
             font-style: italic;
@@ -428,15 +354,12 @@
             font-family: 'Handlee', cursive;
             line-height: 1.25;
         }
-
         .generated-image {
             max-width: 100%;
             max-height: 350px;
             border-radius: 6px;
             display: none;
         }
-
-        /* Responsive tweaks */
         @media (max-width: 600px) {
             .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }
             .header-section .subtitle { font-size: 1.8em; padding-right: 0; }
@@ -444,18 +367,15 @@
             .busyness-gauge h4 { min-width: 120px; font-size: 1.2em; }
             .preset-category label, .busyness-gauge label { font-size: 1.05em; }
             textarea { font-size: 1.15em; }
-            textarea::placeholder { font-size: 0.9em; } 
-
+            textarea::placeholder { font-size: 0.9em; }
             .upload-sections-container {
-                flex-direction: column; /* Stack file and URL upload vertically on small screens */
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-
     <div class="generator-container">
-        
         <div class="header-section">
             <div class="logo-container">
                 <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
@@ -468,12 +388,9 @@
             </p>
         </div>
         <form class="prompt-form" id="imageGenerationForm">
-            
             <div class="upload-options-wrapper">
                 <h3>Upload an image for Tony to outline:</h3>
-                
-                <span class="upload-info">Image types allowed: JPEG/JPG, PNG, TIFF. Image size limit: 2mbs.</span>
-                
+                <span class="upload-info">Image types allowed: JPEG/JPG, PNG, TIFF. Image size limit: 5mbs.</span>
                 <div class="upload-section">
                     <label for="imageUpload">Upload from your device:</label>
                     <input type="file" id="imageUpload" name="image" accept=".png, .jpeg, .jpg, .tiff">
@@ -481,23 +398,16 @@
                         Choose Image File
                     </div>
                 </div>
-                
                 <div class="image-upload-preview" id="imagePreviewContainer">
                     <img id="imagePreview" src="https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true" alt="Uploaded Image Preview">
                 </div>
             </div>
-            
             <label for="prompt" style="font-size: 1.5em;">Describe any style preferences for your outline:</label>
             <textarea id="prompt" name="prompt" placeholder="Example: Use strong, thick outlines. Ignore background elements. Keep fur detail in the foreground. (Or select below.)" required></textarea>
-            
             <div class="preset-options">
-                
-                <h3>Style Preferences</h3> 
-                
-                <div id="allPresetsWrapper"> 
-                    <div id="presetsContainer">
-                    </div>
-
+                <h3>Style Preferences</h3>
+                <div id="allPresetsWrapper">
+                    <div id="presetsContainer"></div>
                     <div class="busyness-gauge">
                         <h4>Page Busyness</h4>
                         <div class="busyness-options">
@@ -520,26 +430,20 @@
                     </div>
                 </div>
             </div>
-
             <div class="submit-button-wrapper">
                 <button type="submit">Ok Tony, cook me an amazing outline...</button>
             </div>
         </form>
-
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
-
         <div class="status-bar" id="statusBar">
             <span id="statusMessage"></span>
         </div>
-
         <h2>Your Generated Outline Preview</h2>
-
         <div class="image-display">
             <p class="image-placeholder" id="placeholderText">Tony is cooking. It'd show up here once he's done.</p>
             <img src="" alt="AI Generated Outline" class="generated-image" id="generatedImage">
         </div>
     </div>
-
     <script>
         // *** PRESET DATA ***
         const PRESET_CATEGORIES = {
@@ -550,17 +454,11 @@
                 { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
             ]
         };
-
         // *** CORE CONFIG & DOM ELEMENTS ***
         const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/74161287-0f76-4b39-b5b6-66393e16ca91';
-        const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
-        // NEW CONSTANT: For placeholder image
+        const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
         const PLACEHOLDER_THUMBNAIL_URL = 'https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true';
-
-        // Global variable to store the 'pure' manual text, excluding currently applied presets
         let manualTextBase = "";
-
-        // Wrap initialization so it runs after DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('imageGenerationForm');
             const promptTextarea = document.getElementById('prompt');
@@ -570,11 +468,9 @@
             const presetsContainer = document.getElementById('presetsContainer');
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
-            
             const imageUpload = document.getElementById('imageUpload');
             const imagePreview = document.getElementById('imagePreview');
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-
 
             // Status Bar Steps
             const STATUS_STEPS = [
@@ -586,8 +482,6 @@
                 "93% - Sending image data back to your browser...",
                 "100% - Serving up your order now..."
             ];
-
-            // Status Bar Control
             let statusInterval;
             function updateStatus(start) {
                 if (!start) {
@@ -595,32 +489,23 @@
                     statusBar.classList.remove('visible');
                     return;
                 }
-
                 let stepIndex = 0;
                 statusBar.classList.add('visible');
-
                 const cycleStatus = () => {
                     statusMessage.innerHTML = STATUS_STEPS[stepIndex];
                     stepIndex = (stepIndex + 1) % STATUS_STEPS.length;
-                    // Freeze on the main generation step (41%) for longer
                     if (stepIndex === 4) stepIndex = 3;
                 };
-
                 cycleStatus();
                 statusInterval = setInterval(cycleStatus, 3000);
             }
-
-            // Function to render the presets dynamically
             function renderPresets() {
                 let html = '';
-
                 for (const categoryName in PRESET_CATEGORIES) {
                     const categoryData = PRESET_CATEGORIES[categoryName];
                     const radioGroupName = categoryName.replace(/\s/g, ''); 
-
                     html += `<div class="preset-category"><h4>${categoryName}</h4>`;
-
-                    if (Array.isArray(categoryData)) { 
+                    if (Array.isArray(categoryData)) {
                         categoryData.forEach(item => {
                             html += `
                                 <label>
@@ -633,66 +518,36 @@
                     html += `</div>`;
                 }
                 presetsContainer.innerHTML = html;
-
-                // Attach event listener to all radio buttons
                 document.querySelectorAll('input[type="radio"]').forEach(radio => {
                     radio.addEventListener('change', updatePromptBox);
                 });
             }
-
-            // Escape HTML helper
             function escapeHtml(str) {
                 return String(str)
                     .replace(/&/g, '&amp;')
                     .replace(/</g, '&lt;')
                     .replace(/>/g, '&gt;')
                     .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
+                    .replace(/'/g, '');
             }
-            
-            // Function to update manualTextBase ONLY on user typing
             function updateManualTextBaseOnly(event) {
                 manualTextBase = promptTextarea.value.trim();
             }
-
-            // Function to update the prompt box with manual text + selected presets
             function updatePromptBox(event) {
-                
-                // Identify all current preset values.
                 const artStyleValue = document.querySelector('input[name="ArtStyle"]:checked')?.value || '';
                 const busynessValue = document.querySelector('input[name="busyness"]:checked')?.value || '';
                 const currentPresetValues = [artStyleValue, busynessValue].filter(v => v);
-                
                 let combinedPromptParts = [];
-                
-                // Add the manual text base (which preserves spaces and all other characters)
                 if (manualTextBase) {
                     combinedPromptParts.push(manualTextBase);
                 }
-                
-                // Add the selected presets
                 combinedPromptParts.push(...currentPresetValues);
-
-                // Update the prompt box.
                 promptTextarea.value = combinedPromptParts.filter(p => p).join(', ');
             }
-            // --- END Fixed logic for updatePromptBox() ---
-
-
-            // Initialize the UI elements
             renderPresets();
-            
-            // Set initial state
-            document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.checked = false;
-            });
+            document.querySelectorAll('input[type="radio"]').forEach(radio => { radio.checked = false; });
             promptTextarea.value = '';
-
-            // Update event listener on textarea: Now calls the base tracking function
             promptTextarea.addEventListener('input', updateManualTextBaseOnly); 
-
-            
-            // UPDATED image handler to manage the placeholder
             imageUpload.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -700,83 +555,59 @@
                     if (!validTypes.includes(file.type)) {
                         alert('Invalid file type. Please upload a PNG, JPEG/JPG, or TIFF image.');
                         e.target.value = '';
-                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL; // Reset to placeholder
+                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
                         return;
                     }
                     if (file.size > MAX_FILE_SIZE_BYTES) {
-                        alert(`File size exceeds 2MB limit. Please upload a smaller image.`);
+                        alert(`File size exceeds 5MB limit. Please upload a smaller image.`);
                         e.target.value = '';
-                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL; // Reset to placeholder
+                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
                         return;
                     }
-
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         imagePreview.src = e.target.result;
-                        // imagePreviewContainer display is handled by CSS (set to flex)
                     }
                     reader.readAsDataURL(file);
                 } else {
-                    // If file input is cleared, ensure the placeholder image is displayed
                     imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
                 }
             });
-
-            // ** FORM SUBMISSION LOGIC ** (Simplified)
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-
                 const prompt = promptTextarea.value.trim();
                 const imageFile = imageUpload.files[0];
-
                 if (!imageFile) {
                     alert("An image upload is required to generate the outline.");
                     return;
                 }
-
-                // 1. Update UI for 'Loading' state
                 submitButton.textContent = "Tony's cooking... Please wait.";
                 submitButton.disabled = true;
                 placeholderText.textContent = 'Generating your unique outline...';
                 placeholderText.style.display = 'block';
                 generatedImage.style.display = 'none';
-
-                // START STATUS BAR
                 updateStatus(true);
-
                 try {
                     let finalImageBlob = imageFile;
-                    
                     const formData = new FormData();
-                    formData.append('prompt', prompt); 
-                    // N8n expects the binary file to be named 'image'
+                    formData.append('prompt', prompt);
                     formData.append('image', finalImageBlob, imageFile.name); 
-
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
                         body: formData,
-                        // DO NOT set Content-Type header when using FormData
                     });
-
-                    // 2. Handle response
                     if (response.ok) {
                         const contentType = response.headers.get('content-type');
-                        
-                        // Check for JSON error response
                         if (contentType && contentType.includes('application/json')) {
                             const result = await response.json();
                             throw new Error(`Server Error (JSON Response): ${result.errorMessage || JSON.stringify(result)}`);
                         }
-                        
-                        // Assume successful image blob response
                         const blob = await response.blob();
                         const imageUrl = URL.createObjectURL(blob);
-                        
                         generatedImage.src = imageUrl;
                         generatedImage.style.display = 'block';
                         placeholderText.style.display = 'none';
                     } else {
-                        // Attempt to read error message from response body
                         const errorText = await response.text();
                         throw new Error(`HTTP Error: ${response.status} - ${errorText.substring(0, 100)}...`);
                     }
@@ -786,7 +617,6 @@
                     placeholderText.style.display = 'block';
                     generatedImage.style.display = 'none';
                 } finally {
-                    // 3. Reset UI state
                     updateStatus(false);
                     submitButton.textContent = "Ok Tony, cook me an amazing outline...";
                     submitButton.disabled = false;
