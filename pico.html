@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">
+    <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Handlee', cursive; /* non-title font */
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.25;
+        }
+
+        /* Container for the App */
+        .generator-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* ------------------------------------------- */
+        /* HEADER SECTION WITH BACKGROUND IMAGE */
+        /* ------------------------------------------- */
+        .header-section {
+            /* Use negative margins to pull the header out to the edges of the container padding (40px) */
+            margin: -40px -40px 30px -40px;
+            /* Re-apply internal padding, reduce bottom padding to pull content closer */
+            padding: 40px 40px 20px 40px;
+
+            /* Background Image Setup */
+            background-image: url('https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/Header.jpg');
+            background-size: cover;
+            background-position: 50% 35%; 
+            background-repeat: no-repeat;
+            
+            height: 180px; 
+            
+            position: relative; 
+            border-radius: 12px 12px 0 0; 
+            overflow: hidden; 
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            /* UPDATED: Center the text horizontally */
+            align-items: center; 
+        }
+
+        /* Styling for the new wrapper spans */
+        .header-text-highlight {
+            /* UPDATED: Light Gray background */
+            background-color: rgba(240, 240, 240, 0.95); 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle lift */
+            padding: 5px 10px;
+            line-height: 1; /* Reset line-height inherited from block element */
+            box-decoration-break: clone; /* Allows padding/bg to wrap multi-line text cleanly */
+            display: inline-block; /* Essential for padding/bg to wrap text */
+        }
+
+        /* Logo Styling */
+        .logo-container {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            z-index: 10;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: auto;
+            filter: none;
+            display: block;
+        }
+
+        /* Header Title Styling */
+        .header-section h1 {
+            font-family: 'Amatic SC', cursive;
+            color: #222; 
+            /* UPDATED: Center text within its container */
+            text-align: center;
+            margin-top: 5px; 
+            margin-bottom: 0;
+            font-weight: 700;
+            font-size: 3.8em;
+            padding-right: 0; /* Removed padding to allow centering */
+            padding-left: 0; /* Removed padding to allow centering */
+            line-height: 1.2; 
+            text-shadow: none; 
+        }
+
+        .header-section .subtitle {
+            color: #444; 
+            /* UPDATED: Center text within its container */
+            text-align: center;
+            margin-top: 5px; 
+            margin-bottom: 0;
+            font-style: normal;
+            font-size: 2.2em;
+            line-height: 1.2;
+            padding-right: 0; /* Removed padding to allow centering */
+            padding-left: 0; /* Removed padding to allow centering */
+            text-shadow: none; 
+        }
+        /* ------------------------------------------- */
+        /* END HEADER SECTION STYLES */
+        /* ------------------------------------------- */
+
+
+        /* Prompt Form Styling */
+        .prompt-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+        }
+
+        .prompt-form label {
+            font-size: 1.5em;
+            color: #5D4037;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.5em;
+            resize: vertical;
+            min-height: 100px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1.25;
+            margin-bottom: 10px; 
+        }
+
+        /* Placeholder styles */
+        textarea::placeholder {
+            font-size: 1.0em; /* Reduced size */
+            color: #9e9e9e;
+            opacity: 1;
+        }
+
+        textarea:focus {
+            border-color: #FF7043;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5);
+        }
+
+        /* --- UPLOAD STYLES --- */
+        .upload-options-wrapper {
+            margin-bottom: 20px;
+            border: 1px dashed #BDBDBD;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fffaf7;
+        }
+
+        .upload-options-wrapper h3 {
+            font-size: 1.8em;
+            color: #E64A19;
+            margin-top: 0;
+            margin-bottom: 5px; /* Reduced margin to fit info text */
+            text-align: center;
+            line-height: 1.1;
+        }
+        
+        /* New style for the info text */
+        .upload-info {
+            display: block;
+            text-align: center;
+            font-size: 1em; /* Adjusted size */
+            color: #757575;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .upload-sections-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Space between file and URL upload */
+        }
+
+        .upload-section {
+            border: 1px solid #FF7043;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .upload-section label {
+            font-size: 1.3em;
+            color: #E64A19;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.1;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        input[type="file"] {
+            display: none; 
+        }
+
+        .custom-file-upload {
+            background-color: #FF7043;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+            display: inline-block;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #E64A19;
+        }
+
+        input[type="text"].image-url-input {
+            width: calc(100% - 30px); /* Account for padding */
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1.2em;
+            font-family: 'Handlee', cursive;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"].image-url-input:focus {
+            border-color: #FF7043;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5);
+        }
+
+        .image-upload-preview {
+            max-width: 100%;
+            max-height: 150px;
+            overflow: hidden;
+            border-radius: 4px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            display: none; 
+        }
+
+        .image-upload-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* -------------------------- */
+
+        button {
+            background-color: #FF7043;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.8em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+            /* Removed margin-top to allow button placement */
+            margin-top: 0; 
+        }
+
+        button:hover {
+            background-color: #E64A19;
+        }
+        
+        /* New class for the relocated submit button wrapper */
+        .submit-button-wrapper {
+            margin-top: 20px;
+        }
+
+        /* Preset Options Styling (Style Preferences Section) */
+        .preset-options {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            overflow: visible;
+        }
+
+        /* Preset header (Style Preferences) */
+        .preset-options h3 {
+            font-size: 2em;
+            color: #FF7043;
+            margin: 0 0 15px 0; 
+            line-height: 1;
+            font-family: 'Handlee', cursive;
+            text-align: center; 
+        }
+        
+        .preset-category {
+            margin-bottom: 15px;
+        }
+
+        .preset-category h4 {
+            font-size: 1.5em;
+            color: #5D4037;
+            margin: 5px 0;
+            text-decoration: underline;
+            line-height: 1.05;
+            font-family: 'Handlee', cursive;
+        }
+
+        .preset-category label {
+            display: inline-block;
+            margin-right: 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+            line-height: 1.5;
+            vertical-align: middle;
+            font-family: 'Handlee', cursive;
+        }
+
+        /* Busyness Gauge Styling */
+        .busyness-gauge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+        }
+        
+        /* Busyness radio buttons now arranged vertically for clarity */
+        .busyness-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .busyness-gauge h4 {
+            margin: 0;
+            min-width: 100px;
+            font-size: 1.5em;
+            line-height: 1;
+            font-family: 'Handlee', cursive;
+            align-self: flex-start; /* Align title to the top */
+            padding-top: 5px; /* Visual spacing */
+        }
+
+        .busyness-gauge label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2em;
+            line-height: 1.2;
+            font-family: 'Handlee', cursive;
+        }
+
+        .busyness-gauge input[type="radio"] {
+            transform: translateY(0);
+        }
+
+        /* Status Bar Styling */
+        .status-bar {
+            text-align: center;
+            min-height: 20px;
+            margin-top: -15px;
+            color: #FF7043;
+            font-size: 1.5em;
+            font-weight: 700;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+        }
+
+        .status-bar.visible {
+            opacity: 1;
+        }
+
+        /* Image Display Area */
+        .image-display {
+            border: 2px dashed #BDBDBD;
+            border-radius: 8px;
+            min-height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background-color: #FAFAFA;
+            box-sizing: border-box;
+        }
+
+        .image-placeholder {
+            color: #9E9E9E;
+            font-style: italic;
+            font-size: 1.5em;
+            font-family: 'Handlee', cursive;
+            line-height: 1.25;
+        }
+
+        .generated-image {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 600px) {
+            .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }
+            .header-section .subtitle { font-size: 1.8em; padding-right: 0; }
+            .preset-options h3 { font-size: 1.6em; }
+            .busyness-gauge h4 { min-width: 120px; font-size: 1.2em; }
+            .preset-category label, .busyness-gauge label { font-size: 1.05em; }
+            textarea { font-size: 1.15em; }
+            textarea::placeholder { font-size: 0.9em; } 
+
+            .upload-sections-container {
+                flex-direction: column; /* Stack file and URL upload vertically on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="generator-container">
+        
+        <div class="header-section">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
+            </div>
+            <h1>
+                <span class="header-text-highlight">The Lined Canvas</span>
+            </h1>
+            <p class="subtitle">
+                <span class="header-text-highlight">Let Tony cook you the outline for your next masterpiece, and he'll ship it to your door too.</span>
+            </p>
+        </div>
+        <form class="prompt-form" id="imageGenerationForm">
+            
+            <div class="upload-options-wrapper">
+                <h3>Upload an image for Tony to outline:</h3>
+                
+                <span class="upload-info">Image types allowed: JPEG/JPG, PNG, TIFF. Image size limit: 2mbs.</span>
+
+                <div class="upload-sections-container">
+                    
+                    <div class="upload-section">
+                        <label for="imageUpload">Upload from your device:</label>
+                        <input type="file" id="imageUpload" name="image" accept=".png, .jpeg, .jpg, .tiff">
+                        <div class="custom-file-upload" onclick="document.getElementById('imageUpload').click()">
+                            Choose Image File
+                        </div>
+                    </div>
+
+                    
+                    <div class="upload-section">
+                        <label for="imageUrlInput">Or provide an image URL:</label>
+                        <input type="text" id="imageUrlInput" class="image-url-input" placeholder="e.g., https://example.com/your-image.jpg">
+                    </div>
+                </div>
+                <div class="image-upload-preview" id="imagePreviewContainer">
+                    <img id="imagePreview" src="" alt="Uploaded Image Preview">
+                </div>
+            </div>
+            
+            <label for="prompt" style="font-size: 1.5em;">Describe any style preferences for your outline:</label>
+            <textarea id="prompt" name="prompt" placeholder="Example: Use strong, thick outlines. Ignore background elements. Keep fur detail in the foreground. (Or select below.)" required></textarea>
+            
+            <div class="preset-options">
+                
+                <h3>Style Preferences</h3> 
+                
+                <div id="allPresetsWrapper"> 
+                    <div id="presetsContainer">
+                    </div>
+
+                    <div class="busyness-gauge">
+                        <h4>Page Busyness</h4>
+                        <div class="busyness-options">
+                            <label>
+                                <input type="radio" name="busyness" value="simple, minimal geometric tiles, few large tiles, 70% of the page is empty">
+                                <span>Minimally Busy</span>
+                                <span style="font-size: 0.9em; color: #9E9E9E;">(Few large tiles, 70% empty)</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="busyness" value="geometric tiles, medium-sized tiles, 55% of the page is empty">
+                                <span>Moderately Busy</span>
+                                <span style="font-size: 0.9em; color: #9E9E9E;">(Medium tiles, 55% empty)</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="busyness" value="dense, intricate, numerous small geometric tiles, 40% of the page is empty">
+                                <span>Super Busy</span>
+                                <span style="font-size: 0.9em; color: #9E9E9E;">(Numerous small tiles, 40% empty)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-button-wrapper">
+                <button type="submit">Ok Tony, cook me an amazing outline...</button>
+            </div>
+        </form>
+
+        <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
+
+        <div class="status-bar" id="statusBar">
+            <span id="statusMessage"></span>
+        </div>
+
+        <h2>Your Generated Outline Preview</h2>
+
+        <div class="image-display">
+            <p class="image-placeholder" id="placeholderText">Tony is cooking. It'd show up here once he's done.</p>
+            <img src="" alt="AI Generated Outline" class="generated-image" id="generatedImage">
+        </div>
+    </div>
+
+    <script>
+        // *** PRESET DATA ***
+        const PRESET_CATEGORIES = {
+            "Art Style": [
+                { display: "Impressionism", value: "broad, visible short brushstrokes, light focused, loose forms, en plein air and outdoors to capture the fleeting effects of natural light, depicting everyday subjects and scenes of modern life, a sense of spontaneity, an emphasis on capturing a momentary impressions, and open compositions with unusual visual angles." },
+                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, non-representational nature, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
+                { display: "Surrealism", value: "dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
+                { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
+            ]
+        };
+
+        // *** CORE DOM ELEMENTS ***
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/74161287-0f76-4b39-b5b6-66393e16ca91';
+        const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+
+        // Global variable to store the 'pure' manual text, excluding currently applied presets
+        let manualTextBase = "";
+
+        // Wrap initialization so it runs after DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('imageGenerationForm');
+            const promptTextarea = document.getElementById('prompt');
+            const placeholderText = document.getElementById('placeholderText');
+            const generatedImage = document.getElementById('generatedImage');
+            const submitButton = form.querySelector('button');
+            const presetsContainer = document.getElementById('presetsContainer');
+            const statusBar = document.getElementById('statusBar');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            // NEW/UPDATED ELEMENTS
+            const imageUpload = document.getElementById('imageUpload');
+            const imageUrlInput = document.getElementById('imageUrlInput'); 
+            const imagePreview = document.getElementById('imagePreview');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+
+            // Status Bar Steps
+            const STATUS_STEPS = [
+                "5% - Sending your descriptions to our magician, Tony ...",
+                "18% - Tony received your descriptions. Now figuring out the style...",
+                "22% - Tony is adding the final touches...",
+                "41% - This may take 5-15 seconds...",
+                "67% - Converting everything into a PNG file...",
+                "93% - Sending image data back to your browser...",
+                "100% - Serving up your order now..."
+            ];
+
+            // Status Bar Control
+            let statusInterval;
+            function updateStatus(start) {
+                if (!start) {
+                    clearInterval(statusInterval);
+                    statusBar.classList.remove('visible');
+                    return;
+                }
+
+                let stepIndex = 0;
+                statusBar.classList.add('visible');
+
+                const cycleStatus = () => {
+                    statusMessage.innerHTML = STATUS_STEPS[stepIndex];
+                    stepIndex = (stepIndex + 1) % STATUS_STEPS.length;
+                    // Freeze on the main generation step (41%) for longer
+                    if (stepIndex === 4) stepIndex = 3;
+                };
+
+                cycleStatus();
+                statusInterval = setInterval(cycleStatus, 3000);
+            }
+
+            // Function to render the presets dynamically
+            function renderPresets() {
+                let html = '';
+
+                for (const categoryName in PRESET_CATEGORIES) {
+                    const categoryData = PRESET_CATEGORIES[categoryName];
+                    const radioGroupName = categoryName.replace(/\s/g, ''); 
+
+                    html += `<div class="preset-category"><h4>${categoryName}</h4>`;
+
+                    if (Array.isArray(categoryData)) { 
+                        categoryData.forEach(item => {
+                            html += `
+                                <label>
+                                    <input type="radio" name="${radioGroupName}" value="${escapeHtml(item.value)}">
+                                    ${escapeHtml(item.display)}
+                                </label>
+                            `;
+                        });
+                    }
+                    html += `</div>`;
+                }
+                presetsContainer.innerHTML = html;
+
+                // Attach event listener to all radio buttons
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    // (2) set up preset radio button listeners as before
+                    radio.addEventListener('change', updatePromptBox);
+                });
+            }
+
+            // Escape HTML helper
+            function escapeHtml(str) {
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+            
+            // (1) new function to update manualTextBase ONLY on user typing
+            function updateManualTextBaseOnly(event) {
+                // Only update manualTextBase as the user types; don't touch .value!
+                // This ensures we capture spaces and all manual edits correctly
+                manualTextBase = promptTextarea.value.trim();
+            }
+
+            // (3) modify updatePromptBox so the value is set ONLY on preset selection
+            function updatePromptBox(event) {
+                
+                // Identify all current preset values.
+                const artStyleValue = document.querySelector('input[name="ArtStyle"]:checked')?.value || '';
+                const busynessValue = document.querySelector('input[name="busyness"]:checked')?.value || '';
+                const currentPresetValues = [artStyleValue, busynessValue].filter(v => v);
+
+                // No need to alter manualTextBase here. It's updated by updateManualTextBaseOnly
+                
+                // Only set textarea value when a radio button fires this event
+                let combinedPromptParts = [];
+                
+                // Add the manual text base (which preserves spaces and all other characters)
+                if (manualTextBase) {
+                    combinedPromptParts.push(manualTextBase);
+                }
+                
+                // Add the selected presets
+                combinedPromptParts.push(...currentPresetValues);
+
+                // 5. Update the prompt box.
+                promptTextarea.value = combinedPromptParts.filter(p => p).join(', ');
+            }
+            // --- END Fixed logic for updatePromptBox() ---
+
+
+            // Initialize the UI elements
+            renderPresets();
+            
+            // Set initial state
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            promptTextarea.value = '';
+
+            // (1) Update event listener on textarea: Now calls the new base tracking function
+            promptTextarea.addEventListener('input', updateManualTextBaseOnly); 
+
+            
+            // NEW/UPDATED image/URL handlers
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/tiff'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('Invalid file type. Please upload a PNG, JPEG/JPG, or TIFF image.');
+                        e.target.value = '';
+                        imagePreviewContainer.style.display = 'none';
+                        imagePreview.src = '';
+                        return;
+                    }
+                    if (file.size > MAX_FILE_SIZE_BYTES) {
+                        alert(`File size exceeds 2MB limit. Please upload a smaller image.`);
+                        e.target.value = '';
+                        imagePreviewContainer.style.display = 'none';
+                        imagePreview.src = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreviewContainer.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+
+                    imageUrlInput.value = '';
+                    imageUrlInput.disabled = true;
+                } else {
+                    imagePreviewContainer.style.display = 'none';
+                    imagePreview.src = '';
+                    imageUrlInput.disabled = false; 
+                }
+            });
+
+            imageUrlInput.addEventListener('input', function() {
+                if (imageUrlInput.value.trim() !== '') {
+                    imageUpload.value = '';
+                    imageUpload.disabled = true;
+                    imagePreviewContainer.style.display = 'none';
+                    imagePreview.src = '';
+                } else {
+                    imageUpload.disabled = false; 
+                }
+            });
+
+
+            // ** FORM SUBMISSION LOGIC **
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Final prompt value is taken directly from the textarea, which is kept up-to-date by updatePromptBox()
+                const prompt = promptTextarea.value.trim();
+                const imageFile = imageUpload.files[0];
+                const imageUrl = imageUrlInput.value.trim();
+
+                if (!prompt && !imageFile && !imageUrl) {
+                    alert("Please either enter style preferences, upload an image, or provide an image URL!");
+                    return;
+                }
+
+                // 1. Update UI for 'Loading' state
+                submitButton.textContent = "Tony's cooking... Please wait.";
+                submitButton.disabled = true;
+                placeholderText.textContent = 'Generating your unique outline...';
+                placeholderText.style.display = 'block';
+                generatedImage.style.display = 'none';
+
+                // START STATUS BAR
+                updateStatus(true);
+
+                try {
+                    let fetchOptions;
+                    let finalImageBlob = null;
+
+                    if (imageFile) {
+                        finalImageBlob = imageFile;
+                    } else if (imageUrl) {
+                        // Fetch the image from the URL
+                        const imageResponse = await fetch(imageUrl);
+                        if (!imageResponse.ok) {
+                            throw new Error(`Failed to fetch image from URL: ${imageResponse.statusText}`);
+                        }
+                        finalImageBlob = await imageResponse.blob();
+
+                        // Basic URL image type/size validation (can be more robust serverside)
+                        const validUrlTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/tiff'];
+                        if (!validUrlTypes.includes(finalImageBlob.type)) {
+                            throw new Error('Invalid image type from URL. Only PNG, JPEG/JPG, TIFF are supported.');
+                        }
+                        if (finalImageBlob.size > MAX_FILE_SIZE_BYTES) {
+                            throw new Error(`Image from URL exceeds 2MB limit. Please provide a smaller image.`);
+                        }
+
+                        // Display URL image preview
+                        imagePreview.src = URL.createObjectURL(finalImageBlob);
+                        imagePreviewContainer.style.display = 'block';
+                    }
+
+                    if (finalImageBlob) {
+                        // If an image (file or URL) is present, use FormData
+                        const formData = new FormData();
+                        formData.append('prompt', prompt); 
+                        formData.append('image', finalImageBlob, imageFile ? imageFile.name : 'url_image.png'); 
+
+                        fetchOptions = {
+                            method: 'POST',
+                            body: formData, 
+                        };
+                    } else {
+                        // If no image, fall back to JSON body (original behavior)
+                        fetchOptions = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ prompt: prompt }),
+                        };
+                    }
+
+                    // 2. Send request to n8n webhook
+                    const response = await fetch(N8N_WEBHOOK_URL, fetchOptions);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    // Handle the incoming binary image data (PNG)
+                    const outlineBlob = await response.blob();
+
+                    if (outlineBlob.type && outlineBlob.type.startsWith('image/')) {
+                        const outlineUrl = URL.createObjectURL(outlineBlob);
+
+                        // 3. Update UI with the result
+                        generatedImage.src = outlineUrl;
+                        generatedImage.alt = prompt;
+
+                        generatedImage.onload = () => {
+                            updateStatus(false);
+                            placeholderText.style.display = 'none';
+                            generatedImage.style.display = 'block';
+                            setTimeout(() => URL.revokeObjectURL(outlineUrl), 1000);
+                        };
+
+                        generatedImage.onerror = () => {
+                            updateStatus(false);
+                            placeholderText.textContent = 'Error loading image data. The response might not be a valid image.';
+                            generatedImage.style.display = 'none';
+                        };
+                    } else {
+                        updateStatus(false);
+                        const errorText = await outlineBlob.text();
+                        placeholderText.textContent = `Generation failed. Tony did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
+                    }
+
+                } catch (error) {
+                    updateStatus(false);
+                    console.error('Generation Error:', error);
+                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured correctly.`;
+                } finally {
+                    // 4. Reset button state
+                    submitButton.textContent = 'Ok Tony, cook me an amazing outline...'; 
+                    submitButton.disabled = false;
+                    imageUpload.disabled = false; 
+                    imageUrlInput.disabled = false;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
