@@ -179,6 +179,10 @@
             padding: 20px;
             border-radius: 8px;
             background-color: #fffaf7;
+            /* UPDATED: Use flex to simplify centering the upload section and preview */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content inside wrapper */
         }
 
         .upload-options-wrapper h3 {
@@ -200,12 +204,6 @@
             font-style: italic;
         }
 
-        .upload-sections-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px; /* Space between file and URL upload */
-        }
-
         .upload-section {
             border: 1px solid #FF7043;
             padding: 15px;
@@ -216,6 +214,9 @@
             align-items: center;
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            /* NEW: Set a max-width to keep the upload box neat */
+            max-width: 300px;
+            width: 100%;
         }
         
         .upload-section label {
@@ -249,39 +250,35 @@
             background-color: #E64A19;
         }
 
-        input[type="text"].image-url-input {
-            width: calc(100% - 30px); /* Account for padding */
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1.2em;
-            font-family: 'Handlee', cursive;
-            box-sizing: border-box;
-        }
-        
-        input[type="text"].image-url-input:focus {
-            border-color: #FF7043;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5);
-        }
-
+        /* ADJUSTMENT: Set size and display for thumbnail */
         .image-upload-preview {
-            max-width: 100%;
-            max-height: 150px;
+            /* Set fixed dimensions for a thumbnail */
+            width: 90px;
+            height: 90px;
+            max-width: 90px;
+            max-height: 90px;
             overflow: hidden;
             border-radius: 4px;
             margin-top: 10px;
             border: 1px solid #ddd;
-            display: none; 
+            /* CHANGED: display: none; -> display: flex; to show the placeholder on load */
+            display: flex; 
+            /* Center the preview box itself */
+            align-self: center;
+            /* Ensure content inside is centered/fits */
+            justify-content: center;
+            align-items: center;
         }
 
         .image-upload-preview img {
+            /* Ensure the image covers the fixed 90x90 area */
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover; /* This makes it fill the container without distortion (cropping if necessary) */
             display: block;
         }
         /* -------------------------- */
-
+        
         button {
             background-color: #FF7043;
             color: white;
@@ -294,7 +291,6 @@
             transition: background-color 0.3s;
             font-family: 'Handlee', cursive;
             line-height: 1;
-            /* Removed margin-top to allow button placement */
             margin-top: 0; 
         }
 
@@ -302,9 +298,10 @@
             background-color: #E64A19;
         }
         
-        /* New class for the relocated submit button wrapper */
+        /* Centering the generate button */
         .submit-button-wrapper {
             margin-top: 20px;
+            text-align: center; 
         }
 
         /* Preset Options Styling (Style Preferences Section) */
@@ -476,25 +473,17 @@
                 <h3>Upload an image for Tony to outline:</h3>
                 
                 <span class="upload-info">Image types allowed: JPEG/JPG, PNG, TIFF. Image size limit: 2mbs.</span>
-
-                <div class="upload-sections-container">
-                    
-                    <div class="upload-section">
-                        <label for="imageUpload">Upload from your device:</label>
-                        <input type="file" id="imageUpload" name="image" accept=".png, .jpeg, .jpg, .tiff">
-                        <div class="custom-file-upload" onclick="document.getElementById('imageUpload').click()">
-                            Choose Image File
-                        </div>
-                    </div>
-
-                    
-                    <div class="upload-section">
-                        <label for="imageUrlInput">Or provide an image URL:</label>
-                        <input type="text" id="imageUrlInput" class="image-url-input" placeholder="e.g., https://example.com/your-image.jpg">
+                
+                <div class="upload-section">
+                    <label for="imageUpload">Upload from your device:</label>
+                    <input type="file" id="imageUpload" name="image" accept=".png, .jpeg, .jpg, .tiff">
+                    <div class="custom-file-upload" onclick="document.getElementById('imageUpload').click()">
+                        Choose Image File
                     </div>
                 </div>
+                
                 <div class="image-upload-preview" id="imagePreviewContainer">
-                    <img id="imagePreview" src="" alt="Uploaded Image Preview">
+                    <img id="imagePreview" src="https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true" alt="Uploaded Image Preview">
                 </div>
             </div>
             
@@ -562,9 +551,11 @@
             ]
         };
 
-        // *** CORE DOM ELEMENTS ***
+        // *** CORE CONFIG & DOM ELEMENTS ***
         const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/74161287-0f76-4b39-b5b6-66393e16ca91';
         const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+        // NEW CONSTANT: For placeholder image
+        const PLACEHOLDER_THUMBNAIL_URL = 'https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true';
 
         // Global variable to store the 'pure' manual text, excluding currently applied presets
         let manualTextBase = "";
@@ -580,9 +571,7 @@
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
             
-            // NEW/UPDATED ELEMENTS
             const imageUpload = document.getElementById('imageUpload');
-            const imageUrlInput = document.getElementById('imageUrlInput'); 
             const imagePreview = document.getElementById('imagePreview');
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
 
@@ -647,7 +636,6 @@
 
                 // Attach event listener to all radio buttons
                 document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    // (2) set up preset radio button listeners as before
                     radio.addEventListener('change', updatePromptBox);
                 });
             }
@@ -662,24 +650,19 @@
                     .replace(/'/g, '&#039;');
             }
             
-            // (1) new function to update manualTextBase ONLY on user typing
+            // Function to update manualTextBase ONLY on user typing
             function updateManualTextBaseOnly(event) {
-                // Only update manualTextBase as the user types; don't touch .value!
-                // This ensures we capture spaces and all manual edits correctly
                 manualTextBase = promptTextarea.value.trim();
             }
 
-            // (3) modify updatePromptBox so the value is set ONLY on preset selection
+            // Function to update the prompt box with manual text + selected presets
             function updatePromptBox(event) {
                 
                 // Identify all current preset values.
                 const artStyleValue = document.querySelector('input[name="ArtStyle"]:checked')?.value || '';
                 const busynessValue = document.querySelector('input[name="busyness"]:checked')?.value || '';
                 const currentPresetValues = [artStyleValue, busynessValue].filter(v => v);
-
-                // No need to alter manualTextBase here. It's updated by updateManualTextBaseOnly
                 
-                // Only set textarea value when a radio button fires this event
                 let combinedPromptParts = [];
                 
                 // Add the manual text base (which preserves spaces and all other characters)
@@ -690,7 +673,7 @@
                 // Add the selected presets
                 combinedPromptParts.push(...currentPresetValues);
 
-                // 5. Update the prompt box.
+                // Update the prompt box.
                 promptTextarea.value = combinedPromptParts.filter(p => p).join(', ');
             }
             // --- END Fixed logic for updatePromptBox() ---
@@ -705,11 +688,11 @@
             });
             promptTextarea.value = '';
 
-            // (1) Update event listener on textarea: Now calls the new base tracking function
+            // Update event listener on textarea: Now calls the base tracking function
             promptTextarea.addEventListener('input', updateManualTextBaseOnly); 
 
             
-            // NEW/UPDATED image/URL handlers
+            // UPDATED image handler to manage the placeholder
             imageUpload.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -717,57 +700,37 @@
                     if (!validTypes.includes(file.type)) {
                         alert('Invalid file type. Please upload a PNG, JPEG/JPG, or TIFF image.');
                         e.target.value = '';
-                        imagePreviewContainer.style.display = 'none';
-                        imagePreview.src = '';
+                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL; // Reset to placeholder
                         return;
                     }
                     if (file.size > MAX_FILE_SIZE_BYTES) {
                         alert(`File size exceeds 2MB limit. Please upload a smaller image.`);
                         e.target.value = '';
-                        imagePreviewContainer.style.display = 'none';
-                        imagePreview.src = '';
+                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL; // Reset to placeholder
                         return;
                     }
 
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         imagePreview.src = e.target.result;
-                        imagePreviewContainer.style.display = 'block';
+                        // imagePreviewContainer display is handled by CSS (set to flex)
                     }
                     reader.readAsDataURL(file);
-
-                    imageUrlInput.value = '';
-                    imageUrlInput.disabled = true;
                 } else {
-                    imagePreviewContainer.style.display = 'none';
-                    imagePreview.src = '';
-                    imageUrlInput.disabled = false; 
+                    // If file input is cleared, ensure the placeholder image is displayed
+                    imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
                 }
             });
 
-            imageUrlInput.addEventListener('input', function() {
-                if (imageUrlInput.value.trim() !== '') {
-                    imageUpload.value = '';
-                    imageUpload.disabled = true;
-                    imagePreviewContainer.style.display = 'none';
-                    imagePreview.src = '';
-                } else {
-                    imageUpload.disabled = false; 
-                }
-            });
-
-
-            // ** FORM SUBMISSION LOGIC **
+            // ** FORM SUBMISSION LOGIC ** (Simplified)
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                // Final prompt value is taken directly from the textarea, which is kept up-to-date by updatePromptBox()
                 const prompt = promptTextarea.value.trim();
                 const imageFile = imageUpload.files[0];
-                const imageUrl = imageUrlInput.value.trim();
 
-                if (!prompt && !imageFile && !imageUrl) {
-                    alert("Please either enter style preferences, upload an image, or provide an image URL!");
+                if (!imageFile) {
+                    alert("An image upload is required to generate the outline.");
                     return;
                 }
 
@@ -782,103 +745,54 @@
                 updateStatus(true);
 
                 try {
-                    let fetchOptions;
-                    let finalImageBlob = null;
+                    let finalImageBlob = imageFile;
+                    
+                    const formData = new FormData();
+                    formData.append('prompt', prompt); 
+                    // N8n expects the binary file to be named 'image'
+                    formData.append('image', finalImageBlob, imageFile.name); 
 
-                    if (imageFile) {
-                        finalImageBlob = imageFile;
-                    } else if (imageUrl) {
-                        // Fetch the image from the URL
-                        const imageResponse = await fetch(imageUrl);
-                        if (!imageResponse.ok) {
-                            throw new Error(`Failed to fetch image from URL: ${imageResponse.statusText}`);
+                    const response = await fetch(N8N_WEBHOOK_URL, {
+                        method: 'POST',
+                        body: formData,
+                        // DO NOT set Content-Type header when using FormData
+                    });
+
+                    // 2. Handle response
+                    if (response.ok) {
+                        const contentType = response.headers.get('content-type');
+                        
+                        // Check for JSON error response
+                        if (contentType && contentType.includes('application/json')) {
+                            const result = await response.json();
+                            throw new Error(`Server Error (JSON Response): ${result.errorMessage || JSON.stringify(result)}`);
                         }
-                        finalImageBlob = await imageResponse.blob();
-
-                        // Basic URL image type/size validation (can be more robust serverside)
-                        const validUrlTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/tiff'];
-                        if (!validUrlTypes.includes(finalImageBlob.type)) {
-                            throw new Error('Invalid image type from URL. Only PNG, JPEG/JPG, TIFF are supported.');
-                        }
-                        if (finalImageBlob.size > MAX_FILE_SIZE_BYTES) {
-                            throw new Error(`Image from URL exceeds 2MB limit. Please provide a smaller image.`);
-                        }
-
-                        // Display URL image preview
-                        imagePreview.src = URL.createObjectURL(finalImageBlob);
-                        imagePreviewContainer.style.display = 'block';
-                    }
-
-                    if (finalImageBlob) {
-                        // If an image (file or URL) is present, use FormData
-                        const formData = new FormData();
-                        formData.append('prompt', prompt); 
-                        formData.append('image', finalImageBlob, imageFile ? imageFile.name : 'url_image.png'); 
-
-                        fetchOptions = {
-                            method: 'POST',
-                            body: formData, 
-                        };
+                        
+                        // Assume successful image blob response
+                        const blob = await response.blob();
+                        const imageUrl = URL.createObjectURL(blob);
+                        
+                        generatedImage.src = imageUrl;
+                        generatedImage.style.display = 'block';
+                        placeholderText.style.display = 'none';
                     } else {
-                        // If no image, fall back to JSON body (original behavior)
-                        fetchOptions = {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ prompt: prompt }),
-                        };
+                        // Attempt to read error message from response body
+                        const errorText = await response.text();
+                        throw new Error(`HTTP Error: ${response.status} - ${errorText.substring(0, 100)}...`);
                     }
-
-                    // 2. Send request to n8n webhook
-                    const response = await fetch(N8N_WEBHOOK_URL, fetchOptions);
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    // Handle the incoming binary image data (PNG)
-                    const outlineBlob = await response.blob();
-
-                    if (outlineBlob.type && outlineBlob.type.startsWith('image/')) {
-                        const outlineUrl = URL.createObjectURL(outlineBlob);
-
-                        // 3. Update UI with the result
-                        generatedImage.src = outlineUrl;
-                        generatedImage.alt = prompt;
-
-                        generatedImage.onload = () => {
-                            updateStatus(false);
-                            placeholderText.style.display = 'none';
-                            generatedImage.style.display = 'block';
-                            setTimeout(() => URL.revokeObjectURL(outlineUrl), 1000);
-                        };
-
-                        generatedImage.onerror = () => {
-                            updateStatus(false);
-                            placeholderText.textContent = 'Error loading image data. The response might not be a valid image.';
-                            generatedImage.style.display = 'none';
-                        };
-                    } else {
-                        updateStatus(false);
-                        const errorText = await outlineBlob.text();
-                        placeholderText.textContent = `Generation failed. Tony did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
-                    }
-
                 } catch (error) {
-                    updateStatus(false);
-                    console.error('Generation Error:', error);
-                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured correctly.`;
+                    console.error('Generation failed:', error);
+                    placeholderText.textContent = `Sorry, Tony failed to cook this time. Error: ${error.message}`;
+                    placeholderText.style.display = 'block';
+                    generatedImage.style.display = 'none';
                 } finally {
-                    // 4. Reset button state
-                    submitButton.textContent = 'Ok Tony, cook me an amazing outline...'; 
+                    // 3. Reset UI state
+                    updateStatus(false);
+                    submitButton.textContent = "Ok Tony, cook me an amazing outline...";
                     submitButton.disabled = false;
-                    imageUpload.disabled = false; 
-                    imageUrlInput.disabled = false;
                 }
             });
         });
     </script>
-
 </body>
 </html>
