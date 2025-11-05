@@ -8,7 +8,7 @@
     <style>
         /* General Styling */
         body {
-            font-family: 'Handlee', cursive; /* non-title font */
+            font-family: 'Handlee', cursive;
             background-color: #f4f7f6;
             color: #333;
             margin: 0;
@@ -22,6 +22,7 @@
             -moz-osx-font-smoothing: grayscale;
             line-height: 1.25;
         }
+
         /* Container for the App */
         .generator-container {
             background-color: #fff;
@@ -35,6 +36,7 @@
             position: relative;
             box-sizing: border-box;
         }
+
         /* ------------------------------------------- */
         /* HEADER SECTION WITH BACKGROUND IMAGE */
         /* ------------------------------------------- */
@@ -49,70 +51,75 @@
             background-size: cover;
             background-position: 50% 35%; 
             background-repeat: no-repeat;
-                        height: 180px; 
-                        position: relative; 
+             
+            height: 180px; 
+             
+            position: relative; /* Base position for absolute logo positioning */
             border-radius: 12px 12px 0 0; 
             overflow: hidden; 
-                        display: flex;
+             
+            display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            /* UPDATED: Center the text horizontally */
             align-items: center; 
-         }
+        }
+
         /* Styling for the new wrapper spans */
         .header-text-highlight {
-            /* UPDATED: Light Gray background */
             background-color: rgba(240, 240, 240, 0.95); 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle lift */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
             padding: 5px 10px;
-            line-height: 1; /* Reset line-height inherited from block element */
-            box-decoration-break: clone; /* Allows padding/bg to wrap multi-line text cleanly */
-            display: inline-block; /* Essential for padding/bg to wrap text */
+            line-height: 1; 
+            box-decoration-break: clone; 
+            display: inline-block; 
         }
-        /* Logo Styling */
+
+        /* Logo Styling (Default: Absolute Positioning on the Right) */
         .logo-container {
             position: absolute;
             top: 30px;
             right: 30px;
             z-index: 10;
         }
+
         .logo-container img {
             width: 80px;
             height: auto;
             filter: none;
             display: block;
         }
+
         /* Header Title Styling */
         .header-section h1 {
             font-family: 'Amatic SC', cursive;
             color: #222; 
-            /* UPDATED: Center text within its container */
             text-align: center;
             margin-top: 5px; 
             margin-bottom: 0;
             font-weight: 700;
             font-size: 3.8em;
-            padding-right: 0; /* Removed padding to allow centering */
-            padding-left: 0; /* Removed padding to allow centering */
+            padding-right: 0; 
+            padding-left: 0; 
             line-height: 1.2; 
             text-shadow: none; 
         }
+
         .header-section .subtitle {
             color: #444; 
-            /* UPDATED: Center text within its container */
             text-align: center;
             margin-top: 5px; 
             margin-bottom: 0;
             font-style: normal;
             font-size: 2.2em;
             line-height: 1.2;
-            padding-right: 0; /* Removed padding to allow centering */
-            padding-left: 0; /* Removed padding to allow centering */
+            padding-right: 0; 
+            padding-left: 0; 
             text-shadow: none; 
         }
         /* ------------------------------------------- */
         /* END HEADER SECTION STYLES */
         /* ------------------------------------------- */
+
 
         /* Prompt Form Styling */
         .prompt-form {
@@ -125,12 +132,14 @@
             background-color: #fafafa;
             box-sizing: border-box;
         }
+
         .prompt-form label {
             font-size: 1.5em;
             color: #5D4037;
             margin: 0;
             line-height: 1.1;
         }
+
         textarea {
             width: 100%;
             padding: 15px;
@@ -143,18 +152,119 @@
             transition: border-color 0.3s;
             font-family: 'Handlee', cursive;
             line-height: 1.25;
+            margin-bottom: 10px; 
         }
-        /* Placeholder styles (carried over from previous request) */
+
+        /* Placeholder styles */
         textarea::placeholder {
-            font-size: 1.0em; /* Reduced size */
+            font-size: 1.0em; 
             color: #9e9e9e;
             opacity: 1;
         }
+
         textarea:focus {
             border-color: #FF7043;
             outline: none;
             box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5);
         }
+
+        /* --- UPLOAD STYLES --- */
+        .upload-options-wrapper {
+            margin-bottom: 20px;
+            border: 1px dashed #BDBDBD;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fffaf7;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        .upload-options-wrapper h3 {
+            font-size: 1.8em;
+            color: #E64A19;
+            margin-top: 0;
+            margin-bottom: 5px; 
+            text-align: center;
+            line-height: 1.1;
+        }
+         
+        /* New style for the info text */
+        .upload-info {
+            display: block;
+            text-align: center;
+            font-size: 1em; 
+            color: #757575;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .upload-section {
+            border: 1px solid #FF7043;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            max-width: 300px;
+            width: 100%;
+        }
+         
+        .upload-section label {
+            font-size: 1.3em;
+            color: #E64A19;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.1;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        input[type="file"] {
+            display: none; 
+        }
+
+        .custom-file-upload {
+            background-color: #FF7043;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+            display: inline-block;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #E64A19;
+        }
+
+        .image-upload-preview {
+            width: 90px;
+            height: 90px;
+            max-width: 90px;
+            max-height: 90px;
+            overflow: hidden;
+            border-radius: 4px;
+            margin: 10px auto 0 auto; /* FIX: Center the preview element */
+            border: 1px solid #ddd;
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-upload-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            display: block;
+        }
+         
         button {
             background-color: #FF7043;
             color: white;
@@ -167,11 +277,20 @@
             transition: background-color 0.3s;
             font-family: 'Handlee', cursive;
             line-height: 1;
+            margin-top: 0; 
         }
+
         button:hover {
             background-color: #E64A19;
         }
-        /* Preset Options Styling */
+         
+        /* Centering the generate button */
+        .submit-button-wrapper {
+            margin-top: 20px;
+            text-align: center; 
+        }
+
+        /* Preset Options Styling (Style Preferences Section) */
         .preset-options {
             padding: 15px;
             border: 1px solid #ddd;
@@ -180,44 +299,31 @@
             box-sizing: border-box;
             overflow: visible;
         }
-        /* Container for the Heading and Button */
-        .preset-header {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 12px;
-            padding-bottom: 5px;
-        }
+
+        /* Preset header (Style Preferences) */
         .preset-options h3 {
             font-size: 2em;
             color: #FF7043;
-            margin: 0;
-            margin-right: 15px; 
+            margin: 0 0 15px 0; 
             line-height: 1;
             font-family: 'Handlee', cursive;
+            text-align: center; 
         }
-        /* New button style for the main toggle */
-        .main-toggle-button {
-            margin-left: auto;
-            background: #FF7043;
-            border: none;
-            color: white;
-            font-size: 1.2em;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            text-align: center;
-            line-height: 1;
-            transition: background-color 0.2s;
-            font-family: 'Handlee', cursive;
-            flex-shrink: 0; 
-        }
-        .main-toggle-button:hover {
-            background: #E64A19;
-        }
+         
         .preset-category {
-            margin-bottom: 15px;
+            margin-bottom: 20px; /* Increased separation between categories */
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee; /* Added separator for clarity */
         }
+        
+        /* Remove border from the last category */
+        #presetsContainer > div:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+
         .preset-category h4 {
             font-size: 1.5em;
             color: #5D4037;
@@ -226,15 +332,19 @@
             line-height: 1.05;
             font-family: 'Handlee', cursive;
         }
+
         .preset-category label {
             display: inline-block;
             margin-right: 15px;
+            margin-bottom: 8px; /* Added margin for stacking on small screens */
             cursor: pointer;
             font-size: 1.2em;
             line-height: 1.5;
             vertical-align: middle;
             font-family: 'Handlee', cursive;
+            flex-wrap: wrap; /* Allows labels to wrap */
         }
+
         /* Busyness Gauge Styling */
         .busyness-gauge {
             display: flex;
@@ -246,21 +356,27 @@
             flex-wrap: wrap;
             box-sizing: border-box;
         }
+         
         /* Busyness radio buttons now arranged vertically for clarity */
         .busyness-options {
             display: flex;
             flex-direction: column;
             gap: 8px;
+            flex-grow: 1; /* Allows it to take up available horizontal space */
         }
+
         .busyness-gauge h4 {
             margin: 0;
-            min-width: 100px;
+            min-width: 120px; /* Set a minimum width for the header */
             font-size: 1.5em;
             line-height: 1;
             font-family: 'Handlee', cursive;
-            align-self: flex-start; /* Align title to the top */
-            padding-top: 5px; /* Visual spacing */
+            align-self: flex-start; 
+            padding-top: 5px; 
+            text-decoration: none; /* Remove underline for this header */
+            color: #5D4037; /* Consistent color */
         }
+
         .busyness-gauge label {
             display: inline-flex;
             align-items: center;
@@ -268,10 +384,13 @@
             font-size: 1.2em;
             line-height: 1.2;
             font-family: 'Handlee', cursive;
+            margin-right: 0;
         }
+
         .busyness-gauge input[type="radio"] {
             transform: translateY(0);
         }
+
         /* Status Bar Styling */
         .status-bar {
             text-align: center;
@@ -285,9 +404,11 @@
             font-family: 'Handlee', cursive;
             line-height: 1;
         }
+
         .status-bar.visible {
             opacity: 1;
         }
+
         /* Image Display Area */
         .image-display {
             border: 2px dashed #BDBDBD;
@@ -301,6 +422,7 @@
             background-color: #FAFAFA;
             box-sizing: border-box;
         }
+
         .image-placeholder {
             color: #9E9E9E;
             font-style: italic;
@@ -308,30 +430,79 @@
             font-family: 'Handlee', cursive;
             line-height: 1.25;
         }
+
         .generated-image {
             max-width: 100%;
             max-height: 350px;
             border-radius: 6px;
             display: none;
         }
-        /* Styles for hidden content */
-        .hidden-content {
-            display: none;
-        }
+
         /* Responsive tweaks */
         @media (max-width: 600px) {
             .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }
             .header-section .subtitle { font-size: 1.8em; padding-right: 0; }
             .preset-options h3 { font-size: 1.6em; }
-            .busyness-gauge h4 { min-width: 120px; font-size: 1.2em; }
+            .busyness-gauge h4 { min-width: 100%; text-align: center; font-size: 1.4em; } /* Full width on mobile */
             .preset-category label, .busyness-gauge label { font-size: 1.05em; }
             textarea { font-size: 1.15em; }
             textarea::placeholder { font-size: 0.9em; } 
+
+            .upload-sections-container {
+                flex-direction: column; 
+            }
+            
+            .busyness-gauge {
+                flex-direction: column; /* Stack header and options */
+                align-items: stretch;
+            }
+            .busyness-options {
+                width: 100%;
+            }
+            
+            .preset-category {
+                /* Ensure radio options stack nicely */
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .preset-category label {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+         
+        /* ------------------------------------------- */
+        /* UPDATED MEDIA QUERY: Logo above title for small screens (5in = 480px) */
+        /* ------------------------------------------- */
+        @media (max-width: 5in) { 
+            .generator-container { padding: 20px; gap: 20px; }
+            /* Make sure the header height can accommodate the stacked elements */
+            .header-section {
+                height: auto; 
+                padding: 20px 20px 5px 20px;
+                margin: -20px -20px 20px -20px; /* Adjust negative margins for new padding */
+            }
+
+            /* Move logo out of absolute flow and center it */
+            .logo-container {
+                position: static;
+                margin: 0px auto 10px auto; /* 0px top margin, 10px bottom margin */
+                right: auto;
+                top: auto;
+            }
+
+            /* Adjust title margin since the logo is now above it */
+            .header-section h1 {
+                margin-top: 0; 
+            }
         }
     </style>
 </head>
 <body>
+
     <div class="generator-container">
+         
         <div class="header-section">
             <div class="logo-container">
                 <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
@@ -344,110 +515,119 @@
             </p>
         </div>
         <form class="prompt-form" id="imageGenerationForm">
-            <label for="prompt" style="font-size: 1.5em;">Describe in detail what outline you'd like to get for your next masterpiece. <i>Or select from the options below.</i></label>
-            <textarea id="prompt" name="prompt" placeholder="Start typing your description... Example: A whimsical kitten. Detailed fur. Playful pose lines, geometric tiles, medium-sized tiles." required></textarea>
-            <button type="submit">Ok Tony, cook me an amazing outline...</button>
-        </form>
-        <div class="preset-options">
-            <div class="preset-header">
-                <h3>Artist's Block?</h3>
-                <button type="button" class="main-toggle-button" id="mainToggleButton">
-                    Try Tony's ideas...
-                </button>
-            </div>
-            <div id="allPresetsWrapper" class="hidden-content"> 
-                <div id="presetsContainer">
+             
+            <div class="upload-options-wrapper">
+                <h3>Choose your image, then describe the style you want:</h3>
+                 
+                <span class="upload-info">Image types allowed: JPEG/JPG, PNG, TIFF. Image size limit: **7mbs.**</span>
+                 
+                <div class="upload-section">
+                    <label for="imageUpload">Upload from your device:</label>
+                    <input type="file" id="imageUpload" name="image" accept=".png, .jpeg, .jpg, .tiff">
+                    <div class="custom-file-upload" onclick="document.getElementById('imageUpload').click()">
+                        Choose Image File
+                    </div>
                 </div>
-                <div class="busyness-gauge">
-                    <h4>Page Busyness</h4>
-                    <div class="busyness-options">
-                        <label>
-                            <input type="radio" name="busyness" value="simple, minimal geometric tiles, few large tiles, 70% of the page is empty">
-                            <span>Minimally Busy</span>
-                            <span style="font-size: 0.9em; color: #9E9E9E;">(Few large tiles, 70% empty)</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="busyness" value="geometric tiles, medium-sized tiles, 55% of the page is empty">
-                            <span>Moderately Busy</span>
-                            <span style="font-size: 0.9em; color: #9E9E9E;">(Medium tiles, 55% empty)</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="busyness" value="dense, intricate, numerous small geometric tiles, 40% of the page is empty">
-                            <span>Super Busy</span>
-                            <span style="font-size: 0.9em; color: #9E9E9E;">(Numerous small tiles, 40% empty)</span>
-                        </label>
+                 
+                <div class="image-upload-preview" id="imagePreviewContainer">
+                    <img id="imagePreview" src="https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true" alt="Uploaded Image Preview">
+                </div>
+            </div>
+             
+            <label for="prompt" style="font-size: 1.5em;">Describe any style preferences for your outline:</label>
+            <textarea id="prompt" name="prompt" placeholder="Example: Use strong, thick outlines. Ignore background elements. Keep fur detail in the foreground. (Or select below.)" required></textarea>
+             
+            <div class="preset-options">
+                 
+                <h3>Style Preferences</h3> 
+                 
+                <div id="allPresetsWrapper"> 
+                    <div id="presetsContainer">
+                    </div>
+
+                    <div class="busyness-gauge">
+                        <h4>Page Busyness</h4>
+                        <div class="busyness-options">
+                            <label>
+                                <input type="radio" name="busyness" value="simple, minimal geometric tiles, few large tiles, 70% of the page is empty">
+                                <span>Minimally Busy</span>
+                                <span style="font-size: 0.9em; color: #9E9E9E;">(Few large tiles, 70% empty)</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="busyness" value="geometric tiles, medium-sized tiles, 55% of the page is empty">
+                                <span>Moderately Busy</span>
+                                <span style="font-size: 0.9em; color: #9E9E9E;">(Medium tiles, 55% empty)</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="busyness" value="dense, intricate, numerous small geometric tiles, 40% of the page is empty">
+                                <span>Super Busy</span> 
+                                <span style="font-size: 0.9em; color: #9E9E9E;">(Numerous small tiles, 40% empty)</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="submit-button-wrapper">
+                <button type="submit">Ok Tony, cook me an amazing outline...</button>
+            </div>
+        </form>
+
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
+
         <div class="status-bar" id="statusBar">
             <span id="statusMessage"></span>
         </div>
+
         <h2>Your Generated Outline Preview</h2>
+
         <div class="image-display">
             <p class="image-placeholder" id="placeholderText">Tony is cooking. It'd show up here once he's done.</p>
             <img src="" alt="AI Generated Outline" class="generated-image" id="generatedImage">
         </div>
     </div>
+
     <script>
         // *** PRESET DATA ***
         const PRESET_CATEGORIES = {
-            "Art Style": [
-                { display: "Impressionism", value: "broad, visible short brushstrokes, light focused, loose forms, en plein air and outdoors to capture the fleeting effects of natural light, depicting everyday subjects and scenes of modern life, a sense of spontaneity, an emphasis on capturing a momentary impressions, and open compositions with unusual visual angles." },
-                { display: "Abstract Art", value: "non-representational forms, geometric and organic shapes, non-representational nature, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
-                { display: "Surrealism", value: "dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
-                { display: "Pop Art", value: "bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
+            "Influential Artists": [
+                { display: "Leonardo da Vinci", value: "In the style of Leonardo da Vinci, Utilize meticulous anatomical realism combined with subtle sfumato for softened transitions, pyramidal composition, and an emphasis on psychological depth and idealization." },
+                { display: "Frida Kahlo", value: "In the style of Frida Kahlo, Employ hyper-realistic self-portraiture within a Surrealist context, integrating Mexican folk art motifs, and symbolic elements that chronicle physical and emotional suffering on a planar surface." },
+                { display: "Michelangelo", value: "In the style of Michelangelo, Render the human form with idealized, colossal musculature (terribilità), emphasizing dramatic contrapposto, complex torsional poses, and a sculptural sense of volume and energy." },
+                { display: "Pablo Picasso", value: "In the style of Pablo Picasso, Generate images by fragmenting subjects into multiple geometric planes (Cubism), employing simultaneous viewpoints, and using a structural, often monochromatic or reduced palette for analysis or collage." },
+                { display: "Claude Monet", value: "In the style of Claude Monet, Recreate the transient quality of light and atmosphere by applying paint in visible, broken brushstrokes (Impasto), focusing on the optical mixing of pigment, and depicting a single subject in series under varied conditions." },
+                { display: "Jackson Pollock", value: "In the style of Jackson Pollock, Create large, 'all-over' abstract compositions by dripping, pouring, and flinging industrial paint onto a horizontal canvas, resulting in a dense, layered network of linear skeins without a central focus." },
+                { display: "Georgia O'Keeffe", value: "In the style of Georgia O'Keeffe, Execute large-scale, close-up details of natural forms, like flowers or bones, using smooth, gradient transitions of value, simplified contours, and a composition that borders on pure abstraction." },
+                { display: "Vincent van Gogh", value: "In the style of Vincent van Gogh, Apply paint with an emotionally intense impasto, utilizing distinct, swirling, curvilinear brushstrokes that convey movement and energy, and employing thick application often within dark contours." },
+                { display: "Johannes Vermeer", value: "In the style of Johannes Vermeer, Achieve photorealistic detail in intimate, domestic scenes by rendering light with scientific precision (often using pointillés for highlights), and focusing on subtle textures and harmonious spatial composition." },
+                { display: "Andy Warhol", value: "In the style of Andy Warhol, Replicate iconic commercial imagery and celebrity photographs using mass-production methods like silkscreen printing, characterized by flat blocks and repetitive, modular arrangements." },
+                { display: "Cezanne", value: "In the style of Cezanne, Construct subjects using visible, parallel, faceted brushstrokes that build up geometric forms, resulting in a deliberate distortion of perspective, and an emphasis on the underlying structural volume of nature." },
+                { display: "Gustav Klimt", value: "In the style of Gustav Klimt, Compose figures in a highly stylized, flat manner, often incorporating intricate, Byzantine-inspired patterns and application of metallic leaf that merge the subject and background into an ornate, sensual tapestry." },
+                { display: "Rembrandt van Rijn", value: "In the style of Rembrandt van Rijn, Masterfully use dramatic chiaroscuro (pronounced light and shadow) to sculpt figures out of darkness, focusing on visceral texture and a somber palette to convey profound psychological depth and human vulnerability." },
+                { display: "Salvador Dalí", value: "In the style of Salvador Dalí, Paint hallucinatory, dream-like landscapes with academic, almost photographic realism, juxtaposing precise, hard-edged detail with bizarre, symbolic, and often unsettling melting or suspended objects." }
             ],
-            "Themes": { 
-                "Cities": [
-                    { display: "New York City", value: "a New York City cityscape with famous landmarks, towering skyscrapers, detailed traffic" },
-                    { display: "San Francisco", value: "a dense, hilly San Francisco city and landmarks with Victorian houses and the Golden Gate Bridge" },
-                    { display: "Rio de Janeiro", value: "Rio de Janeiro's lush mountains, beaches, and the Christ the Redeemer statue" },
-                    { display: "Istanbul", value: "Istanbul's historic mosques and markets, complex patterns, bustling waterfront" },
-                    { display: "Hong Kong", value: "Hong Kong's vertical architecture, harbor view, illuminated city grid" },
-                    { display: "Mecca", value: "Mecca's highly detailed Islamic architecture, complex geometric patterns, focus on the Kaaba" },
-                    { display: "Dubai", value: "Dubai's futuristic architecture, tall glass buildings, sharp geometric design" },
-                    { display: "Macau", value: "Macau's blend of Portuguese and modern Chinese architecture, casino lights, detailed paving" },
-                    { display: "Tehran", value: "Tehran's landmarks, choose between the Azadi Tower or the Milad Tower, and urban sprawl, distant mountains, intricate Persian tile work" },
-                    { display: "London", value: "London's historic architecture, Big Ben, red phone booths, detailed brickwork" },
-                    { display: "Paris", value: "Paris's Eiffel Tower, ornate Haussmann buildings, Seine River view, detailed ironwork" },
-                    { display: "Kuala Lumpur", value: "Kuala Lumpur's Petronas Twin Towers, lush tropical setting, detailed city foliage" },
-                    { display: "Bangkok", value: "Bangkok's detailed temples, winding canals, busy street scenes, complex rooftop lines" },
-                    { display: "Sydney", value: "Sydney's Opera House, harbor views, intricate yacht rigging" },
-                    { display: "Tokyo", value: "neon signs, dense pedestrian streets, futuristic buildings, busy intersections" },
-                    { display: "Beijing", value: "Beijing's landmarks and the Great Wall of China, urban streets, historic buildings, and Chinese architecture" }
-                ],
-                "Animals": [
-                    { display: "Bunny", value: "a cute bunny in a whimsical field, intricate fur and whisker detail" },
-                    { display: "Fox", value: "a clever fox in a forest, detailed brush and branch work" },
-                    { display: "Panda", value: "a large panda eating bamboo, detailed leaf and fur texture" },
-                    { display: "Quokka", value: "a smiling quokka, detailed island foliage" },
-                    { display: "Hedgehog", value: "a tiny hedgehog, complex spine patterns, detailed ground cover" },
-                    { display: "Penguin", value: "a penguin on ice, crisp black and white contrast, detailed snow texture" },
-                    { display: "Sloth", value: "a slow sloth hanging from a branch, detailed vine and bark texture" },
-                    { display: "Seal", value: "a sleek seal basking on rocks, wet skin texture, detailed water reflections" },
-                    { display: "Puppy", value: "a playful puppy, soft fur texture, detailed toy lines" },
-                    { display: "Kitten", value: "a curious kitten, detailed fur and playful pose lines" }
-                ],
-                "Landscapes": [
-                    { display: "The Swiss Alps", value: "The Swiss Alps, sweeping mountain landscape, jagged peaks, small chalets, detailed snow texture" },
-                    { display: "The Rocky Mountains", value: "The Rocky Mountains, rugged peaks, dense pine forests, detailed rock formations" },
-                    { display: "The Grand Canyon", value: "The Grand Canyon, vast, layered rock formations, deep shadows, dry texture" },
-                    { display: "Mount Rushmore", value: "Mount Rushmore, detailed presidential faces carved into rock, precise light and shadow" },
-                    { display: "Zhangye Danxia Geopark", value: "Zhangye Danxia Geopark, striped rock mountains, sweeping geological layers" },
-                    { display: "The Norwegian Fjords", value: "The Norwegian Fjords, sheer cliffs, calm dark water, small fishing villages, detailed reflections" },
-                    { display: "The Grand Canal of Venice", value: "The Grand Canal of Venice, historic buildings, detailed boat lines, water reflections, complex shadows" },
-                    { display: "The Redwood Forests", value: "The Redwood Forests, towering trees, sunbeams filtering through, detailed bark and canopy" },
-                    { display: "The Japanese Cherry Blossoms", value: "The Japanese Cherry Blossoms, delicate floral patterns, sweeping tree branches, soft, scattered petals" },
-                    { display: "The Serengeti", value: "The Serengeti, wide open savanna, scattered acacia trees, detailed grasses and animal silhouettes" },
-                    { display: "The Sahara Desert", value: "The Sahara Desert, rolling sand dunes, extreme shadows, sparse dry plants, detailed sand patterns" }
-                ]
-            }
+            "Or an Art Style": [
+                { display: "Impressionism", value: "In the style of impressionism, broad, visible short brushstrokes, light focused, loose forms, en plein air and outdoors to capture the fleeting effects of natural light, depicting everyday subjects and scenes of modern life, a sense of spontaneity, an emphasis on capturing a momentary impressions, and open compositions with unusual visual angles." },
+                { display: "Abstract Art", value: "In the style of abstract art, non-representational forms, geometric and organic shapes, non-representational nature, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
+                { display: "Surrealism", value: "In the style of surrealism, dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
+                { display: "Cubism", value: "In the style of cubism, a revolutionary early 20th-century art movement pioneered by Pablo Picasso and Georges Braque that completely reimagined traditional Western art conventions. It rejected the idea that art should imitate nature or use a single, fixed perspective, focusing instead on depicting subjects from multiple viewpoints simultaneously within a single composition." },
+                { display: "Pop Art", value: "In the style of pop art, bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
+            ]
         };
 
-        // *** CORE DOM ELEMENTS ***
+        // *** CORE CONFIG & DOM ELEMENTS ***
         const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/74161287-0f76-4b39-b5b6-66393e16ca91';
+        // CHANGED: Increased max file size to 7MB
+        const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
+        // NEW CONSTANT: For placeholder image
+        const PLACEHOLDER_THUMBNAIL_URL = 'https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true';
+
+        // Global variable to store the 'pure' manual text, excluding currently applied presets
+        let manualTextBase = "";
+        
+        // Define the mutually exclusive groups
+        const EXCLUSIVE_GROUPS = ['InfluentialArtists', 'ArtStyle'];
+
 
         // Wrap initialization so it runs after DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
@@ -459,8 +639,11 @@
             const presetsContainer = document.getElementById('presetsContainer');
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
-            const mainToggleButton = document.getElementById('mainToggleButton');
-            const allPresetsWrapper = document.getElementById('allPresetsWrapper');
+            
+            const imageUpload = document.getElementById('imageUpload');
+            const imagePreview = document.getElementById('imagePreview'); // Correctly reference the img element
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
 
             // Status Bar Steps
             const STATUS_STEPS = [
@@ -500,39 +683,22 @@
             function renderPresets() {
                 let html = '';
 
+                // Note: Object.keys() preserves insertion order in modern JS environments
                 for (const categoryName in PRESET_CATEGORIES) {
                     const categoryData = PRESET_CATEGORIES[categoryName];
                     const radioGroupName = categoryName.replace(/\s/g, ''); 
 
                     html += `<div class="preset-category"><h4>${categoryName}</h4>`;
 
-                    if (Array.isArray(categoryData)) {
-                        // Simple array (Art Style)
+                    if (Array.isArray(categoryData)) { 
                         categoryData.forEach(item => {
                             html += `
                                 <label>
-                                    <input type="radio" name="${radioGroupName}" value="${escapeHtml(item.value)}">
+                                    <input type="radio" name="${radioGroupName}" value="${escapeHtml(item.value)}" data-group="${radioGroupName}">
                                     ${escapeHtml(item.display)}
                                 </label>
                             `;
                         });
-                    } else if (typeof categoryData === 'object' && categoryName === 'Themes') {
-                        // Complex object (Themes: Cities, Animals, Landscapes)
-                        for (const subCategoryName in categoryData) {
-                            const items = categoryData[subCategoryName];
-                                                        // Subcategory heading
-                            html += `<p style="margin: 5px 0 3px 0; color: #FF7043; font-size: 1.1em;">— ${escapeHtml(subCategoryName)}:</p>`;
-
-                            // Subcategory options
-                            items.forEach(item => {
-                                html += `
-                                    <label>
-                                        <input type="radio" name="${radioGroupName}" value="${escapeHtml(item.value)}">
-                                        ${escapeHtml(item.display)}
-                                    </label>
-                                `;
-                            });
-                        }
                     }
                     html += `</div>`;
                 }
@@ -540,67 +706,178 @@
 
                 // Attach event listener to all radio buttons
                 document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    radio.addEventListener('change', updatePromptBox);
+                    // Check if the radio button belongs to one of the exclusive groups
+                    if (EXCLUSIVE_GROUPS.includes(radio.getAttribute('data-group'))) {
+                        radio.addEventListener('change', handleExclusiveSelection);
+                    }
+                    // Busyness radio buttons still use the standard updatePromptBox
+                    if (radio.name === 'busyness') {
+                        radio.addEventListener('change', updatePromptBox);
+                    }
                 });
             }
-
-            // Function to toggle the main preset wrapper
-            function toggleMainPresets() {
-                const isHidden = allPresetsWrapper.classList.toggle('hidden-content');
-                                if (isHidden) {
-                    // UPDATED TEXT
-                    mainToggleButton.textContent = "Try Tony's ideas...";
-                } else {
-                    mainToggleButton.textContent = 'Hide ideas'; // New text for visible state
+            
+            // NEW FUNCTION: Handles the exclusive selection logic
+            function handleExclusiveSelection(event) {
+                const clickedRadio = event.target;
+                const clickedGroup = clickedRadio.getAttribute('data-group');
+                
+                // Find the other exclusive group
+                const otherGroup = EXCLUSIVE_GROUPS.find(group => group !== clickedGroup);
+                
+                if (otherGroup) {
+                    // Uncheck all radio buttons in the other group
+                    document.querySelectorAll(`input[name="${otherGroup}"]:checked`).forEach(radio => {
+                        // Uncheck the radio
+                        radio.checked = false;
+                    });
                 }
+
+                // Update the prompt box after making changes
+                updatePromptBox();
             }
 
-            // Escape HTML helper to avoid accidental markup injection in labels
+
+            // Escape HTML helper
             function escapeHtml(str) {
                 return String(str)
                     .replace(/&/g, '&amp;')
                     .replace(/</g, '&lt;')
                     .replace(/>/g, '&gt;')
                     .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
+                    .replace(/'/g, ''); 
+            }
+             
+            // Function to update manualTextBase ONLY on user typing
+            function updateManualTextBaseOnly(event) {
+                // This strips out the preset values from the textarea value to keep only the user's base text
+                let fullText = promptTextarea.value.trim();
+                 
+                // Get all current preset values, including those from the EXCLUSIVE_GROUPS
+                const activePresetValues = [];
+                
+                // Collect values from exclusive groups
+                EXCLUSIVE_GROUPS.forEach(groupName => {
+                    const value = document.querySelector(`input[name="${groupName}"]:checked`)?.value;
+                    if (value) activePresetValues.push(value);
+                });
+                
+                // Collect value from busyness group
+                const busynessValue = document.querySelector('input[name="busyness"]:checked')?.value || '';
+                if (busynessValue) activePresetValues.push(busynessValue);
+                 
+                let base = fullText;
+                 
+                // Strip out preset values (if they are present and followed by ', ')
+                activePresetValues.filter(v => v).forEach(preset => {
+                    // Escape preset value for regex
+                    const escapedPreset = preset.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                     
+                    // Match the preset followed by a comma and space (or at the beginning/end)
+                    const regex = new RegExp(`, ${escapedPreset}|${escapedPreset}, ?`, 'g');
+                    base = base.replace(regex, '');
+                });
+                 
+                // Ensure clean separation (e.g., removing leading/trailing commas left by stripping)
+                base = base.split(',').map(s => s.trim()).filter(s => s).join(', ');
+                 
+                manualTextBase = base;
+                 
+                // Then call updatePromptBox to rebuild the full text (with presets)
+                updatePromptBox();
             }
 
-            // Function to update the prompt box based on selected radio buttons
-            function updatePromptBox() {
-                // Collects the 'value' of all checked radio buttons (which are the descriptive strings)
-                const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
-                                             .map(radio => radio.value);
+            // Function to update the prompt box with manual text + selected presets
+            function updatePromptBox(event) {
+                 
+                let combinedPromptParts = [];
+                 
+                // Add the manual text base (which preserves spaces and all other characters)
+                if (manualTextBase) {
+                    combinedPromptParts.push(manualTextBase);
+                }
+                 
+                // Add the selected presets (exclusive and busyness)
+                
+                // 1. Get the single selected value from the exclusive groups (only one can be checked)
+                EXCLUSIVE_GROUPS.forEach(groupName => {
+                    const exclusiveValue = document.querySelector(`input[name="${groupName}"]:checked`)?.value;
+                    if (exclusiveValue) combinedPromptParts.push(exclusiveValue);
+                });
 
-                const newPrompt = selectedOptions.join(', ');
-                promptTextarea.value = newPrompt;
+                // 2. Get the busyness value (independent)
+                const busynessValue = document.querySelector('input[name="busyness"]:checked')?.value || '';
+                if (busynessValue) combinedPromptParts.push(busynessValue);
+
+
+                // Update the prompt box.
+                promptTextarea.value = combinedPromptParts.filter(p => p).join(', ');
             }
 
-            // INITIALIZE UI
+
+            // Initialize the UI elements
             renderPresets();
-            
-            // --- FIX: Attach the click listener to the main toggle button ---
-            mainToggleButton.addEventListener('click', toggleMainPresets);
-            // ---------------------------------------------------------------
-            
-            // --- UPDATED INITIAL STATE LOGIC (Start Hidden and Unselected) ---
-            // 1. Ensure content starts hidden (just in case CSS failed)
-            allPresetsWrapper.classList.add('hidden-content');
-            // 2. Set the button text to its 'show' state
-            mainToggleButton.textContent = "Try Tony's ideas...";
-            // 3. Clear all radio buttons (in case any were somehow set during rendering)
+             
+            // Set initial state
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.checked = false;
             });
-            // 4. Ensure the prompt box starts empty after clearing selections
             promptTextarea.value = '';
-            // -----------------------------------
 
-            // Form Submission Logic (Binary File Handling)
+            // Update event listener on textarea: Now calls the base tracking function
+            promptTextarea.addEventListener('input', updateManualTextBaseOnly); 
+
+             
+            // UPDATED image handler to manage the placeholder and show chosen thumbnail
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+                    // Accept TIFF for upload, but do not preview
+                    if (!validTypes.includes(file.type)) {
+                        if (file.type === 'image/tiff' || file.type === 'image/x-tiff') {
+                            imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
+                            imagePreview.alt = "TIFF preview not supported";
+                            return;
+                        } else {
+                            alert('Invalid file type. Please upload a PNG, JPEG, or TIFF image.');
+                            e.target.value = '';
+                            imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
+                            imagePreview.alt = "Uploaded Image Preview";
+                            return;
+                        }
+                    }
+                    if (file.size > MAX_FILE_SIZE_BYTES) {
+                        // UPDATED alert message
+                        alert(`File size exceeds 7MB limit. Please upload a smaller image.`);
+                        e.target.value = '';
+                        imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
+                        imagePreview.alt = "Uploaded Image Preview";
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        imagePreview.src = ev.target.result;
+                        imagePreview.alt = "Selected Image Thumbnail";
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
+                    imagePreview.alt = "Uploaded Image Preview";
+                }
+            });
+
+            // ** FORM SUBMISSION LOGIC **
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 const prompt = promptTextarea.value.trim();
-                if (!prompt) return;
+                const imageFile = imageUpload.files[0];
+
+                if (!imageFile) {
+                    alert("An image upload is required to generate the outline.");
+                    return;
+                }
 
                 // 1. Update UI for 'Loading' state
                 submitButton.textContent = "Tony's cooking... Please wait.";
@@ -613,59 +890,50 @@
                 updateStatus(true);
 
                 try {
-                    // 2. Send prompt to n8n webhook
+                    let finalImageBlob = imageFile;
+                    
+                    const formData = new FormData();
+                    formData.append('prompt', prompt); 
+                    // N8n expects the binary file to be named 'image'
+                    formData.append('image', finalImageBlob, imageFile.name); 
+
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ prompt: prompt }),
+                        body: formData,
+                        // DO NOT set Content-Type header when using FormData
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    // Handle the incoming binary image data (PNG)
-                    const imageBlob = await response.blob();
-
-                    if (imageBlob.type && imageBlob.type.startsWith('image/')) {
-                        const imageUrl = URL.createObjectURL(imageBlob);
-
-                        // 3. Update UI with the result
+                    // 2. Handle response
+                    if (response.ok) {
+                        const contentType = response.headers.get('content-type');
+                        
+                        // Check for JSON error response
+                        if (contentType && contentType.includes('application/json')) {
+                            const result = await response.json();
+                            throw new Error(`Server Error (JSON Response): ${result.errorMessage || JSON.stringify(result)}`);
+                        }
+                        
+                        // Assume successful image blob response
+                        const blob = await response.blob();
+                        const imageUrl = URL.createObjectURL(blob);
+                        
                         generatedImage.src = imageUrl;
-                        generatedImage.alt = prompt;
-
-                        generatedImage.onload = () => {
-                            // STOP STATUS BAR on successful load
-                            updateStatus(false);
-                            placeholderText.style.display = 'none';
-                            generatedImage.style.display = 'block';
-                            // revoke after a tick to avoid problems on some browsers
-                            setTimeout(() => URL.revokeObjectURL(imageUrl), 1000);
-                        };
-
-                        generatedImage.onerror = () => {
-                            // STOP STATUS BAR on error
-                            updateStatus(false);
-                            placeholderText.textContent = 'Error loading image data. The response might not be a valid image.';
-                            generatedImage.style.display = 'none';
-                        };
+                        generatedImage.style.display = 'block';
+                        placeholderText.style.display = 'none';
                     } else {
-                        // STOP STATUS BAR on file type error
-                        updateStatus(false);
-                        const errorText = await imageBlob.text();
-                        placeholderText.textContent = `Generation failed. N8N did not return a valid image file. Raw response: ${errorText.substring(0, 100)}...`;
+                        // Attempt to read error message from response body
+                        const errorText = await response.text();
+                        throw new Error(`HTTP Error: ${response.status} - ${errorText.substring(0, 100)}...`);
                     }
-
                 } catch (error) {
-                    // STOP STATUS BAR on fetch error
-                    updateStatus(false);
-                    console.error('Generation Error:', error);
-                    placeholderText.textContent = `An error occurred: ${error.message}. Please ensure your n8n workflow is active and configured to return a binary PNG file.`;
+                    console.error('Generation failed:', error);
+                    placeholderText.textContent = `Sorry, Tony failed to cook this time. Error: ${error.message}`;
+                    placeholderText.style.display = 'block';
+                    generatedImage.style.display = 'none';
                 } finally {
-                    // 4. Reset button state
-                    submitButton.textContent = 'Ok Tony, cook me an amazing outline...'; 
+                    // 3. Reset UI state
+                    updateStatus(false);
+                    submitButton.textContent = "Ok Tony, cook me an amazing outline...";
                     submitButton.disabled = false;
                 }
             });
