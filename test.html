@@ -751,7 +751,8 @@
             // Toggle logic for the presets wrapper
             togglePresetsButton.addEventListener('click', () => {
                 const isHidden = allPresetsWrapper.classList.toggle('presets-hidden');
-                togglePresetsButton.textContent = isHidden ? 'Show' : 'Hide';
+                // CHANGE 2: Updated button text logic
+                togglePresetsButton.textContent = isHidden ? 'Show Options' : 'Hide Options';
             });
 
             // Handles the exclusive selection logic for Artist/Style presets
