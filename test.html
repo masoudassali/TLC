@@ -557,7 +557,7 @@
                 <span class="upload-info">Image types allowed: JPEG/JPG, PNG, TIFF. Image size limit: **7mbs.**</span>
                 <div class="upload-section">
                     <label for="imageUpload">Upload from your device:</label>
-                    <input type="file" id="imageUpload" name="image" accept=".png, .jpeg, .jpg, .tiff">
+                    <input type="file" id="imageUpload" name="image" accept=".png, .jpeg, .jpg, .tiff" required>
                     <div class="custom-file-upload" onclick="document.getElementById('imageUpload').click()">
                         Choose Image File
                     </div>
@@ -586,17 +586,17 @@
                         <h4>Page Busyness</h4>
                         <div class="busyness-options">
                             <label>
-                                <input type="radio" name="busyness" value="simple, minimal geometric tiles, few large tiles, 70% of the page is empty">
+                                <input type="radio" name="busyness" value="colorless, simple, minimal geometric tiles, low density">
                                 <span>Minimally Busy</span>
                                 <span style="font-size: 0.9em; color: #9E9E9E;">(Few large tiles, 70% empty)</span>
                             </label>
                             <label>
-                                <input type="radio" name="busyness" value="geometric tiles, medium-sized tiles, 55% of the page is empty">
+                                <input type="radio" name="busyness" value="colorless, geometric tiles, medium-sized tiles, 55% of the page is empty">
                                 <span>Moderately Busy</span>
-                                <span style="font-size: 0.9em; color: #9E9E9E;">(Medium tiles, 55% empty)</span>
+                                <span>(Medium tiles, 55% empty)</span>
                             </label>
                             <label>
-                                <input type="radio" name="busyness" value="dense, intricate, numerous small geometric tiles, 40% of the page is empty">
+                                <input type="radio" name="busyness" value="colorless, dense, intricate, tiny geometric tiles">
                                 <span>Super Busy</span>
                                 <span style="font-size: 0.9em; color: #9E9E9E;">(Numerous small tiles, 40% empty)</span>
                             </label>
@@ -651,7 +651,8 @@
         };
 
         // *** CORE CONFIG & DOM ELEMENTS ***
-        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/0d799bc0-9a8f-4da0-a9a0-39e511d5d01d';
+        // NOTE: Updated the URL to the one you manually pasted in the chat (ending in 'd5d01d')
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/0d799bc0-9a8f-4da0-a9a0-39e511d5d01d'; 
         const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
         const PLACEHOLDER_THUMBNAIL_URL = 'https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true';
 
@@ -734,24 +735,21 @@
                 }
                 presetsContainer.innerHTML = html;
 
-                // Attach event listener to ALL radio buttons
+                // Attach event listener to ALL radio buttons to trigger the prompt update
                 document.querySelectorAll('input[type="radio"]').forEach(radio => {
                     // Check if the radio button belongs to one of the exclusive groups (Artist/Style)
                     if (EXCLUSIVE_GROUPS.includes(radio.getAttribute('data-group'))) {
                         radio.addEventListener('change', handleExclusiveSelection);
                     }
 
-                    // Add listener to Busyness radio buttons to update the prompt box
-                    if (radio.name === 'busyness') {
-                        radio.addEventListener('change', updatePromptBox);
-                    }
+                    // Add listener to all radio buttons (including Busyness) to update the prompt box
+                    radio.addEventListener('change', updatePromptBox);
                 });
             }
 
             // Toggle logic for the presets wrapper
             togglePresetsButton.addEventListener('click', () => {
                 const isHidden = allPresetsWrapper.classList.toggle('presets-hidden');
-                // CHANGE 2: Updated button text logic
                 togglePresetsButton.textContent = isHidden ? 'Show Options' : 'Hide Options';
             });
 
@@ -768,7 +766,7 @@
                         radio.checked = false;
                     });
                 }
-                updatePromptBox();
+                // No need to call updatePromptBox here, the general change listener does it.
             }
 
             // Escape HTML helper
@@ -780,87 +778,84 @@
                     .replace(/"/g, '&quot;')
                     .replace(/'/g, '');
             }
-
+            
             // Function to update manualTextBase ONLY on user typing
             promptTextarea.addEventListener('input', updateManualTextBaseOnly);
 
-            function updateManualTextBaseOnly(event) {
-                // This ensures manualTextBase only contains the text the user actually typed
+            function updateManualTextBaseOnly() {
+                // Get all active preset values (includes busyness)
+                const presetsValues = getActivePresets().join('\n\n');
                 const currentText = promptTextarea.value.trim();
-                const presetsContent = getActivePresetsForBaseCheck();
-
-                // If the current text doesn't contain the presets content, the user must be typing
-                if (currentText.startsWith(presetsContent.trim()) || presetsContent.trim() === '') {
-                    // We extract the part that is not the preset content
-                    manualTextBase = currentText.substring(presetsContent.length).trim().replace(/^\s*\n+/, '');
+                
+                // If the current text starts with the presets, the base text is the remainder
+                if (currentText.startsWith(presetsValues.trim())) {
+                    // Extract the text that is NOT the preset content
+                    manualTextBase = currentText.substring(presetsValues.length).trim().replace(/^[\n]+/, '');
                 } else {
-                    // If the user deleted the presets, the base becomes the full content.
-                    // This is an imperfect but pragmatic way to track user edits.
+                    // If the user modified the presets or deleted them, treat the current text as the new base
+                    // This is simple and prevents losing user edits.
                     manualTextBase = currentText;
                 }
             }
             
-            // Helper function to reconstruct the presets content (used for determining the 'base' manual text)
-            function getActivePresetsForBaseCheck() {
+            // Helper function to get all active preset values (styles and busyness)
+            function getActivePresets() {
                 const activePresetValues = [];
 
                 // 1. Get Style Presets (from EXCLUSIVE_GROUPS)
                 document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
-                    if (EXCLUSIVE_GROUPS.includes(radio.getAttribute('data-group'))) {
+                    // Filter for style groups AND busyness group
+                    if (EXCLUSIVE_GROUPS.includes(radio.getAttribute('data-group')) || radio.name === 'busyness') {
                         activePresetValues.push(radio.value);
                     }
                 });
 
-                // 2. Get Busyness Preset (from name="busyness")
-                const busynessRadio = document.querySelector('input[name="busyness"]:checked');
-                if (busynessRadio) {
-                    activePresetValues.push(busynessRadio.value);
-                }
-
-                // Return the formatted string of presets
-                return activePresetValues.filter(p => p).join('\n\n') + (activePresetValues.length > 0 && manualTextBase ? '\n\n' : '');
+                return activePresetValues.filter(p => p);
             }
 
-
-            // Function to update the prompt box with ALL active presets (Style AND Busyness)
+            // Function to update the prompt box with ALL active presets (Style AND Busyness) + Manual Base
             function updatePromptBox() {
-                const activePresetValues = [];
+                const activePresetValues = getActivePresets();
 
-                // 1. Get Style Presets (from EXCLUSIVE_GROUPS)
-                document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
-                    if (EXCLUSIVE_GROUPS.includes(radio.getAttribute('data-group'))) {
-                        activePresetValues.push(radio.value);
-                    }
-                });
-
-                // 2. Get Busyness Preset (from name="busyness")
-                const busynessRadio = document.querySelector('input[name="busyness"]:checked');
-                if (busynessRadio) {
-                    activePresetValues.push(busynessRadio.value); // Add busyness to the list
+                // 1. Get the current clean manual base text
+                // IMPORTANT: Since updateManualTextBaseOnly runs on every input, we check if the current
+                // prompt value differs from what we *would* set to avoid cursor jumps.
+                const manual = promptTextarea.value.trim();
+                if (activePresetValues.length === 0) {
+                     manualTextBase = manual; // If no presets are selected, the whole text is manual
+                } else if (manual.startsWith(activePresetValues.join('\n\n').trim())) {
+                    // Only update the base if the presets are still at the top
+                    manualTextBase = manual.substring(activePresetValues.join('\n\n').trim().length).trim().replace(/^[\n]+/, '');
                 }
-
-                // 3. Combine: (Active Presets + Busyness) + (Manually Stored Text Base)
-                // Filter out empty strings before joining
-                const combinedText = [...activePresetValues.filter(p => p), manualTextBase].filter(p => p).join('\n\n');
                 
-                // Set the value back to the textarea
-                promptTextarea.value = combinedText;
+                // 2. Combine: (Active Presets) + (Manually Stored Text Base)
+                // Filter out empty strings before joining, use double newline for separation
+                const combinedText = [...activePresetValues, manualTextBase].filter(p => p).join('\n\n');
+                
+                // 3. Set the value back to the textarea (only if it actually changes)
+                if (promptTextarea.value.trim() !== combinedText.trim()) {
+                    promptTextarea.value = combinedText;
+                }
             }
 
             // Function to get the final complete prompt text (Famous Person + Main Prompt Box Content)
             function getFullPromptText() {
                 // 1. Get Famous Person Input
                 const famousPersonInput = famousPersonTextarea.value.trim();
-                // Note: The original code used "famous person", the new prompt says "celebrity", keeping the prompt as provided by user in the previous turn.
-                let famousPersonPrompt = famousPersonInput ? `Subject includes a celebrity: ${famousPersonInput}. ` : '';
-
-                // 2. Get the full content from the main prompt box (which now contains all presets)
+                let famousPersonPrompt = '';
+                // The client-side format for celebrity is: "Subject includes a celebrity: [Name]."
+                if (famousPersonInput) {
+                    famousPersonPrompt = `Subject includes a celebrity: ${famousPersonInput}.`;
+                }
+                
+                // 2. Get the full content from the main prompt box (which now contains all presets and manual text)
                 const allStyleAndBusynessContent = promptTextarea.value.trim();
 
                 // 3. Combine parts
                 let parts = [famousPersonPrompt, allStyleAndBusynessContent].filter(p => p);
 
-                return parts.join(' ').trim();
+                // Use double newline to clearly separate the celebrity input from the main prompt area content
+                return parts.join('\n\n').trim();
             }
 
 
@@ -870,52 +865,53 @@
             async function handleFormSubmit(event) {
                 event.preventDefault();
 
+                // 1. Basic file validation
                 const file = imageUpload.files[0];
                 if (!file) {
                     alert('Please upload an image first.');
-                    return;
+                    return; // Stop execution if no file is present
                 }
                 if (file.size > MAX_FILE_SIZE_BYTES) {
                     alert(`The file size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB.`);
                     return;
                 }
 
+                // 2. Update UI state
                 submitButton.disabled = true;
                 updateStatus(true);
                 generatedImage.style.display = 'none';
                 placeholderText.style.display = 'block';
 
                 try {
-                    // Convert file to Base64
-                    const base64Image = await new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result.split(',')[1]);
-                        reader.onerror = error => reject(error);
-                        reader.readAsDataURL(file);
-                    });
-
-                    // Gather all data for the payload: fullPrompt now includes ALL required text
+                    // 3. Prepare FormData (multipart/form-data)
                     const fullPrompt = getFullPromptText();
-
-                    // Prepare the JSON payload
-                    const payload = {
-                        prompt: fullPrompt, // This now contains Celebrity Name, Style Presets, Busyness, and Manual Text
-                        image: base64Image
-                    };
-
-                    // Send request
+                    const formData = new FormData();
+                    
+                    // The field names ('prompt', 'image') must match what your n8n Webhook node expects.
+                    formData.append('prompt', fullPrompt);
+                    formData.append('image', file, file.name); // Sends the file as binary data
+                    
+                    // 4. Send request
+                    // We don't manually set 'Content-Type' here; fetch does it automatically for FormData
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(payload),
+                        body: formData,
                     });
 
+                    // 5. Check for HTTP errors
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        let errorDetail = response.statusText;
+                        try {
+                            const errorBody = await response.text();
+                            errorDetail = errorBody || response.statusText;
+                        } catch (e) {
+                            // Ignore JSON/Text parsing errors on the response body
+                        }
+                        
+                        throw new Error(`HTTP Error! Status: ${response.status}. Detail: ${errorDetail.substring(0, 100)}...`);
                     }
-
+                    
+                    // 6. Handle successful response (JSON expected)
                     const result = await response.json();
 
                     if (result && result.base64_image) {
@@ -923,12 +919,12 @@
                         generatedImage.style.display = 'block';
                         placeholderText.style.display = 'none';
                     } else {
-                        throw new Error('Image data not received from server.');
+                        throw new Error('Image data not received from server in the expected format (missing base64_image field).');
                     }
                 } catch (error) {
                     console.error('Generation failed:', error);
                     alert(`Outline generation failed. Please check the image or try again. Error: ${error.message}`);
-                    placeholderText.innerHTML = 'Generation Failed. Please try again.';
+                    placeholderText.innerHTML = `Generation Failed: ${error.message}. Please try again.`;
                     placeholderText.style.display = 'block';
                     generatedImage.style.display = 'none';
                 } finally {
@@ -949,6 +945,12 @@
                 } else {
                     imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
                 }
+            });
+            
+            // Add listener to famousPerson textarea to ensure prompt box is updated if text is entered/removed
+            famousPersonTextarea.addEventListener('input', () => {
+                // When celebrity input changes, the prompt text doesn't change, 
+                // but the final prompt payload changes via getFullPromptText().
             });
 
             // Initial render
