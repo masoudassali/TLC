@@ -651,7 +651,6 @@
         };
 
         // *** CORE CONFIG & DOM ELEMENTS ***
-        // NOTE: Updated the URL to the one you manually pasted in the chat (ending in 'd5d01d')
         const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/0d799bc0-9a8f-4da0-a9a0-39e511d5d01d'; 
         const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
         const PLACEHOLDER_THUMBNAIL_URL = 'https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true';
@@ -766,7 +765,6 @@
                         radio.checked = false;
                     });
                 }
-                // No need to call updatePromptBox here, the general change listener does it.
             }
 
             // Escape HTML helper
@@ -793,7 +791,6 @@
                     manualTextBase = currentText.substring(presetsValues.length).trim().replace(/^[\n]+/, '');
                 } else {
                     // If the user modified the presets or deleted them, treat the current text as the new base
-                    // This is simple and prevents losing user edits.
                     manualTextBase = currentText;
                 }
             }
@@ -818,8 +815,6 @@
                 const activePresetValues = getActivePresets();
 
                 // 1. Get the current clean manual base text
-                // IMPORTANT: Since updateManualTextBaseOnly runs on every input, we check if the current
-                // prompt value differs from what we *would* set to avoid cursor jumps.
                 const manual = promptTextarea.value.trim();
                 if (activePresetValues.length === 0) {
                      manualTextBase = manual; // If no presets are selected, the whole text is manual
@@ -892,7 +887,6 @@
                     formData.append('image', file, file.name); // Sends the file as binary data
                     
                     // 4. Send request
-                    // We don't manually set 'Content-Type' here; fetch does it automatically for FormData
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
                         body: formData,
@@ -902,25 +896,25 @@
                     if (!response.ok) {
                         let errorDetail = response.statusText;
                         try {
+                            // Try reading as text to see if there's an error message
                             const errorBody = await response.text();
                             errorDetail = errorBody || response.statusText;
                         } catch (e) {
-                            // Ignore JSON/Text parsing errors on the response body
+                            // Ignore any parsing errors
                         }
                         
                         throw new Error(`HTTP Error! Status: ${response.status}. Detail: ${errorDetail.substring(0, 100)}...`);
                     }
                     
-                    // 6. Handle successful response (JSON expected)
-                    const result = await response.json();
+                    // 6. Handle successful response (EXPECTING RAW BINARY/BLOB DATA)
+                    // This is the CRITICAL CHANGE to fix the "Unexpected token '®'" JSON error.
+                    const imageBlob = await response.blob();
+                    const imageUrl = URL.createObjectURL(imageBlob);
 
-                    if (result && result.base64_image) {
-                        generatedImage.src = `data:image/png;base64,${result.base64_image}`;
-                        generatedImage.style.display = 'block';
-                        placeholderText.style.display = 'none';
-                    } else {
-                        throw new Error('Image data not received from server in the expected format (missing base64_image field).');
-                    }
+                    generatedImage.src = imageUrl;
+                    generatedImage.style.display = 'block';
+                    placeholderText.style.display = 'none';
+
                 } catch (error) {
                     console.error('Generation failed:', error);
                     alert(`Outline generation failed. Please check the image or try again. Error: ${error.message}`);
