@@ -1,54 +1,322 @@
-<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8" />    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">    <title>The Lined Canvas - Generate Your Masterpiece Outline</title>    <style>        /* General Styling */        body {            font-family: 'Handlee', cursive;            background-color: #f4f7f6;            color: #333;            margin: 0;            padding: 20px;            display: flex;            justify-content: center;            align-items: flex-start;            min-height: 100vh;            box-sizing: border-box;            -webkit-font-smoothing: antialiased;            -moz-osx-font-smoothing: grayscale;            line-height: 1.25;        }
-        /* Container for the App */        .generator-container {            background-color: #fff;            padding: 40px;            border-radius: 12px;            max-width: 900px;            width: 100%;            display: flex;            flex-direction: column;            gap: 30px;            position: relative;            box-sizing: border-box;        }
-        /* ------------------------------------------- */        /* HEADER SECTION WITH BACKGROUND IMAGE */        /* ------------------------------------------- */        .header-section {            /* Use negative margins to pull the header out to the edges of the container padding (40px) */            margin: -40px -40px 30px -40px;            /* Re-apply internal padding, reduce bottom padding to pull content closer */            padding: 40px 40px 20px 40px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">
+    <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Handlee', cursive;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.25;
+        }
 
-            /* Background Image Setup */            background-image: url('https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/Header.jpg');            background-size: cover;            background-position: 50% 35%;            background-repeat: no-repeat;            height: 180px;            position: relative; /* Base position for absolute logo positioning */            border-radius: 12px 12px 0 0;            overflow: hidden;            display: flex;            flex-direction: column;            justify-content: flex-start;            align-items: center;        }
-        /* Styling for the new wrapper spans */        .header-text-highlight {            background-color: rgba(240, 240, 240, 0.95);            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);            padding: 5px 10px;            line-height: 1;            box-decoration-break: clone;            display: inline-block;        }
-        /* Logo Styling (Default: Absolute Positioning on the Right) */        .logo-container {            position: absolute;            top: 30px;            right: 30px;            z-index: 10;        }
-        .logo-container img {            width: 80px;            height: auto;            filter: none;            display: block;        }
-        /* Header Title Styling */        .header-section h1 {            font-family: 'Amatic SC', cursive;            color: #222;            text-align: center;            margin-top: 5px;            margin-bottom: 0;            font-weight: 700;            font-size: 3.8em;            padding-right: 0;            padding-left: 0;            line-height: 1.2;            text-shadow: none;        }
-        .header-section .subtitle {            color: #444;            text-align: center;            margin-top: 5px;            margin-bottom: 0;            font-style: normal;            font-size: 2.2em;            line-height: 1.2;            padding-right: 0;            padding-left: 0;            text-shadow: none;        }        /* ------------------------------------------- */        /* END HEADER SECTION STYLES */        /* ------------------------------------------- */
-        /* Prompt Form Styling */        .prompt-form {            display: flex;            flex-direction: column;            gap: 15px;            padding: 20px;            border: 1px solid #ddd;            border-radius: 8px;            background-color: #fafafa;            box-sizing: border-box;        }
-        .prompt-form label {            font-size: 1.5em;            color: #5D4037;            margin: 0;            line-height: 1.1;        }
-        textarea {            width: 100%;            padding: 15px;            border: 1px solid #ddd;            border-radius: 8px;            font-size: 1.5em;            resize: vertical;            min-height: 100px;            box-sizing: border-box;            transition: border-color 0.3s;            font-family: 'Handlee', cursive;            line-height: 1.25;            margin-bottom: 10px;        }
-        /* Placeholder styles */        textarea::placeholder {            font-size: 1.0em;            color: #9e9e9e;            opacity: 1;        }
-        textarea:focus {            border-color: #FF7043;            outline: none;            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5);        }
-        /* --- UPLOAD STYLES --- */        .upload-options-wrapper {            margin-bottom: 20px;            border: 1px dashed #BDBDBD;            padding: 20px;            border-radius: 8px;            background-color: #fffaf7;            display: flex;            flex-direction: column;            align-items: center;        }
-        .upload-options-wrapper h3 {            font-size: 1.8em;            color: #E64A19;            margin-top: 0;            margin-bottom: 5px;            text-align: center;            line-height: 1.1;        }
-        /* New style for the info text */        .upload-info {            display: block;            text-align: center;            font-size: 1em;            color: #757575;            margin-bottom: 15px;            font-style: italic;        }
-        .upload-section {            border: 1px solid #FF7043;            padding: 15px;            border-radius: 8px;            display: flex;            flex-direction: column;            gap: 10px;            align-items: center;            background-color: #fff;            box-shadow: 0 2px 5px rgba(0,0,0,0.05);            max-width: 300px;            width: 100%;        }
-        .upload-section label {            font-size: 1.3em;            color: #E64A19;            font-weight: 700;            text-align: center;            line-height: 1.1;            cursor: pointer;            margin-bottom: 5px;        }
-        input[type="file"] {            display: none;        }
-        .custom-file-upload {            background-color: #FF7043;            color: white;            padding: 8px 15px;            border-radius: 6px;            cursor: pointer;            font-size: 1.2em;            transition: background-color 0.3s;            font-family: 'Handlee', cursive;            line-height: 1;            display: inline-block;        }
-        .custom-file-upload:hover {            background-color: #E64A19;        }
-        .image-upload-preview {            width: 90px;            height: 90px;            max-width: 90px;            max-height: 90px;            overflow: hidden;            border-radius: 4px;            margin: 10px auto 0 auto; /* FIX: Center the preview element */            border: 1px solid #ddd;            display: flex;            justify-content: center;            align-items: center;        }
-        .image-upload-preview img {            width: 100%;            height: 100%;            object-fit: cover;            display: block;        }
-        button {            background-color: #FF7043;            color: white;            padding: 12px 20px;            border: none;            border-radius: 8px;            cursor: pointer;            font-size: 1.8em;            font-weight: bold;            transition: background-color 0.3s;            font-family: 'Handlee', cursive;            line-height: 1;            margin-top: 0;        }
-        button:hover {            background-color: #E64A19;        }
-        /* Centering the generate button */        .submit-button-wrapper {            margin-top: 20px;            text-align: center;        }
-        /* Preset Options Styling (Style Preferences Section) */        .preset-options {            padding: 15px;            border: 1px solid #ddd;            border-radius: 8px;            background-color: #fafafa;            box-sizing: border-box;            overflow: visible;        }
-        
-        /* NEW: Header Container for flex layout */
+        /* Container for the App */
+        .generator-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* ------------------------------------------- */
+        /* HEADER SECTION WITH BACKGROUND IMAGE */
+        /* ------------------------------------------- */
+        .header-section {
+            /* Use negative margins to pull the header out to the edges of the container padding (40px) */
+            margin: -40px -40px 30px -40px;
+            /* Re-apply internal padding, reduce bottom padding to pull content closer */
+            padding: 40px 40px 20px 40px;
+
+            /* Background Image Setup */
+            background-image: url('https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/Header.jpg');
+            background-size: cover;
+            background-position: 50% 35%;
+            background-repeat: no-repeat;
+            height: 180px;
+            position: relative; /* Base position for absolute logo positioning */
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        /* Styling for the new wrapper spans */
+        .header-text-highlight {
+            background-color: rgba(240, 240, 240, 0.95);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 5px 10px;
+            line-height: 1;
+            box-decoration-break: clone;
+            display: inline-block;
+        }
+
+        /* Logo Styling (Default: Absolute Positioning on the Right) */
+        .logo-container {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            z-index: 10;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: auto;
+            filter: none;
+            display: block;
+        }
+
+        /* Header Title Styling */
+        .header-section h1 {
+            font-family: 'Amatic SC', cursive;
+            color: #222;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 0;
+            font-weight: 700;
+            font-size: 3.8em;
+            padding-right: 0;
+            padding-left: 0;
+            line-height: 1.2;
+            text-shadow: none;
+        }
+
+        .header-section .subtitle {
+            color: #444;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 0;
+            font-style: normal;
+            font-size: 2.2em;
+            line-height: 1.2;
+            padding-right: 0;
+            padding-left: 0;
+            text-shadow: none;
+        }
+        /* ------------------------------------------- */
+        /* END HEADER SECTION STYLES */
+        /* ------------------------------------------- */
+
+        /* Prompt Form Styling */
+        .prompt-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+        }
+
+        .prompt-form label {
+            font-size: 1.5em;
+            color: #5D4037;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.5em;
+            resize: vertical;
+            min-height: 100px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        /* Placeholder styles */
+        textarea::placeholder {
+            font-size: 1.0em;
+            color: #9e9e9e;
+            opacity: 1;
+        }
+
+        textarea:focus {
+            border-color: #FF7043;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5);
+        }
+
+        /* --- UPLOAD STYLES --- */
+        .upload-options-wrapper {
+            margin-bottom: 20px;
+            border: 1px dashed #BDBDBD;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fffaf7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .upload-options-wrapper h3 {
+            font-size: 1.8em;
+            color: #E64A19;
+            margin-top: 0;
+            margin-bottom: 5px;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        /* New style for the info text */
+        .upload-info {
+            display: block;
+            text-align: center;
+            font-size: 1em;
+            color: #757575;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .upload-section {
+            border: 1px solid #FF7043;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .upload-section label {
+            font-size: 1.3em;
+            color: #E64A19;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.1;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            background-color: #FF7043;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+            display: inline-block;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #E64A19;
+        }
+
+        .image-upload-preview {
+            width: 90px;
+            height: 90px;
+            max-width: 90px;
+            max-height: 90px;
+            overflow: hidden;
+            border-radius: 4px;
+            margin: 10px auto 0 auto;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-upload-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        button {
+            background-color: #FF7043;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.8em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+            margin-top: 0;
+        }
+
+        button:hover {
+            background-color: #E64A19;
+        }
+
+        /* Centering the generate button */
+        .submit-button-wrapper {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Preset Options Styling (Style Preferences Section) */
+        .preset-options {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            overflow: visible;
+        }
+
+        /* Header Container for flex layout */
         .preset-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px; 
+            margin-bottom: 15px;
             border-bottom: 2px dashed #f0f0f0;
             padding-bottom: 10px;
         }
 
-        /* Preset header (Style Preferences) */        
-        .preset-options h3 {            
-            font-size: 2em;            
-            color: #FF7043;            
-            margin: 0; /* Important: remove default margins */            
-            line-height: 1;            
-            font-family: 'Handlee', cursive;            
-            text-align: left; /* Adjust alignment */
+        /* Preset header (Style Preferences) - Updated to target both h3 and h4 */
+        .preset-options h3, .preset-options h4 {
+            font-size: 2em;
+            color: #FF7043;
+            margin: 0;
+            line-height: 1;
+            font-family: 'Handlee', cursive;
+            text-align: left;
         }
-        
-        /* NEW: Toggle button style */
+
+        /* Toggle button style */
         #togglePresetsButton {
             background-color: #FF7043;
             color: white;
@@ -60,37 +328,180 @@
             font-weight: normal;
             transition: background-color 0.3s;
             line-height: 1.2;
-            margin-top: 0; 
+            margin-top: 0;
             min-width: 70px;
             box-sizing: border-box;
         }
+
         #togglePresetsButton:hover {
             background-color: #E64A19;
         }
 
-        /* NEW: Class for hiding the presets content */
+        /* Class for hiding the presets content */
         .presets-hidden {
             display: none;
         }
 
-        .preset-category {            margin-bottom: 20px; /* Increased separation between categories */            padding-bottom: 10px;            border-bottom: 1px dashed #eee; /* Added separator for clarity */        }
-        /* Remove border from the last category */        #presetsContainer > div:last-child {            border-bottom: none;            margin-bottom: 0;            padding-bottom: 0;        }
-        .preset-category h4 {            font-size: 1.5em;            color: #5D4037;            margin: 5px 0;            text-decoration: underline;            line-height: 1.05;            font-family: 'Handlee', cursive;        }
-        .preset-category label {            display: inline-block;            margin-right: 15px;            margin-bottom: 8px; /* Added margin for stacking on small screens */            cursor: pointer;            font-size: 1.2em;            line-height: 1.5;            vertical-align: middle;            font-family: 'Handlee', cursive;            flex-wrap: wrap; /* Allows labels to wrap */        }
-        /* Busyness Gauge Styling */        .busyness-gauge {            display: flex;            align-items: center;            gap: 15px;            padding: 10px 0;            border-top: 1px solid #eee;            margin-top: 15px;            flex-wrap: wrap;            box-sizing: border-box;        }
-        /* Busyness radio buttons now arranged vertically for clarity */        .busyness-options {            display: flex;            flex-direction: column;            gap: 8px;            flex-grow: 1; /* Allows it to take up available horizontal space */        }
-        .busyness-gauge h4 {            margin: 0;            min-width: 120px; /* Set a minimum width for the header */            font-size: 1.5em;            line-height: 1;            font-family: 'Handlee', cursive;            align-self: flex-start;            padding-top: 5px;            text-decoration: none; /* Remove underline for this header */            color: #5D4037; /* Consistent color */        }
-        .busyness-gauge label {            display: inline-flex;            align-items: center;            gap: 8px;            font-size: 1.2em;            line-height: 1.2;            font-family: 'Handlee', cursive;            margin-right: 0;        }
-        .busyness-gauge input[type="radio"] {            transform: translateY(0);        }
-        /* Status Bar Styling */        .status-bar {            text-align: center;            min-height: 20px;            margin-top: -15px;            color: #FF7043;            font-size: 1.5em;            font-weight: 700;            transition: opacity 0.3s ease-in-out;            opacity: 0;            font-family: 'Handlee', cursive;            line-height: 1;        }
-        .status-bar.visible {            opacity: 1;        }
-        /* Image Display Area */        .image-display {            border: 2px dashed #BDBDBD;            border-radius: 8px;            min-height: 350px;            display: flex;            justify-content: center;            align-items: center;            text-align: center;            padding: 20px;            background-color: #FAFAFA;            box-sizing: border-box;        }
-        .image-placeholder {            color: #9E9E9E;            font-style: italic;            font-size: 1.5em;            font-family: 'Handlee', cursive;            line-height: 1.25;        }
-        .generated-image {            max-width: 100%;            max-height: 350px;            border-radius: 6px;            display: none;        }
-        /* Responsive tweaks */        @media (max-width: 600px) {            .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }            .header-section .subtitle { font-size: 1.8em; padding-right: 0; }            .preset-options h3 { font-size: 1.6em; }            .busyness-gauge h4 { min-width: 100%; text-align: center; font-size: 1.4em; } /* Full width on mobile */            .preset-category label, .busyness-gauge label { font-size: 1.05em; }            textarea { font-size: 1.15em; }            textarea::placeholder { font-size: 0.9em; }
-            .upload-sections-container {                flex-direction: column;            }
-            .busyness-gauge {                flex-direction: column; /* Stack header and options */                align-items: stretch;            }            .busyness-options {                width: 100%;            }
-            .preset-category {                /* Ensure radio options stack nicely */                display: flex;                flex-direction: column;                align-items: flex-start;            }            .preset-category label {                width: 100%;                margin-right: 0;            }
+        .preset-category {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        /* Remove border from the last category */
+        #presetsContainer > div:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .preset-category h4 {
+            font-size: 1.5em;
+            color: #5D4037;
+            margin: 5px 0;
+            text-decoration: underline;
+            line-height: 1.05;
+            font-family: 'Handlee', cursive;
+        }
+
+        .preset-category label {
+            display: inline-block;
+            margin-right: 15px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            line-height: 1.5;
+            vertical-align: middle;
+            font-family: 'Handlee', cursive;
+            flex-wrap: wrap;
+        }
+
+        /* Busyness Gauge Styling */
+        .busyness-gauge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+        }
+
+        /* Busyness radio buttons now arranged vertically for clarity */
+        .busyness-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .busyness-gauge h4 {
+            margin: 0;
+            min-width: 120px;
+            font-size: 1.5em;
+            line-height: 1;
+            font-family: 'Handlee', cursive;
+            align-self: flex-start;
+            padding-top: 5px;
+            text-decoration: none;
+            color: #5D4037;
+        }
+
+        .busyness-gauge label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2em;
+            line-height: 1.2;
+            font-family: 'Handlee', cursive;
+            margin-right: 0;
+        }
+
+        .busyness-gauge input[type="radio"] {
+            transform: translateY(0);
+        }
+
+        /* Status Bar Styling */
+        .status-bar {
+            text-align: center;
+            min-height: 20px;
+            margin-top: -15px;
+            color: #FF7043;
+            font-size: 1.5em;
+            font-weight: 700;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+        }
+
+        .status-bar.visible {
+            opacity: 1;
+        }
+
+        /* Image Display Area */
+        .image-display {
+            border: 2px dashed #BDBDBD;
+            border-radius: 8px;
+            min-height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background-color: #FAFAFA;
+            box-sizing: border-box;
+        }
+
+        .image-placeholder {
+            color: #9E9E9E;
+            font-style: italic;
+            font-size: 1.5em;
+            font-family: 'Handlee', cursive;
+            line-height: 1.25;
+        }
+
+        .generated-image {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 600px) {
+            .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }
+            .header-section .subtitle { font-size: 1.8em; padding-right: 0; }
+            .preset-options h3, .preset-options h4 { font-size: 1.6em; }
+            .busyness-gauge h4 { min-width: 100%; text-align: center; font-size: 1.4em; } /* Full width on mobile */
+            .preset-category label, .busyness-gauge label { font-size: 1.05em; }
+            textarea { font-size: 1.15em; }
+            textarea::placeholder { font-size: 0.9em; }
+
+            .upload-sections-container {
+                flex-direction: column;
+            }
+
+            .busyness-gauge {
+                flex-direction: column; /* Stack header and options */
+                align-items: stretch;
+            }
+            .busyness-options {
+                width: 100%;
+            }
+
+            .preset-category {
+                /* Ensure radio options stack nicely */
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .preset-category label {
+                width: 100%;
+                margin-right: 0;
+            }
+
             .preset-header {
                 /* On small screens, stack the heading and button if necessary, or center them */
                 justify-content: center;
@@ -101,9 +512,25 @@
                 margin-top: 10px;
             }
         }
-        /* ------------------------------------------- */        /* UPDATED MEDIA QUERY: Logo above title for small screens (5in = 480px) */        /* ------------------------------------------- */        @media (max-width: 5in) {            .generator-container { padding: 20px; gap: 20px; }            /* Make sure the header height can accommodate the stacked elements */            .header-section {                height: auto;                padding: 20px 20px 5px 20px;                margin: -20px -20px 20px -20px; /* Adjust negative margins for new padding */            }
-            /* Move logo out of absolute flow and center it */            .logo-container {                position: static;                margin: 0px auto 10px auto; /* 0px top margin, 10px bottom margin */                right: auto;                top: auto;
+
+        /* UPDATED MEDIA QUERY: Logo above title for small screens (5in = 480px) */
+        @media (max-width: 5in) {
+            .generator-container { padding: 20px; gap: 20px; }
+            /* Make sure the header height can accommodate the stacked elements */
+            .header-section {
+                height: auto;
+                padding: 20px 20px 5px 20px;
+                margin: -20px -20px 20px -20px; /* Adjust negative margins for new padding */
             }
+
+            /* Move logo out of absolute flow and center it */
+            .logo-container {
+                position: static;
+                margin: 0px auto 10px auto; /* 0px top margin, 10px bottom margin */
+                right: auto;
+                top: auto;
+            }
+
             /* Adjust title margin since the logo is now above it */
             .header-section h1 {
                 margin-top: 0;
@@ -148,10 +575,10 @@
 
             <div class="preset-options">
                 <div class="preset-header">
-                    <h4>Style Preferences...</h4>
-                    <button id="togglePresetsButton" type="button">Show</button>
+                    <h3>Style Preferences...</h3>
+                    <button id="togglePresetsButton" type="button">Show Options</button>
                 </div>
-                
+
                 <div id="allPresetsWrapper" class="presets-hidden">
                     <div id="presetsContainer">
                     </div>
@@ -222,6 +649,7 @@
                 { display: "Pop Art", value: "In the style of pop art, bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
             ]
         };
+
         // *** CORE CONFIG & DOM ELEMENTS ***
         const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/0d799bc0-9a8f-4da0-a9a0-39e511d5d01d';
         const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
@@ -246,8 +674,6 @@
             const statusMessage = document.getElementById('statusMessage');
             const imageUpload = document.getElementById('imageUpload');
             const imagePreview = document.getElementById('imagePreview');
-            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-            // NEW ELEMENT REFERENCES
             const allPresetsWrapper = document.getElementById('allPresetsWrapper');
             const togglePresetsButton = document.getElementById('togglePresetsButton');
 
@@ -264,6 +690,7 @@
 
             // Status Bar Control
             let statusInterval;
+
             function updateStatus(start) {
                 if (!start) {
                     clearInterval(statusInterval);
@@ -320,8 +747,8 @@
                     }
                 });
             }
-            
-            // NEW TOGGLE LOGIC
+
+            // Toggle logic for the presets wrapper
             togglePresetsButton.addEventListener('click', () => {
                 const isHidden = allPresetsWrapper.classList.toggle('presets-hidden');
                 togglePresetsButton.textContent = isHidden ? 'Show' : 'Hide';
@@ -357,8 +784,42 @@
             promptTextarea.addEventListener('input', updateManualTextBaseOnly);
 
             function updateManualTextBaseOnly(event) {
-                manualTextBase = promptTextarea.value.trim();
+                // This ensures manualTextBase only contains the text the user actually typed
+                const currentText = promptTextarea.value.trim();
+                const presetsContent = getActivePresetsForBaseCheck();
+
+                // If the current text doesn't contain the presets content, the user must be typing
+                if (currentText.startsWith(presetsContent.trim()) || presetsContent.trim() === '') {
+                    // We extract the part that is not the preset content
+                    manualTextBase = currentText.substring(presetsContent.length).trim().replace(/^\s*\n+/, '');
+                } else {
+                    // If the user deleted the presets, the base becomes the full content.
+                    // This is an imperfect but pragmatic way to track user edits.
+                    manualTextBase = currentText;
+                }
             }
+            
+            // Helper function to reconstruct the presets content (used for determining the 'base' manual text)
+            function getActivePresetsForBaseCheck() {
+                const activePresetValues = [];
+
+                // 1. Get Style Presets (from EXCLUSIVE_GROUPS)
+                document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+                    if (EXCLUSIVE_GROUPS.includes(radio.getAttribute('data-group'))) {
+                        activePresetValues.push(radio.value);
+                    }
+                });
+
+                // 2. Get Busyness Preset (from name="busyness")
+                const busynessRadio = document.querySelector('input[name="busyness"]:checked');
+                if (busynessRadio) {
+                    activePresetValues.push(busynessRadio.value);
+                }
+
+                // Return the formatted string of presets
+                return activePresetValues.filter(p => p).join('\n\n') + (activePresetValues.length > 0 && manualTextBase ? '\n\n' : '');
+            }
+
 
             // Function to update the prompt box with ALL active presets (Style AND Busyness)
             function updatePromptBox() {
@@ -378,7 +839,10 @@
                 }
 
                 // 3. Combine: (Active Presets + Busyness) + (Manually Stored Text Base)
-                const combinedText = [...activePresetValues, manualTextBase].filter(p => p).join('\n\n');
+                // Filter out empty strings before joining
+                const combinedText = [...activePresetValues.filter(p => p), manualTextBase].filter(p => p).join('\n\n');
+                
+                // Set the value back to the textarea
                 promptTextarea.value = combinedText;
             }
 
@@ -386,7 +850,8 @@
             function getFullPromptText() {
                 // 1. Get Famous Person Input
                 const famousPersonInput = famousPersonTextarea.value.trim();
-                let famousPersonPrompt = famousPersonInput ? `Subject includes a famous person: ${famousPersonInput}. ` : '';
+                // Note: The original code used "famous person", the new prompt says "celebrity", keeping the prompt as provided by user in the previous turn.
+                let famousPersonPrompt = famousPersonInput ? `Subject includes a celebrity: ${famousPersonInput}. ` : '';
 
                 // 2. Get the full content from the main prompt box (which now contains all presets)
                 const allStyleAndBusynessContent = promptTextarea.value.trim();
@@ -433,7 +898,7 @@
 
                     // Prepare the JSON payload
                     const payload = {
-                        prompt: fullPrompt, // This now contains Famous Person, Style Presets, Busyness, and Manual Text
+                        prompt: fullPrompt, // This now contains Celebrity Name, Style Presets, Busyness, and Manual Text
                         image: base64Image
                     };
 
