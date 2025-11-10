@@ -317,7 +317,7 @@
         }
 
         /* Toggle button style */
-        #togglePresetsButton {
+        #togglePresetsButton, #toggleTLCButton {
             background-color: #FF7043;
             color: white;
             border: none;
@@ -333,7 +333,7 @@
             box-sizing: border-box;
         }
 
-        #togglePresetsButton:hover {
+        #togglePresetsButton:hover, #toggleTLCButton:hover {
             background-color: #E64A19;
         }
 
@@ -508,7 +508,7 @@
                 flex-wrap: wrap;
                 text-align: center;
             }
-            #togglePresetsButton {
+            #togglePresetsButton, #toggleTLCButton {
                 margin-top: 10px;
             }
         }
@@ -548,12 +548,30 @@
                 <span class="header-text-highlight">The Lined Canvas</span>
             </h1>
             <p class="subtitle">
-                <span class="header-text-highlight">Follow these steps and Tony will cook you the outline for your next masterpiece.</span>
+                <span class="header-text-highlight">Let Chef Tony cook you the outline for your next masterpiece.</span>
             </p>
         </div>
+        
+        <div class="preset-options" style="margin-bottom: 20px;">
+            <div class="preset-header">
+                <h3>How TLC works:</h3>
+                <button id="toggleTLCButton" type="button">Show</button>
+            </div>
+            <div id="tlcContent" class="presets-hidden">
+                <p><strong>The Lined Canvas (TLC)</strong> is an AI-powered tool that converts your uploaded images into high-quality, stylized line art outlines.</p>
+                <ol>
+                    <li>Upload your image (JPEG, PNG, or TIFF, max 7MB).</li>
+                    <li>Optionally specify a celebrity to help the AI focus.</li>
+                    <li>Customize the style using the presets (Influential Artists or Art Style) and the Page Busyness gauge.</li>
+                    <li>Hit 'Cook' and Chef Tony will generate a unique, printable outline for you.</li>
+                </ol>
+                <p>This outline is perfect for personal coloring, tracing, or as a base for your own artwork.</p>
+            </div>
+        </div>
+        
         <form class="prompt-form" id="imageGenerationForm">
+            <label for="imageUpload" style="font-size: 1.5em;">1. Choose your image:</label>
             <div class="upload-options-wrapper">
-                <h3>1. Choose your image:</h3>
                 <span class="upload-info">Image types allowed: JPEG/JPG, PNG, TIFF. Image size limit: **7mbs.**</span>
                 <div class="upload-section">
                     <label for="imageUpload">Upload from your device:</label>
@@ -606,9 +624,9 @@
             </div>
 
             <div class="submit-button-wrapper">
-                <button type="submit">Ok Tony, cook me an amazing outline...</button>
+                <button type="submit">Ok Chef Tony, cook me an amazing outline...</button>
                 <p style="font-size: 0.8em; color: #757575; margin-top: 5px;">
-                    Disclaimer: Tony is an AI agent. Randomness is in his nature.
+                    Disclaimer: Chef Tony is an AI agent. Randomness is in his nature.
                 </p>
             </div>
         </form>
@@ -618,7 +636,7 @@
         </div>
         <h2>Your Generated Outline Preview</h2>
         <div class="image-display">
-            <p class="image-placeholder" id="placeholderText">Tony is cooking. It'd show up here once he's done.</p>
+            <p class="image-placeholder" id="placeholderText">Chef Tony is cooking. It'd show up here once he's done.</p>
             <img src="" alt="AI Generated Outline" class="generated-image" id="generatedImage">
         </div>
     </div>
@@ -676,14 +694,18 @@
             const imagePreview = document.getElementById('imagePreview');
             const allPresetsWrapper = document.getElementById('allPresetsWrapper');
             const togglePresetsButton = document.getElementById('togglePresetsButton');
+            
+            // FIX 2: Get new TLC elements
+            const tlcContent = document.getElementById('tlcContent');
+            const toggleTLCButton = document.getElementById('toggleTLCButton');
 
             // Status Bar Steps
             const STATUS_STEPS = [
-                "5% - Sending your descriptions to our magician, Tony ...",
-                "18% - Tony received your descriptions. Now figuring out the style...",
-                "22% - Tony is adding the final touches...",
+                "5% - Sending your descriptions to our magician chef, Tony ...",
+                "18% - Chef Tony received your descriptions. Now figuring out the style...",
+                "22% - The Chef is adding the final touches...",
                 "41% - This may take 5-15 seconds...",
-                "67% - Converting everything into a PNG file...",
+                "67% - Mixing everything into a PNG file...",
                 "93% - Sending image data back to your browser...",
                 "100% - Serving up your order now..."
             ];
@@ -746,10 +768,16 @@
                 });
             }
 
-            // Toggle logic for the presets wrapper
+            // Toggle logic for the Style Presets wrapper
             togglePresetsButton.addEventListener('click', () => {
                 const isHidden = allPresetsWrapper.classList.toggle('presets-hidden');
                 togglePresetsButton.textContent = isHidden ? 'Show Options' : 'Hide Options';
+            });
+            
+            // FIX 2: Toggle logic for the TLC section
+            toggleTLCButton.addEventListener('click', () => {
+                const isHidden = tlcContent.classList.toggle('presets-hidden');
+                toggleTLCButton.textContent = isHidden ? 'Show' : 'Hide';
             });
 
             // Handles the exclusive selection logic for Artist/Style presets
@@ -907,7 +935,6 @@
                     }
                     
                     // 6. Handle successful response (EXPECTING RAW BINARY/BLOB DATA)
-                    // This is the CRITICAL CHANGE to fix the "Unexpected token '®'" JSON error.
                     const imageBlob = await response.blob();
                     const imageUrl = URL.createObjectURL(imageBlob);
 
