@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">
-    <title>The Lined Canvas - New Yorker Daily Cartoon Generator</title>
+    <title>The Lined Comic - New Yorker Daily Comic Generator</title>
     <style>
         /* General Styling */
         body {
@@ -38,7 +38,7 @@
         }
 
         /* ------------------------------------------- */
-        /* HEADER SECTION WITH BACKGROUND IMAGE (Minimal changes from original) */
+        /* HEADER SECTION */
         /* ------------------------------------------- */
         .header-section {
             margin: -40px -40px 30px -40px;
@@ -129,8 +129,8 @@
             line-height: 1.1;
         }
 
-        /* --- New Yorker Specific Display --- */
-        .new-yorker-info {
+        /* --- Collapsible Info Section --- */
+        .info-container {
             padding: 15px 20px;
             background-color: #fff9f5;
             border: 2px solid #E64A19;
@@ -138,53 +138,96 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        .new-yorker-info h3 {
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .info-header h3 {
             font-size: 2em;
             color: #E64A19;
-            margin: 0 0 5px 0;
+            margin: 0;
         }
-        .new-yorker-info p {
+        .info-content p {
             font-size: 1.3em;
             color: #5D4037;
             margin: 5px 0;
+            text-align: left;
         }
-
-        /* --- Three Images Preview Section --- */
-        .images-preview-section {
+        
+        /* --- Image Upload & Preview Section --- */
+        .image-upload-wrapper {
             display: flex;
             justify-content: space-around;
             gap: 15px;
             margin-top: 20px;
             flex-wrap: wrap;
         }
-        .image-box {
+
+        .upload-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* New class for the clickable preview box */
+        .image-preview-box {
             width: 150px;
             height: 150px;
-            border: 1px solid #ddd;
+            border: 2px dashed #BDBDBD;
             border-radius: 8px;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             background-color: #fff;
+            cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .image-box img {
+
+        .image-preview-box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
-        .image-box-placeholder {
+        
+        .image-preview-box span {
             font-size: 0.9em;
             color: #9E9E9E;
             text-align: center;
             padding: 10px;
+            display: block;
+        }
+
+        .upload-slot input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+        
+        /* FIX: Styled Upload Label */
+        .upload-label {
+            /* Matched to the main button style for continuity */
+            background-color: #FF7043; 
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+        }
+
+        .upload-label:hover {
+            background-color: #E64A19;
         }
         /* ----------------------------------- */
 
 
         button {
+            /* General button styling for generate and toggle buttons */
             background-color: #FF7043;
             color: white;
             padding: 12px 20px;
@@ -197,6 +240,16 @@
             font-family: 'Handlee', cursive;
             line-height: 1;
             margin-top: 0;
+        }
+        
+        /* Override for the smaller toggle button */
+        #toggleInfoButton {
+            padding: 8px 12px;
+            font-size: 1.1em;
+            font-weight: normal;
+            min-width: 70px;
+            box-sizing: border-box;
+            border-radius: 6px;
         }
 
         button:hover {
@@ -257,6 +310,11 @@
         .status-bar.visible {
             opacity: 1;
         }
+        
+        /* Class for hiding content */
+        .content-hidden {
+            display: none;
+        }
 
         /* Image Display Area */
         .image-display {
@@ -292,14 +350,13 @@
             .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }
             .header-section .subtitle { font-size: 1.6em; padding-right: 0; } 
             
-            .images-preview-section {
+            .image-upload-wrapper {
                 flex-direction: column;
                 align-items: center;
             }
-            .image-box {
+            .upload-slot {
                 width: 100%;
                 max-width: 250px;
-                height: 250px;
             }
         }
 
@@ -334,44 +391,76 @@
                 <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
             </div>
             <h1>
-                <span class="header-text-highlight">The Lined Canvas AI Studio</span>
+                <span class="header-text-highlight">The Lined Comic</span>
             </h1>
             <p class="subtitle">
                 <span class="header-text-highlight">Chef Tony cooks up a daily comic!</span>
             </p>
         </div>
         
-        <div class="new-yorker-info">
-            <h3>New Feature: Daily Comic Generator</h3>
-            <p>Chef Tony takes **3 random images** from our gallery, analyzes their themes and content, and combines them into a single, cohesive comic panel in the style of **The New Yorker's Daily Cartoon**.</p>
+        <div class="info-container">
+            <div class="info-header">
+                <h3>How it works...</h3>
+                <button id="toggleInfoButton" type="button">Show</button>
+            </div>
+            <div id="infoContent" class="content-hidden info-content">
+                <p>Chef Tony takes **3 of your images**, analyzes their themes and content, and combines them into a single, cohesive comic panel in the style of **The New Yorker's Daily Cartoon**.</p>
+                
+                <div class="chef-tony-info" style="border-top: 1px dashed #E64A19; padding-top: 15px; margin-top: 15px;">
+                    <p>Who is Chef Tony?</p>
+                    <ol style="margin-top: 0; padding-left: 20px; text-align: left; font-size: 1em;">
+                        <li>Chef Tony is our chubbily cute and friendly "AI Chef" who cooks up creative outlines.</li>
+                    </ol>
+                    <div class="chef-tony-images">
+                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_3D.png" alt="Chef Tony 3D Illustration">
+                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Flat Illustration">
+                    </div>
+                </div>
+            </div>
         </div>
 
         <form class="prompt-form" id="imageGenerationForm">
             
-            <label style="font-size: 1.5em; text-align: center;">The 3 images Chef Tony will analyze:</label>
-            <div class="images-preview-section" id="imagesPreviewSection">
-                <div class="image-box"><div class="image-box-placeholder">Image 1 Loading...</div></div>
-                <div class="image-box"><div class="image-box-placeholder">Image 2 Loading...</div></div>
-                <div class="image-box"><div class="image-box-placeholder">Image 3 Loading...</div></div>
+            <label style="font-size: 1.5em; text-align: center;">Upload the 3 images for Chef Tony to analyze:</label>
+            <div class="image-upload-wrapper">
+                
+                <div class="upload-slot">
+                    <label for="imageUpload1" class="image-preview-box">
+                        <img id="imagePreview1" src="" alt="Image 1 Preview" style="display:none;">
+                        <span id="previewText1">Image 1</span>
+                    </label>
+                    <input type="file" id="imageUpload1" name="image1" accept="image/png, image/jpeg, image/tiff" required>
+                    <label for="imageUpload1" class="upload-label">Upload Image 1</label>
+                </div>
+
+                <div class="upload-slot">
+                    <label for="imageUpload2" class="image-preview-box">
+                        <img id="imagePreview2" src="" alt="Image 2 Preview" style="display:none;">
+                        <span id="previewText2">Image 2</span>
+                    </label>
+                    <input type="file" id="imageUpload2" name="image2" accept="image/png, image/jpeg, image/tiff" required>
+                    <label for="imageUpload2" class="upload-label">Upload Image 2</label>
+                </div>
+
+                <div class="upload-slot">
+                    <label for="imageUpload3" class="image-preview-box">
+                        <img id="imagePreview3" src="" alt="Image 3 Preview" style="display:none;">
+                        <span id="previewText3">Image 3</span>
+                    </label>
+                    <input type="file" id="imageUpload3" name="image3" accept="image/png, image/jpeg, image/tiff" required>
+                    <label for="imageUpload3" class="upload-label">Upload Image 3</label>
+                </div>
+
             </div>
 
             <div class="submit-button-wrapper">
                 <button type="submit" id="generateButton">Cook New Daily Comic Now!</button>
                 <p style="font-size: 0.8em; color: #757575; margin-top: 5px;">
-                    Disclaimer: Chef Tony is an AI agent. Randomness is in his nature.
+                    Please upload all three images before submitting. Max 7MB per file.
                 </p>
             </div>
         </form>
 
-        <div class="chef-tony-info">
-            <p>Who is Chef Tony?</p>
-            <ol>Chef Tony is our chubbily cute and friendly "AI Chef" who cooks up creative outlines.</ol>
-            <div class="chef-tony-images">
-                <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_3D.png" alt="Chef Tony 3D Illustration">
-                <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Flat Illustration">
-            </div>
-        </div>
-        
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
         <div class="status-bar" id="statusBar">
             <span id="statusMessage"></span>
@@ -384,22 +473,8 @@
     </div>
     <script>
         // *** CORE CONFIG & DOM ELEMENTS ***
-        // NOTE: The n8n webhook URL remains the same, but its EXPECTED INPUT TYPE must change to JSON on the server side.
-        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/0d799bc0-9a8f-4da0-a9a0-39e511d5d01d'; 
-        
-        // Hardcoded list of potential image URLs to simulate a gallery
-        const POTENTIAL_IMAGE_URLS = [
-            'https://picsum.photos/id/684/200/200',
-            'https://picsum.photos/id/1025/200/200',
-            'https://picsum.photos/id/1080/200/200',
-            'https://picsum.photos/id/30/200/200',
-            'https://picsum.photos/id/56/200/200',
-            'https://picsum.photos/id/169/200/200',
-            'https://picsum.photos/id/40/200/200',
-            'https://picsum.photos/id/80/200/200',
-            'https://picsum.photos/id/100/200/200',
-            // Add more URLs as needed for variety
-        ];
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/90ddc1c7-3ae3-46ff-919b-a923d1473dd3'; 
+        const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
         
         // Fixed style for the new project
         const NEW_YORKER_STYLE_PROMPT = "The final output must be a single, simple, black and white comic panel in the style of The New Yorker's Daily Cartoon. Analyze the three provided images for their main subject, theme, or concept, and combine these elements into a single, slightly humorous or ironic scene. Focus on clear outlines and minimal detail to capture the iconic New Yorker aesthetic.";
@@ -412,11 +487,31 @@
             const generateButton = document.getElementById('generateButton');
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
-            const imagesPreviewSection = document.getElementById('imagesPreviewSection');
 
+            // FIX: Get the new collapsible elements
+            const infoContent = document.getElementById('infoContent');
+            const toggleInfoButton = document.getElementById('toggleInfoButton');
+
+            // Arrays to manage inputs and previews
+            const imageUploads = [
+                document.getElementById('imageUpload1'),
+                document.getElementById('imageUpload2'),
+                document.getElementById('imageUpload3'),
+            ];
+            const imagePreviews = [
+                document.getElementById('imagePreview1'),
+                document.getElementById('imagePreview2'),
+                document.getElementById('imagePreview3'),
+            ];
+            const previewTexts = [
+                document.getElementById('previewText1'),
+                document.getElementById('previewText2'),
+                document.getElementById('previewText3'),
+            ];
+            
             // Status Bar Steps (Adjusted for the new workflow)
             const STATUS_STEPS = [
-                "5% - Selecting 3 random images for analysis...",
+                "5% - Uploading 3 images to the server...",
                 "18% - Chef Tony is analyzing the content of the three images...",
                 "35% - Combining concepts for a single comic scene...",
                 "50% - Sketching the New Yorker style panel...",
@@ -446,47 +541,64 @@
                 statusInterval = setInterval(cycleStatus, 3000);
             }
 
-            // Function to select N random, unique elements from an array
-            function getRandomUnique(arr, num) {
-                const shuffled = [...arr].sort(() => 0.5 - Math.random());
-                return shuffled.slice(0, num);
-            }
+            // Image Preview Handler
+            imageUploads.forEach((upload, index) => {
+                upload.addEventListener('change', function() {
+                    const file = this.files[0];
+                    const previewImg = imagePreviews[index];
+                    const previewText = previewTexts[index];
+
+                    if (file) {
+                        if (file.size > MAX_FILE_SIZE_BYTES) {
+                            alert(`File size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose a smaller file.`);
+                            this.value = ''; // Clear the file input
+                            previewImg.style.display = 'none';
+                            previewText.style.display = 'block';
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewImg.src = e.target.result;
+                            previewImg.style.display = 'block'; // Show the image
+                            previewText.style.display = 'none'; // Hide the text
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        previewImg.src = '';
+                        previewImg.style.display = 'none'; // Hide the image
+                        previewText.style.display = 'block'; // Show the text
+                    }
+                });
+            });
+
+            // FIX: Toggle logic for the How it Works section
+            toggleInfoButton.addEventListener('click', () => {
+                const isHidden = infoContent.classList.toggle('content-hidden');
+                toggleInfoButton.textContent = isHidden ? 'Show' : 'Hide';
+            });
 
             // Function to handle form submission
             form.addEventListener('submit', handleFormSubmit);
 
-            // Function to update the image preview boxes
-            function updateImagePreviews(urls) {
-                const boxes = imagesPreviewSection.querySelectorAll('.image-box');
-                boxes.forEach((box, index) => {
-                    const url = urls[index];
-                    if (url) {
-                        box.innerHTML = `<img src="${url}" alt="Source Image ${index + 1}">`;
-                    } else {
-                        box.innerHTML = `<div class="image-box-placeholder">No image selected</div>`;
-                    }
-                });
-            }
-
-            // Function to run on initial load to show the images that will be used
-            function setupInitialImages() {
-                const randomUrls = getRandomUnique(POTENTIAL_IMAGE_URLS, 3);
-                updateImagePreviews(randomUrls);
-                form.setAttribute('data-urls', JSON.stringify(randomUrls));
-            }
-            
-            // Run on load
-            setupInitialImages();
-
-
             async function handleFormSubmit(event) {
                 event.preventDefault();
 
-                // 1. Get the 3 image URLs from the pre-set data attribute
-                const randomUrls = JSON.parse(form.getAttribute('data-urls'));
+                // 1. Check if all three images are uploaded
+                const files = [
+                    imageUploads[0].files[0],
+                    imageUploads[1].files[0],
+                    imageUploads[2].files[0],
+                ];
 
-                if (randomUrls.length < 3) {
-                    alert('Error: Could not select 3 unique image URLs.');
+                if (files.some(file => !file)) {
+                    alert('Please upload all three images before submitting.');
+                    return;
+                }
+                
+                // Check file sizes
+                if (files.some(file => file.size > MAX_FILE_SIZE_BYTES)) {
+                    alert(`One or more files exceed the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose smaller files.`);
                     return;
                 }
 
@@ -499,19 +611,20 @@
                 placeholderText.style.display = 'block';
 
                 try {
-                    // 3. Prepare JSON Payload (Crucial change: sending JSON, not FormData)
-                    const payload = {
-                        image_urls: randomUrls,
-                        style_prompt: NEW_YORKER_STYLE_PROMPT
-                    };
+                    // 3. Prepare FormData (Crucial change: sending files using FormData)
+                    const formData = new FormData();
+                    formData.append('prompt', NEW_YORKER_STYLE_PROMPT); // The prompt for the Gemini model
+                    formData.append('image1', files[0]);
+                    formData.append('image2', files[1]);
+                    formData.append('image3', files[2]);
 
-                    // 4. Send request with JSON body
+
+                    // 4. Send request with FormData body
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json' // Tell the server we are sending JSON
-                        },
-                        body: JSON.stringify(payload), // Send the JSON object
+                        // Do NOT set Content-Type header manually for FormData.
+                        // The browser sets it automatically, including the necessary boundary=...
+                        body: formData, 
                     });
 
                     // 5. Check for HTTP errors
@@ -540,12 +653,10 @@
                     placeholderText.style.display = 'block';
                     generatedImage.style.display = 'none';
                 } finally {
-                    // 7. Reset state and setup for the next run
+                    // 7. Reset state
                     generateButton.disabled = false;
                     generateButton.textContent = "Cook New Daily Comic Now!";
                     updateStatus(false);
-                    // Select new random images for the next submission
-                    setupInitialImages(); 
                 }
             }
         });
