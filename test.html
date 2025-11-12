@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">
-    <title>The Lined Canvas - Generate Your Masterpiece Outline</title>
+    <title>The Lined Comic - New Yorker Daily Comic Generator</title>
     <style>
         /* General Styling */
         body {
@@ -38,21 +39,17 @@
         }
 
         /* ------------------------------------------- */
-        /* HEADER SECTION WITH BACKGROUND IMAGE */
+        /* HEADER SECTION */
         /* ------------------------------------------- */
         .header-section {
-            /* Use negative margins to pull the header out to the edges of the container padding (40px) */
             margin: -40px -40px 30px -40px;
-            /* Re-apply internal padding, reduce bottom padding to pull content closer */
             padding: 40px 40px 20px 40px;
-
-            /* Background Image Setup */
             background-image: url('https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/Header.jpg');
             background-size: cover;
             background-position: 50% 35%;
             background-repeat: no-repeat;
             height: 180px;
-            position: relative; /* Base position for absolute logo positioning */
+            position: relative; 
             border-radius: 12px 12px 0 0;
             overflow: hidden;
             display: flex;
@@ -61,7 +58,6 @@
             align-items: center;
         }
 
-        /* Styling for the new wrapper spans */
         .header-text-highlight {
             background-color: rgba(240, 240, 240, 0.95);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -71,7 +67,6 @@
             display: inline-block;
         }
 
-        /* Logo Styling (Default: Absolute Positioning on the Right) */
         .logo-container {
             position: absolute;
             top: 30px;
@@ -86,7 +81,6 @@
             display: block;
         }
 
-        /* Header Title Styling */
         .header-section h1 {
             font-family: 'Amatic SC', cursive;
             color: #222;
@@ -117,7 +111,7 @@
         /* END HEADER SECTION STYLES */
         /* ------------------------------------------- */
 
-        /* Prompt Form Styling */
+        /* Simplified Form Styling */
         .prompt-form {
             display: flex;
             flex-direction: column;
@@ -136,132 +130,105 @@
             line-height: 1.1;
         }
 
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
+        /* --- Collapsible Info Section --- */
+        .info-container {
+            padding: 15px 20px;
+            background-color: #fff9f5;
+            border: 2px solid #E64A19;
             border-radius: 8px;
-            font-size: 1.5em;
-            resize: vertical;
-            min-height: 100px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-            font-family: 'Handlee', cursive;
-            line-height: 1.25;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
         }
-
-        /* Placeholder styles */
-        textarea::placeholder {
-            font-size: 1.0em;
-            color: #9e9e9e;
-            opacity: 1;
-        }
-
-        textarea:focus {
-            border-color: #FF7043;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.5);
-        }
-
-        /* --- UPLOAD STYLES --- */
-        .upload-options-wrapper {
-            margin-bottom: 20px;
-            border: 1px dashed #BDBDBD;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #fffaf7;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .upload-options-wrapper h3 {
-            font-size: 1.8em;
+        .info-header h3 {
+            font-size: 2em;
             color: #E64A19;
-            margin-top: 0;
-            margin-bottom: 5px;
-            text-align: center;
-            line-height: 1.1;
+            margin: 0;
         }
-
-        /* New style for the info text */
-        .upload-info {
-            display: block;
-            text-align: center;
-            font-size: 1em;
-            color: #757575;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        .upload-section {
-            border: 1px solid #FF7043;
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            max-width: 300px;
-            width: 100%;
-        }
-
-        .upload-section label {
+        .info-content p {
             font-size: 1.3em;
-            color: #E64A19;
-            font-weight: 700;
-            text-align: center;
-            line-height: 1.1;
-            cursor: pointer;
-            margin-bottom: 5px;
+            color: #5D4037;
+            margin: 5px 0;
+            text-align: left;
+        }
+        
+        /* --- Image Upload & Preview Section --- */
+        .image-upload-wrapper {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
-        input[type="file"] {
-            display: none;
+        .upload-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-
-        .custom-file-upload {
-            background-color: #FF7043;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: background-color 0.3s;
-            font-family: 'Handlee', cursive;
-            line-height: 1;
-            display: inline-block;
-        }
-
-        .custom-file-upload:hover {
-            background-color: #E64A19;
-        }
-
-        .image-upload-preview {
-            width: 90px;
-            height: 90px;
-            max-width: 90px;
-            max-height: 90px;
+        
+        /* New class for the clickable preview box */
+        .image-preview-box {
+            width: 150px;
+            height: 150px;
+            border: 2px dashed #BDBDBD;
+            border-radius: 8px;
             overflow: hidden;
-            border-radius: 4px;
-            margin: 10px auto 0 auto;
-            border: 1px solid #ddd;
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .image-upload-preview img {
+        .image-preview-box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
+        
+        .image-preview-box span {
+            font-size: 0.9em;
+            color: #9E9E9E;
+            text-align: center;
+            padding: 10px;
+            display: block;
+        }
+
+        .upload-slot input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+        
+        /* FIX: Styled Upload Label */
+        .upload-label {
+            /* Matched to the main button style for continuity */
+            background-color: #FF7043; 
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            font-family: 'Handlee', cursive;
+            line-height: 1;
+        }
+
+        .upload-label:hover {
+            background-color: #E64A19;
+        }
+        /* ----------------------------------- */
+
 
         button {
+            /* General button styling for generate and toggle buttons */
             background-color: #FF7043;
             color: white;
             padding: 12px 20px;
@@ -275,6 +242,16 @@
             line-height: 1;
             margin-top: 0;
         }
+        
+        /* Override for the smaller toggle button */
+        #toggleInfoButton {
+            padding: 8px 12px;
+            font-size: 1.1em;
+            font-weight: normal;
+            min-width: 70px;
+            box-sizing: border-box;
+            border-radius: 6px;
+        }
 
         button:hover {
             background-color: #E64A19;
@@ -285,141 +262,36 @@
             margin-top: 20px;
             text-align: center;
         }
-
-        /* Preset Options Styling (Style Preferences Section) */
-        .preset-options {
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fafafa;
-            box-sizing: border-box;
-            overflow: visible;
-        }
-
-        /* Header Container for flex layout */
-        .preset-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 2px dashed #f0f0f0;
-            padding-bottom: 10px;
-        }
-
-        /* Preset header (Style Preferences) - Updated to target both h3 and h4 */
-        .preset-options h3, .preset-options h4 {
-            font-size: 2em;
-            color: #FF7043;
-            margin: 0;
-            line-height: 1;
-            font-family: 'Handlee', cursive;
-            text-align: left;
-        }
-
-        /* Toggle button style */
-        #togglePresetsButton {
-            background-color: #FF7043;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: normal;
-            transition: background-color 0.3s;
-            line-height: 1.2;
-            margin-top: 0;
-            min-width: 70px;
-            box-sizing: border-box;
-        }
-
-        #togglePresetsButton:hover {
-            background-color: #E64A19;
-        }
-
-        /* Class for hiding the presets content */
-        .presets-hidden {
-            display: none;
-        }
-
-        .preset-category {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #eee;
-        }
-
-        /* Remove border from the last category */
-        #presetsContainer > div:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .preset-category h4 {
-            font-size: 1.5em;
-            color: #5D4037;
-            margin: 5px 0;
-            text-decoration: underline;
-            line-height: 1.05;
-            font-family: 'Handlee', cursive;
-        }
-
-        .preset-category label {
-            display: inline-block;
-            margin-right: 15px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            font-size: 1.2em;
-            line-height: 1.5;
-            vertical-align: middle;
-            font-family: 'Handlee', cursive;
-            flex-wrap: wrap;
-        }
-
-        /* Busyness Gauge Styling */
-        .busyness-gauge {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        
+        /* Chef Tony Info Section (Kept for branding) */
+        .chef-tony-info {
             padding: 10px 0;
-            border-top: 1px solid #eee;
             margin-top: 15px;
-            flex-wrap: wrap;
-            box-sizing: border-box;
-        }
-
-        /* Busyness radio buttons now arranged vertically for clarity */
-        .busyness-options {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            flex-grow: 1;
-        }
-
-        .busyness-gauge h4 {
-            margin: 0;
-            min-width: 120px;
-            font-size: 1.5em;
-            line-height: 1;
-            font-family: 'Handlee', cursive;
-            align-self: flex-start;
-            padding-top: 5px;
-            text-decoration: none;
-            color: #5D4037;
-        }
-
-        .busyness-gauge label {
-            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1.2em;
-            line-height: 1.2;
-            font-family: 'Handlee', cursive;
-            margin-right: 0;
+            text-align: center;
         }
-
-        .busyness-gauge input[type="radio"] {
-            transform: translateY(0);
+        .chef-tony-info p {
+            font-size: 1.3em;
+            color: #5D4037;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .chef-tony-images {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .chef-tony-images img {
+            width: 120px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #FF7043;
         }
 
         /* Status Bar Styling */
@@ -438,6 +310,11 @@
 
         .status-bar.visible {
             opacity: 1;
+        }
+        
+        /* Class for hiding content */
+        .content-hidden {
+            display: none;
         }
 
         /* Image Display Area */
@@ -472,68 +349,38 @@
         /* Responsive tweaks */
         @media (max-width: 600px) {
             .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }
-            .header-section .subtitle { font-size: 1.8em; padding-right: 0; }
-            .preset-options h3, .preset-options h4 { font-size: 1.6em; }
-            .busyness-gauge h4 { min-width: 100%; text-align: center; font-size: 1.4em; } /* Full width on mobile */
-            .preset-category label, .busyness-gauge label { font-size: 1.05em; }
-            textarea { font-size: 1.15em; }
-            textarea::placeholder { font-size: 0.9em; }
-
-            .upload-sections-container {
+            .header-section .subtitle { font-size: 1.6em; padding-right: 0; } 
+            
+            .image-upload-wrapper {
                 flex-direction: column;
+                align-items: center;
             }
-
-            .busyness-gauge {
-                flex-direction: column; /* Stack header and options */
-                align-items: stretch;
-            }
-            .busyness-options {
+            .upload-slot {
                 width: 100%;
-            }
-
-            .preset-category {
-                /* Ensure radio options stack nicely */
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .preset-category label {
-                width: 100%;
-                margin-right: 0;
-            }
-
-            .preset-header {
-                /* On small screens, stack the heading and button if necessary, or center them */
-                justify-content: center;
-                flex-wrap: wrap;
-                text-align: center;
-            }
-            #togglePresetsButton {
-                margin-top: 10px;
+                max-width: 250px;
             }
         }
 
-        /* UPDATED MEDIA QUERY: Logo above title for small screens (5in = 480px) */
+        /* Logo above title for small screens (5in = 480px) */
         @media (max-width: 5in) {
             .generator-container { padding: 20px; gap: 20px; }
-            /* Make sure the header height can accommodate the stacked elements */
             .header-section {
                 height: auto;
                 padding: 20px 20px 5px 20px;
-                margin: -20px -20px 20px -20px; /* Adjust negative margins for new padding */
+                margin: -20px -20px 20px -20px;
             }
-
-            /* Move logo out of absolute flow and center it */
             .logo-container {
                 position: static;
-                margin: 0px auto 10px auto; /* 0px top margin, 10px bottom margin */
+                margin: 0px auto 10px auto;
                 right: auto;
                 top: auto;
             }
-
-            /* Adjust title margin since the logo is now above it */
             .header-section h1 {
                 margin-top: 0;
+            }
+            .chef-tony-images {
+                flex-direction: column;
+                gap: 15px;
             }
         }
     </style>
@@ -545,147 +392,133 @@
                 <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
             </div>
             <h1>
-                <span class="header-text-highlight">The Lined Canvas</span>
+                <span class="header-text-highlight">The Lined Comic</span>
             </h1>
             <p class="subtitle">
-                <span class="header-text-highlight">Follow these steps and Tony will cook you the outline for your next masterpiece.</span>
+                <span class="header-text-highlight">Chef Tony cooks up a daily comic!</span>
             </p>
         </div>
-        <form class="prompt-form" id="imageGenerationForm">
-            <div class="upload-options-wrapper">
-                <h3>1. Choose your image:</h3>
-                <span class="upload-info">Image types allowed: JPEG/JPG, PNG, TIFF. Image size limit: **7mbs.**</span>
-                <div class="upload-section">
-                    <label for="imageUpload">Upload from your device:</label>
-                    <input type="file" id="imageUpload" name="image" accept=".png, .jpeg, .jpg, .tiff" required>
-                    <div class="custom-file-upload" onclick="document.getElementById('imageUpload').click()">
-                        Choose Image File
+        
+        <div class="info-container">
+            <div class="info-header">
+                <h3>How it works...</h3>
+                <button id="toggleInfoButton" type="button">Show</button>
+            </div>
+            <div id="infoContent" class="content-hidden info-content">
+                <p>Chef Tony takes **3 of your images**, analyzes their themes and content, and combines them into a single, cohesive comic panel in the style of **The New Yorker's Daily Cartoon**.</p>
+                
+                <div class="chef-tony-info" style="border-top: 1px dashed #E64A19; padding-top: 15px; margin-top: 15px;">
+                    <p>Who is Chef Tony?</p>
+                    <ol style="margin-top: 0; padding-left: 20px; text-align: left; font-size: 1em;">
+                        <li>Chef Tony is our chubbily cute and friendly "AI Chef" who cooks up creative outlines.</li>
+                    </ol>
+                    <div class="chef-tony-images">
+                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_3D.png" alt="Chef Tony 3D Illustration">
+                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Flat Illustration">
                     </div>
-                </div>
-                <div class="image-upload-preview" id="imagePreviewContainer">
-                    <img id="imagePreview" src="https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true" alt="Uploaded Image Preview">
                 </div>
             </div>
+        </div>
 
-            <label for="famousPerson" style="font-size: 1.5em;">2. Does your image include a celebrity? (Optional)</label>
-            <textarea id="famousPerson" name="famousPerson" placeholder="Example: Leonardo DiCaprio, Oprah Winfrey, etc." style="margin-bottom: 20px; min-height: 50px;"></textarea>
-
-            <label for="prompt" style="font-size: 1.5em;">3. Describe style preferences or add from the options below.</label>
-            <textarea id="prompt" name="prompt" placeholder="Example: Use strong, thick outlines. Ignore background elements. Keep fur detail in the foreground. (Or select below.)" required></textarea>
-
-            <div class="preset-options">
-                <div class="preset-header">
-                    <h3>Style Preferences...</h3>
-                    <button id="togglePresetsButton" type="button">Show Options</button>
+        <form class="prompt-form" id="imageGenerationForm">
+            
+            <label style="font-size: 1.5em; text-align: center;">Upload 3 images and Chef Tony will whip up a "comic-cake" for you:</label>
+            <div class="image-upload-wrapper">
+                
+                <div class="upload-slot">
+                    <label for="imageUpload1" class="image-preview-box">
+                        <img id="imagePreview1" src="" alt="Image 1 Preview" style="display:none;">
+                        <span id="previewText1">Image 1</span>
+                    </label>
+                    <input type="file" id="imageUpload1" name="image1" accept="image/png, image/jpeg, image/tiff" required>
+                    <label for="imageUpload1" class="upload-label">Upload Image 1</label>
                 </div>
 
-                <div id="allPresetsWrapper" class="presets-hidden">
-                    <div id="presetsContainer">
-                    </div>
-                    <div class="busyness-gauge">
-                        <h4>Page Busyness</h4>
-                        <div class="busyness-options">
-                            <label>
-                                <input type="radio" name="busyness" value="colorless, simple, minimal geometric tiles, low density">
-                                <span>Minimally Busy</span>
-                                <span style="font-size: 0.9em; color: #9E9E9E;">(Few large tiles, 70% empty)</span>
-                            </label>
-                            <label>
-                                <input type="radio" name="busyness" value="colorless, geometric tiles, medium-sized tiles, 55% of the page is empty">
-                                <span>Moderately Busy</span>
-                                <span>(Medium tiles, 55% empty)</span>
-                            </label>
-                            <label>
-                                <input type="radio" name="busyness" value="colorless, dense, intricate, tiny geometric tiles">
-                                <span>Super Busy</span>
-                                <span style="font-size: 0.9em; color: #9E9E9E;">(Numerous small tiles, 40% empty)</span>
-                            </label>
-                        </div>
-                    </div>
+                <div class="upload-slot">
+                    <label for="imageUpload2" class="image-preview-box">
+                        <img id="imagePreview2" src="" alt="Image 2 Preview" style="display:none;">
+                        <span id="previewText2">Image 2</span>
+                    </label>
+                    <input type="file" id="imageUpload2" name="image2" accept="image/png, image/jpeg, image/tiff" required>
+                    <label for="imageUpload2" class="upload-label">Upload Image 2</label>
                 </div>
+
+                <div class="upload-slot">
+                    <label for="imageUpload3" class="image-preview-box">
+                        <img id="imagePreview3" src="" alt="Image 3 Preview" style="display:none;">
+                        <span id="previewText3">Image 3</span>
+                    </label>
+                    <input type="file" id="imageUpload3" name="image3" accept="image/png, image/jpeg, image/tiff" required>
+                    <label for="imageUpload3" class="upload-label">Upload Image 3</label>
+                </div>
+
             </div>
 
             <div class="submit-button-wrapper">
-                <button type="submit">Ok Tony, cook me an amazing outline...</button>
+                <button type="submit" id="generateButton">Cook New Daily Comic Now!</button>
                 <p style="font-size: 0.8em; color: #757575; margin-top: 5px;">
-                    Disclaimer: Tony is an AI agent. Randomness is in his nature.
+                    Please upload all three images before submitting. Max 7MB per file.
                 </p>
             </div>
         </form>
+
         <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
         <div class="status-bar" id="statusBar">
             <span id="statusMessage"></span>
         </div>
-        <h2>Your Generated Outline Preview</h2>
+        <h2>Your Generated Comic Preview</h2>
         <div class="image-display">
-            <p class="image-placeholder" id="placeholderText">Tony is cooking. It'd show up here once he's done.</p>
-            <img src="" alt="AI Generated Outline" class="generated-image" id="generatedImage">
+            <p class="image-placeholder" id="placeholderText">Chef Tony is cooking. It'd show up here once he's done.</p>
+            <img src="" alt="AI Generated Comic" class="generated-image" id="generatedImage">
         </div>
     </div>
     <script>
-        // *** PRESET DATA ***
-        const PRESET_CATEGORIES = {
-            "Influential Artists": [
-                { display: "Leonardo da Vinci", value: "In the style of Leonardo da Vinci, Utilize meticulous anatomical realism combined with subtle sfumato for softened transitions, pyramidal composition, and an emphasis on psychological depth and idealization." },
-                { display: "Frida Kahlo", value: "In the style of Frida Kahlo, Employ hyper-realistic self-portraiture within a Surrealist context, integrating Mexican folk art motifs, and symbolic elements that chronicle physical and emotional suffering on a planar surface." },
-                { display: "Michelangelo", value: "In the style of Michelangelo, Render the human form with idealized, colossal musculature (terribilità), emphasizing dramatic contrapposto, complex torsional poses, and a sculptural sense of volume and energy." },
-                { display: "Pablo Picasso", value: "In the style of Pablo Picasso, Generate images by fragmenting subjects into multiple geometric planes (Cubism), employing simultaneous viewpoints, and using a structural, often monochromatic or reduced palette for analysis or collage." },
-                { display: "Claude Monet", value: "In the style of Claude Monet, Recreate the transient quality of light and atmosphere by applying paint in visible, broken brushstrokes (Impasto), focusing on the optical mixing of pigment, and depicting a single subject in series under varied conditions." },
-                { display: "Jackson Pollock", value: "In the style of Jackson Pollock, Create large, 'all-over' abstract compositions by dripping, pouring, and flinging industrial paint onto a horizontal canvas, resulting in a dense, layered network of linear skeins without a central focus." },
-                { display: "Georgia O'Keeffe", value: "In the style of Georgia O'Keeffe, Execute large-scale, close-up details of natural forms, like flowers or bones, using smooth, gradient transitions of value, simplified contours, and a composition that borders on pure abstraction." },
-                { display: "Vincent van Gogh", value: "In the style of Vincent van Gogh, Apply paint with an emotionally intense impasto, utilizing distinct, swirling, curvilinear brushstrokes that convey movement and energy, and employing thick application often within dark contours." },
-                { display: "Johannes Vermeer", value: "In the style of Johannes Vermeer, Achieve photorealistic detail in intimate, domestic scenes by rendering light with scientific precision (often using pointillés for highlights), and focusing on subtle textures and harmonious spatial composition." },
-                { display: "Andy Warhol", value: "In the style of Andy Warhol, Replicate iconic commercial imagery and celebrity photographs using mass-production methods like silkscreen printing, characterized by flat blocks and repetitive, modular arrangements." },
-                { display: "Cezanne", value: "In the style of Cezanne, Construct subjects using visible, parallel, faceted brushstrokes that build up geometric forms, resulting in a deliberate distortion of perspective, and an emphasis on the underlying structural volume of nature." },
-                { display: "Gustav Klimt", value: "In the style of Gustav Klimt, Compose figures in a highly stylized, flat manner, often incorporating intricate, Byzantine-inspired patterns and application of metallic leaf that merge the subject and background into an ornate, sensual tapestry." },
-                { display: "Rembrandt van Rijn", value: "In the style of Rembrandt van Rijn, Masterfully use dramatic chiaroscuro (pronounced light and shadow) to sculpt figures out of darkness, focusing on visceral texture and a somber palette to convey profound psychological depth and human vulnerability." },
-                { display: "Salvador Dalí", value: "In the style of Salvador Dalí, Paint hallucinatory, dream-like landscapes with academic, almost photographic realism, juxtaposing precise, hard-edged detail with bizarre, symbolic, and often unsettling melting or suspended objects." }
-            ],
-            "Or an Art Style": [
-                { display: "Impressionism", value: "In the style of impressionism, broad, visible short brushstrokes, light focused, loose forms, en plein air and outdoors to capture the fleeting effects of natural light, depicting everyday subjects and scenes of modern life, a sense of spontaneity, an emphasis on capturing a momentary impressions, and open compositions with unusual visual angles." },
-                { display: "Abstract Art", value: "In the style of abstract art, non-representational forms, geometric and organic shapes, non-representational nature, emphasis on visual elements like shape and form and line, focus on emotion and concepts over realistic depiction, use visual language instead of showing recognizable objects to evoke feelings and ideas and spiritual themes, subjective interpretation." },
-                { display: "Surrealism", value: "In the style of surrealism, dreamlike imagery, illogical irrational juxtaposition, unexpected elements, use of techniques like automatism to tap into the subconscious, combining unrelated objects in surprising ways, depicting strange or impossible scenes, employing symbolism to explore the human psyche, rejecting rationality and order in favor of the unpredictable nature of the mind." },
-                { display: "Cubism", value: "In the style of cubism, a revolutionary early 20th-century art movement pioneered by Pablo Picasso and Georges Braque that completely reimagined traditional Western art conventions. It rejected the idea that art should imitate nature or use a single, fixed perspective, focusing instead on depicting subjects from multiple viewpoints simultaneously within a single composition." },
-                { display: "Pop Art", value: "In the style of pop art, bold, graphic, thick black outlines, commercial imagery, mass consumerism and everyday life, celebrity culture, irony and satire, hard-edged composition, typography, postmodernism." }
-            ]
-        };
-
         // *** CORE CONFIG & DOM ELEMENTS ***
-        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/0d799bc0-9a8f-4da0-a9a0-39e511d5d01d'; 
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/3c69a7e2-0266-48d6-af49-1cd4f246c3d9'; 
         const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
-        const PLACEHOLDER_THUMBNAIL_URL = 'https://github.com/masoudassali/TLC/blob/main/Thumbnail%20Placeholder.png?raw=true';
-
-        // Global variable to store the 'pure' manual text, excluding currently applied presets
-        let manualTextBase = "";
-
-        // Define the mutually exclusive groups using the space-removed names
-        const EXCLUSIVE_GROUPS = ['InfluentialArtists', 'OranArtStyle'];
-
+        
+        // Fixed style for the new project
+        const NEW_YORKER_STYLE_PROMPT = "The final output must be a single, simple, black and white comic panel in the style of The New Yorker's Daily Cartoon. Analyze the three provided images for their main subject, theme, or concept, and combine these elements into a single, slightly humorous or ironic scene. Focus on clear outlines and minimal detail to capture the iconic New Yorker aesthetic.";
+        
         // Wrap initialization so it runs after DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('imageGenerationForm');
-            const promptTextarea = document.getElementById('prompt');
-            const famousPersonTextarea = document.getElementById('famousPerson');
             const placeholderText = document.getElementById('placeholderText');
             const generatedImage = document.getElementById('generatedImage');
-            const submitButton = form.querySelector('button');
-            const presetsContainer = document.getElementById('presetsContainer');
+            const generateButton = document.getElementById('generateButton');
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
-            const imageUpload = document.getElementById('imageUpload');
-            const imagePreview = document.getElementById('imagePreview');
-            const allPresetsWrapper = document.getElementById('allPresetsWrapper');
-            const togglePresetsButton = document.getElementById('togglePresetsButton');
 
-            // Status Bar Steps
+            // FIX: Get the new collapsible elements
+            const infoContent = document.getElementById('infoContent');
+            const toggleInfoButton = document.getElementById('toggleInfoButton');
+
+            // Arrays to manage inputs and previews
+            const imageUploads = [
+                document.getElementById('imageUpload1'),
+                document.getElementById('imageUpload2'),
+                document.getElementById('imageUpload3'),
+            ];
+            const imagePreviews = [
+                document.getElementById('imagePreview1'),
+                document.getElementById('imagePreview2'),
+                document.getElementById('imagePreview3'),
+            ];
+            const previewTexts = [
+                document.getElementById('previewText1'),
+                document.getElementById('previewText2'),
+                document.getElementById('previewText3'),
+            ];
+            
+            // Status Bar Steps (Adjusted for the new workflow)
             const STATUS_STEPS = [
-                "5% - Sending your descriptions to our magician, Tony ...",
-                "18% - Tony received your descriptions. Now figuring out the style...",
-                "22% - Tony is adding the final touches...",
-                "41% - This may take 5-15 seconds...",
-                "67% - Converting everything into a PNG file...",
+                "5% - Uploading 3 images to the server...",
+                "18% - Chef Tony is analyzing the content of the three images...",
+                "35% - Combining concepts for a single comic scene...",
+                "50% - Sketching the New Yorker style panel...",
+                "67% - Hang tight. This may take a couple of minutes...",
                 "93% - Sending image data back to your browser...",
-                "100% - Serving up your order now..."
+                "100% - Serving up your daily comic now..."
             ];
 
             // Status Bar Control
@@ -702,157 +535,49 @@
                 const cycleStatus = () => {
                     statusMessage.innerHTML = STATUS_STEPS[stepIndex];
                     stepIndex = (stepIndex + 1) % STATUS_STEPS.length;
-                    // Freeze on the main generation step (41%) for longer
-                    if (stepIndex === 4) stepIndex = 3;
+                    // Freeze on the main generation step (67%) for longer
+                    if (stepIndex === 6) stepIndex = 5; 
                 };
                 cycleStatus();
                 statusInterval = setInterval(cycleStatus, 3000);
             }
 
-            // Function to render the presets dynamically
-            function renderPresets() {
-                let html = '';
-                for (const categoryName in PRESET_CATEGORIES) {
-                    const categoryData = PRESET_CATEGORIES[categoryName];
-                    const radioGroupName = categoryName.replace(/\s/g, '');
+            // Image Preview Handler
+            imageUploads.forEach((upload, index) => {
+                upload.addEventListener('change', function() {
+                    const file = this.files[0];
+                    const previewImg = imagePreviews[index];
+                    const previewText = previewTexts[index];
 
-                    html += `<div class="preset-category"><h4>${categoryName}</h4>`;
-                    if (Array.isArray(categoryData)) {
-                        categoryData.forEach(item => {
-                            html += `
-                                <label>
-                                    <input type="radio"
-                                            name="${radioGroupName}"
-                                            value="${escapeHtml(item.value)}"
-                                            data-group="${radioGroupName}">
-                                    ${escapeHtml(item.display)}
-                                </label>
-                            `;
-                        });
+                    if (file) {
+                        if (file.size > MAX_FILE_SIZE_BYTES) {
+                            alert(`File size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose a smaller file.`);
+                            this.value = ''; // Clear the file input
+                            previewImg.style.display = 'none';
+                            previewText.style.display = 'block';
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewImg.src = e.target.result;
+                            previewImg.style.display = 'block'; // Show the image
+                            previewText.style.display = 'none'; // Hide the text
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        previewImg.src = '';
+                        previewImg.style.display = 'none'; // Hide the image
+                        previewText.style.display = 'block'; // Show the text
                     }
-                    html += `</div>`;
-                }
-                presetsContainer.innerHTML = html;
-
-                // Attach event listener to ALL radio buttons to trigger the prompt update
-                document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    // Check if the radio button belongs to one of the exclusive groups (Artist/Style)
-                    if (EXCLUSIVE_GROUPS.includes(radio.getAttribute('data-group'))) {
-                        radio.addEventListener('change', handleExclusiveSelection);
-                    }
-
-                    // Add listener to all radio buttons (including Busyness) to update the prompt box
-                    radio.addEventListener('change', updatePromptBox);
                 });
-            }
-
-            // Toggle logic for the presets wrapper
-            togglePresetsButton.addEventListener('click', () => {
-                const isHidden = allPresetsWrapper.classList.toggle('presets-hidden');
-                togglePresetsButton.textContent = isHidden ? 'Show Options' : 'Hide Options';
             });
 
-            // Handles the exclusive selection logic for Artist/Style presets
-            function handleExclusiveSelection(event) {
-                const clickedRadio = event.target;
-                const clickedGroup = clickedRadio.getAttribute('data-group');
-
-                const otherGroup = EXCLUSIVE_GROUPS.find(group => group !== clickedGroup);
-
-                if (otherGroup) {
-                    // Uncheck all radio buttons in the other group
-                    document.querySelectorAll(`input[name="${otherGroup}"]:checked`).forEach(radio => {
-                        radio.checked = false;
-                    });
-                }
-            }
-
-            // Escape HTML helper
-            function escapeHtml(str) {
-                return String(str)
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '');
-            }
-            
-            // Function to update manualTextBase ONLY on user typing
-            promptTextarea.addEventListener('input', updateManualTextBaseOnly);
-
-            function updateManualTextBaseOnly() {
-                // Get all active preset values (includes busyness)
-                const presetsValues = getActivePresets().join('\n\n');
-                const currentText = promptTextarea.value.trim();
-                
-                // If the current text starts with the presets, the base text is the remainder
-                if (currentText.startsWith(presetsValues.trim())) {
-                    // Extract the text that is NOT the preset content
-                    manualTextBase = currentText.substring(presetsValues.length).trim().replace(/^[\n]+/, '');
-                } else {
-                    // If the user modified the presets or deleted them, treat the current text as the new base
-                    manualTextBase = currentText;
-                }
-            }
-            
-            // Helper function to get all active preset values (styles and busyness)
-            function getActivePresets() {
-                const activePresetValues = [];
-
-                // 1. Get Style Presets (from EXCLUSIVE_GROUPS)
-                document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
-                    // Filter for style groups AND busyness group
-                    if (EXCLUSIVE_GROUPS.includes(radio.getAttribute('data-group')) || radio.name === 'busyness') {
-                        activePresetValues.push(radio.value);
-                    }
-                });
-
-                return activePresetValues.filter(p => p);
-            }
-
-            // Function to update the prompt box with ALL active presets (Style AND Busyness) + Manual Base
-            function updatePromptBox() {
-                const activePresetValues = getActivePresets();
-
-                // 1. Get the current clean manual base text
-                const manual = promptTextarea.value.trim();
-                if (activePresetValues.length === 0) {
-                     manualTextBase = manual; // If no presets are selected, the whole text is manual
-                } else if (manual.startsWith(activePresetValues.join('\n\n').trim())) {
-                    // Only update the base if the presets are still at the top
-                    manualTextBase = manual.substring(activePresetValues.join('\n\n').trim().length).trim().replace(/^[\n]+/, '');
-                }
-                
-                // 2. Combine: (Active Presets) + (Manually Stored Text Base)
-                // Filter out empty strings before joining, use double newline for separation
-                const combinedText = [...activePresetValues, manualTextBase].filter(p => p).join('\n\n');
-                
-                // 3. Set the value back to the textarea (only if it actually changes)
-                if (promptTextarea.value.trim() !== combinedText.trim()) {
-                    promptTextarea.value = combinedText;
-                }
-            }
-
-            // Function to get the final complete prompt text (Famous Person + Main Prompt Box Content)
-            function getFullPromptText() {
-                // 1. Get Famous Person Input
-                const famousPersonInput = famousPersonTextarea.value.trim();
-                let famousPersonPrompt = '';
-                // The client-side format for celebrity is: "Subject includes a celebrity: [Name]."
-                if (famousPersonInput) {
-                    famousPersonPrompt = `Subject includes a celebrity: ${famousPersonInput}.`;
-                }
-                
-                // 2. Get the full content from the main prompt box (which now contains all presets and manual text)
-                const allStyleAndBusynessContent = promptTextarea.value.trim();
-
-                // 3. Combine parts
-                let parts = [famousPersonPrompt, allStyleAndBusynessContent].filter(p => p);
-
-                // Use double newline to clearly separate the celebrity input from the main prompt area content
-                return parts.join('\n\n').trim();
-            }
-
+            // FIX: Toggle logic for the How it Works section
+            toggleInfoButton.addEventListener('click', () => {
+                const isHidden = infoContent.classList.toggle('content-hidden');
+                toggleInfoButton.textContent = isHidden ? 'Show' : 'Hide';
+            });
 
             // Function to handle form submission
             form.addEventListener('submit', handleFormSubmit);
@@ -860,54 +585,61 @@
             async function handleFormSubmit(event) {
                 event.preventDefault();
 
-                // 1. Basic file validation
-                const file = imageUpload.files[0];
-                if (!file) {
-                    alert('Please upload an image first.');
-                    return; // Stop execution if no file is present
+                // 1. Check if all three images are uploaded
+                const files = [
+                    imageUploads[0].files[0],
+                    imageUploads[1].files[0],
+                    imageUploads[2].files[0],
+                ];
+
+                if (files.some(file => !file)) {
+                    alert('Please upload all three images before submitting.');
+                    return;
                 }
-                if (file.size > MAX_FILE_SIZE_BYTES) {
-                    alert(`The file size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB.`);
+                
+                // Check file sizes
+                if (files.some(file => file.size > MAX_FILE_SIZE_BYTES)) {
+                    alert(`One or more files exceed the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose smaller files.`);
                     return;
                 }
 
                 // 2. Update UI state
-                submitButton.disabled = true;
+                generateButton.disabled = true;
+                generateButton.textContent = "Cooking...";
                 updateStatus(true);
                 generatedImage.style.display = 'none';
+                placeholderText.innerHTML = "Chef Tony is cooking. It'd show up here once he's done.";
                 placeholderText.style.display = 'block';
 
                 try {
-                    // 3. Prepare FormData (multipart/form-data)
-                    const fullPrompt = getFullPromptText();
+                    // 3. Prepare FormData (Crucial change: sending files using FormData)
                     const formData = new FormData();
-                    
-                    // The field names ('prompt', 'image') must match what your n8n Webhook node expects.
-                    formData.append('prompt', fullPrompt);
-                    formData.append('image', file, file.name); // Sends the file as binary data
-                    
-                    // 4. Send request
+                    formData.append('prompt', NEW_YORKER_STYLE_PROMPT); // The prompt for the Gemini model
+                    formData.append('image1', files[0]);
+                    formData.append('image2', files[1]);
+                    formData.append('image3', files[2]);
+
+
+                    // 4. Send request with FormData body
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
-                        body: formData,
+                        // Do NOT set Content-Type header manually for FormData.
+                        // The browser sets it automatically, including the necessary boundary=...
+                        body: formData, 
                     });
 
                     // 5. Check for HTTP errors
                     if (!response.ok) {
                         let errorDetail = response.statusText;
                         try {
-                            // Try reading as text to see if there's an error message
                             const errorBody = await response.text();
                             errorDetail = errorBody || response.statusText;
-                        } catch (e) {
-                            // Ignore any parsing errors
-                        }
+                        } catch (e) { /* Ignore */ }
                         
                         throw new Error(`HTTP Error! Status: ${response.status}. Detail: ${errorDetail.substring(0, 100)}...`);
                     }
                     
                     // 6. Handle successful response (EXPECTING RAW BINARY/BLOB DATA)
-                    // This is the CRITICAL CHANGE to fix the "Unexpected token '®'" JSON error.
                     const imageBlob = await response.blob();
                     const imageUrl = URL.createObjectURL(imageBlob);
 
@@ -917,38 +649,17 @@
 
                 } catch (error) {
                     console.error('Generation failed:', error);
-                    alert(`Outline generation failed. Please check the image or try again. Error: ${error.message}`);
+                    alert(`Comic generation failed. Error: ${error.message}`);
                     placeholderText.innerHTML = `Generation Failed: ${error.message}. Please try again.`;
                     placeholderText.style.display = 'block';
                     generatedImage.style.display = 'none';
                 } finally {
-                    submitButton.disabled = false;
+                    // 7. Reset state
+                    generateButton.disabled = false;
+                    generateButton.textContent = "Cook New Daily Comic Now!";
                     updateStatus(false);
                 }
             }
-
-            // Image Preview Handler
-            imageUpload.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imagePreview.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    imagePreview.src = PLACEHOLDER_THUMBNAIL_URL;
-                }
-            });
-            
-            // Add listener to famousPerson textarea to ensure prompt box is updated if text is entered/removed
-            famousPersonTextarea.addEventListener('input', () => {
-                // When celebrity input changes, the prompt text doesn't change, 
-                // but the final prompt payload changes via getFullPromptText().
-            });
-
-            // Initial render
-            renderPresets();
         });
     </script>
 </body>
