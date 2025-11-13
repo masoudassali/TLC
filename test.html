@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,13 +41,13 @@
         /* HEADER SECTION */
         /* ------------------------------------------- */
         .header-section {
+            /* CHEF TONY IMAGE IN BACKGROUND - REMOVED */
+            background-image: none; 
+            background-color: transparent; /* Changed to transparent */
+            
             margin: -40px -40px 30px -40px;
             padding: 40px 40px 20px 40px;
-            background-image: url('https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/Header.jpg');
-            background-size: cover;
-            background-position: 50% 35%;
-            background-repeat: no-repeat;
-            height: 180px;
+            height: auto;
             position: relative; 
             border-radius: 12px 12px 0 0;
             overflow: hidden;
@@ -59,7 +58,7 @@
         }
 
         .header-text-highlight {
-            background-color: rgba(240, 240, 240, 0.95);
+            background-color: rgba(255, 255, 255, 0.9); /* Lighter background for text */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 5px 10px;
             line-height: 1;
@@ -68,9 +67,8 @@
         }
 
         .logo-container {
-            position: absolute;
-            top: 30px;
-            right: 30px;
+            position: static;
+            margin: 0px auto 10px auto;
             z-index: 10;
         }
 
@@ -129,6 +127,16 @@
             margin: 0;
             line-height: 1.1;
         }
+        
+        /* New Instagram Input Field Styling */
+        .instagram-input-field {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-family: 'Handlee', cursive;
+            box-sizing: border-box;
+        }
 
         /* --- Collapsible Info Section --- */
         .info-container {
@@ -146,15 +154,25 @@
             margin-bottom: 10px;
         }
         .info-header h3 {
-            font-size: 2em;
+            /* 3. Shrink the size of "How it works..." */
+            font-size: 1.5em; 
             color: #E64A19;
             margin: 0;
         }
-        .info-content p {
+        .info-content p, .info-content ul {
             font-size: 1.3em;
             color: #5D4037;
             margin: 5px 0;
             text-align: left;
+        }
+        .info-content ul {
+            padding-left: 20px;
+            list-style-type: none; /* Remove default list style */
+        }
+        .info-content ul li::before {
+            content: "- "; /* Add bullet point */
+            color: #FF7043;
+            font-weight: bold;
         }
         
         /* --- Image Upload & Preview Section --- */
@@ -389,13 +407,14 @@
     <div class="generator-container">
         <div class="header-section">
             <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
+                <!-- LOGO REPLACED WITH CHEF TONY -->
+                <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Logo">
             </div>
             <h1>
                 <span class="header-text-highlight">The Lined Comic</span>
             </h1>
             <p class="subtitle">
-                <span class="header-text-highlight">Chef Tony cooks up a daily comic!</span>
+                <span class="header-text-highlight">Let's cook you a daily comic!</span>
             </p>
         </div>
         
@@ -405,7 +424,13 @@
                 <button id="toggleInfoButton" type="button">Show</button>
             </div>
             <div id="infoContent" class="content-hidden info-content">
-                <p>Chef Tony takes **3 of your images**, analyzes their themes and content, and combines them into a single, cohesive comic panel in the style of **The New Yorker's Daily Cartoon**.</p>
+                <ul>
+                    <li>Chef Tony takes 3 of your images.</li>
+                    <li>He'll then analyze them by their themes and content.</li>
+                    <li>And finally produces a unique and fun comic strip in the style of **The New Yorker's Daily Cartoon**.</li>
+                    <li>He'll then posts the results online.</li>
+                </ul>
+                <p style="text-align: center; margin-top: 15px;">**Give it a spin, and have fun!**</p>
                 
                 <div class="chef-tony-info" style="border-top: 1px dashed #E64A19; padding-top: 15px; margin-top: 15px;">
                     <p>Who is Chef Tony?</p>
@@ -421,6 +446,10 @@
         </div>
 
         <form class="prompt-form" id="imageGenerationForm">
+            
+            <!-- 2. Updated Instagram Handle Label -->
+            <label for="instagramHandle" style="font-size: 1.5em; text-align: center;">Add your Instagram handle to win a t-shirt:</label>
+            <input type="text" id="instagramHandle" name="instagramHandle" placeholder="@yourhandle" class="instagram-input-field" style="margin-bottom: 20px;">
             
             <label style="font-size: 1.5em; text-align: center;">Upload 3 images and Chef Tony will whip up a "comic-cake" for you:</label>
             <div class="image-upload-wrapper">
@@ -455,7 +484,7 @@
             </div>
 
             <div class="submit-button-wrapper">
-                <button type="submit" id="generateButton">Cook New Daily Comic Now!</button>
+                <button type="submit" id="generateButton">Let's Cook!</button>
                 <p style="font-size: 0.8em; color: #757575; margin-top: 5px;">
                     Please upload all three images before submitting. Max 7MB per file.
                 </p>
@@ -474,7 +503,7 @@
     </div>
     <script>
         // *** CORE CONFIG & DOM ELEMENTS ***
-        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/3c69a7e2-0266-48d6-af49-1cd4f246c3d9'; 
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/5690e248-8416-4bd1-b0c5-48612fdbc8b2'; 
         const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
         
         // Fixed style for the new project
@@ -483,13 +512,14 @@
         // Wrap initialization so it runs after DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('imageGenerationForm');
+            const instagramHandleInput = document.getElementById('instagramHandle'); // Get the new input field
             const placeholderText = document.getElementById('placeholderText');
             const generatedImage = document.getElementById('generatedImage');
             const generateButton = document.getElementById('generateButton');
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
 
-            // FIX: Get the new collapsible elements
+            // Get the collapsible elements
             const infoContent = document.getElementById('infoContent');
             const toggleInfoButton = document.getElementById('toggleInfoButton');
 
@@ -551,7 +581,7 @@
 
                     if (file) {
                         if (file.size > MAX_FILE_SIZE_BYTES) {
-                            alert(`File size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose a smaller file.`);
+                            console.error(`File size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose a smaller file.`);
                             this.value = ''; // Clear the file input
                             previewImg.style.display = 'none';
                             previewText.style.display = 'block';
@@ -573,7 +603,7 @@
                 });
             });
 
-            // FIX: Toggle logic for the How it Works section
+            // Toggle logic for the How it Works section
             toggleInfoButton.addEventListener('click', () => {
                 const isHidden = infoContent.classList.toggle('content-hidden');
                 toggleInfoButton.textContent = isHidden ? 'Show' : 'Hide';
@@ -593,15 +623,22 @@
                 ];
 
                 if (files.some(file => !file)) {
-                    alert('Please upload all three images before submitting.');
+                    console.error('Please upload all three images before submitting.');
                     return;
                 }
                 
                 // Check file sizes
                 if (files.some(file => file.size > MAX_FILE_SIZE_BYTES)) {
-                    alert(`One or more files exceed the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose smaller files.`);
+                    console.error(`One or more files exceed the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose smaller files.`);
                     return;
                 }
+
+                // Get Instagram handle and trim any leading '@' or whitespace
+                let handle = instagramHandleInput.value.trim();
+                if (handle.startsWith('@')) {
+                    handle = handle.substring(1);
+                }
+
 
                 // 2. Update UI state
                 generateButton.disabled = true;
@@ -618,13 +655,13 @@
                     formData.append('image1', files[0]);
                     formData.append('image2', files[1]);
                     formData.append('image3', files[2]);
+                    // Pass the Instagram handle
+                    formData.append('instagramHandle', handle);
 
 
                     // 4. Send request with FormData body
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
-                        // Do NOT set Content-Type header manually for FormData.
-                        // The browser sets it automatically, including the necessary boundary=...
                         body: formData, 
                     });
 
@@ -649,14 +686,19 @@
 
                 } catch (error) {
                     console.error('Generation failed:', error);
-                    alert(`Comic generation failed. Error: ${error.message}`);
                     placeholderText.innerHTML = `Generation Failed: ${error.message}. Please try again.`;
-                    placeholderText.style.display = 'block';
                     generatedImage.style.display = 'none';
+                    // Custom modal instead of alert
+                    const messageModal = document.getElementById('message-modal');
+                    if (messageModal) { // Check if the modal structure exists (it doesn't in this HTML, so we log instead)
+                        // If we had a modal, we'd show it here.
+                    } else {
+                        console.error('Could not display error message in modal, logging instead.');
+                    }
                 } finally {
                     // 7. Reset state
                     generateButton.disabled = false;
-                    generateButton.textContent = "Cook New Daily Comic Now!";
+                    generateButton.textContent = "Let's Cook!";
                     updateStatus(false);
                 }
             }
