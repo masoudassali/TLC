@@ -41,9 +41,8 @@
         /* HEADER SECTION */
         /* ------------------------------------------- */
         .header-section {
-            /* CHEF TONY IMAGE IN BACKGROUND - REMOVED */
             background-image: none; 
-            background-color: transparent; /* Changed to transparent */
+            background-color: transparent;
             
             margin: -40px -40px 30px -40px;
             padding: 40px 40px 20px 40px;
@@ -58,7 +57,7 @@
         }
 
         .header-text-highlight {
-            background-color: rgba(255, 255, 255, 0.9); /* Lighter background for text */
+            background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 5px 10px;
             line-height: 1;
@@ -154,7 +153,6 @@
             margin-bottom: 10px;
         }
         .info-header h3 {
-            /* 3. Shrink the size of "How it works..." */
             font-size: 1.5em; 
             color: #E64A19;
             margin: 0;
@@ -167,10 +165,10 @@
         }
         .info-content ul {
             padding-left: 20px;
-            list-style-type: none; /* Remove default list style */
+            list-style-type: none; 
         }
         .info-content ul li::before {
-            content: "- "; /* Add bullet point */
+            content: "- "; 
             color: #FF7043;
             font-weight: bold;
         }
@@ -222,12 +220,11 @@
         }
 
         .upload-slot input[type="file"] {
-            display: none; /* Hide the default file input */
+            display: none; 
         }
         
         /* FIX: Styled Upload Label */
         .upload-label {
-            /* Matched to the main button style for continuity */
             background-color: #FF7043; 
             color: white;
             padding: 8px 15px;
@@ -246,7 +243,6 @@
 
 
         button {
-            /* General button styling for generate and toggle buttons */
             background-color: #FF7043;
             color: white;
             padding: 12px 20px;
@@ -281,7 +277,7 @@
             text-align: center;
         }
         
-        /* Chef Tony Info Section (Kept for branding) */
+        /* Chef Tony Info Section */
         .chef-tony-info {
             padding: 10px 0;
             margin-top: 15px;
@@ -407,7 +403,6 @@
     <div class="generator-container">
         <div class="header-section">
             <div class="logo-container">
-                <!-- LOGO REPLACED WITH CHEF TONY -->
                 <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Logo">
             </div>
             <h1>
@@ -426,27 +421,28 @@
             <div id="infoContent" class="content-hidden info-content">
                 <ul>
                     <li>Chef Tony takes 3 of your images.</li>
-                    <li>He'll then analyze and create a unique and fun comic strip just for you (with your Instagram handle on it if you want).</li>
-                    <li>Chef Tony's best copics will then be posted online.</li>
+                    <li>He'll then analyze them by their themes and content.</li>
+                    <li>And finally produces a unique and fun comic strip in the style of **The New Yorker's Daily Cartoon**.</li>
+                    <li>He'll then posts the results online.</li>
                 </ul>
-                <p style="text-align: center; margin-top: 15px;"><i>Give it a spin, and have fun!</i></p>
+                <p style="text-align: center; margin-top: 15px;">**Give it a spin, and have fun!**</p>
                 
-                <div class="chef-tony-info" style="border-top: 1px dashed #E64A19; padding-top: 15px; margin-top: 15px; text-align: center;">
+                <div class="chef-tony-info" style="border-top: 1px dashed #E64A19; padding-top: 15px; margin-top: 15px;">
                     <p>Who is Chef Tony?</p>
-                    <p style="margin-top: 0; font-size: 1em;">
+                    <p style="margin-top: 0; font-size: 1em; color: #5D4037; text-align: center;">
                         Chef Tony is our chubbily cute and friendly "AI Chef" who cooks up creative outlines.
                     </p>
-                    <div class="chef-tony-images" style="margin-top: 10px;">
-                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_3D.png" alt="Chef Tony 3D Illustration" style="max-width: 150px; margin: 5px;">
-                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Flat Illustration" style="max-width: 150px; margin: 5px;">
+                    <div class="chef-tony-images">
+                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_3D.png" alt="Chef Tony 3D Illustration">
+                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Flat Illustration">
                     </div>
-                </div>              
+                </div>
             </div>
         </div>
 
         <form class="prompt-form" id="imageGenerationForm">
             
-            <!-- 2. Updated Instagram Handle Label -->
+            <!-- Instagram Handle Input -->
             <label for="instagramHandle" style="font-size: 1.5em; text-align: center;">Add your Instagram handle to win a t-shirt:</label>
             <input type="text" id="instagramHandle" name="instagramHandle" placeholder="@yourhandle" class="instagram-input-field" style="margin-bottom: 20px;">
             
@@ -502,16 +498,17 @@
     </div>
     <script>
         // *** CORE CONFIG & DOM ELEMENTS ***
-        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook-test/5690e248-8416-4bd1-b0c5-48612fdbc8b2'; 
+        // WARNING: This URL must point to your N8N webhook.
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/3c69a7e2-0266-48d6-af49-1cd4f246c3d9'; 
         const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
         
-        // Fixed style for the new project
+        // Fixed style prompt for the New Yorker Daily Cartoon aesthetic
         const NEW_YORKER_STYLE_PROMPT = "The final output must be a single, simple, black and white comic panel in the style of The New Yorker's Daily Cartoon. Analyze the three provided images for their main subject, theme, or concept, and combine these elements into a single, slightly humorous or ironic scene. Focus on clear outlines and minimal detail to capture the iconic New Yorker aesthetic.";
         
         // Wrap initialization so it runs after DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('imageGenerationForm');
-            const instagramHandleInput = document.getElementById('instagramHandle'); // Get the new input field
+            const instagramHandleInput = document.getElementById('instagramHandle');
             const placeholderText = document.getElementById('placeholderText');
             const generatedImage = document.getElementById('generatedImage');
             const generateButton = document.getElementById('generateButton');
@@ -539,7 +536,7 @@
                 document.getElementById('previewText3'),
             ];
             
-            // Status Bar Steps (Adjusted for the new workflow)
+            // Status Bar Steps 
             const STATUS_STEPS = [
                 "5% - Uploading 3 images to the server...",
                 "18% - Chef Tony is analyzing the content of the three images...",
@@ -654,7 +651,7 @@
                     formData.append('image1', files[0]);
                     formData.append('image2', files[1]);
                     formData.append('image3', files[2]);
-                    // Pass the Instagram handle
+                    // PASS THE INSTAGRAM HANDLE TO N8N
                     formData.append('instagramHandle', handle);
 
 
@@ -687,13 +684,9 @@
                     console.error('Generation failed:', error);
                     placeholderText.innerHTML = `Generation Failed: ${error.message}. Please try again.`;
                     generatedImage.style.display = 'none';
-                    // Custom modal instead of alert
-                    const messageModal = document.getElementById('message-modal');
-                    if (messageModal) { // Check if the modal structure exists (it doesn't in this HTML, so we log instead)
-                        // If we had a modal, we'd show it here.
-                    } else {
-                        console.error('Could not display error message in modal, logging instead.');
-                    }
+                    
+                    // Do not use alert(), just log the error in the console.
+                    console.error('Could not display error message to user, logging instead.');
                 } finally {
                     // 7. Reset state
                     generateButton.disabled = false;
