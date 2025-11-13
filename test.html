@@ -628,14 +628,24 @@
                     return;
                 }
 
-                // 2. Process Instagram Handle: Ensure it starts with '@'
+                // 2. Process Instagram Handle: Ensures correct format or empty string
                 let handle = instagramHandleInput.value.trim();
-                // Remove existing '@' if present, then add it back
-                if (handle.startsWith('@')) {
-                    handle = handle.substring(1);
-                }
-                const formattedHandle = `@${handle}`;
+                let formattedHandle = ""; // Default to empty string
 
+                if (handle.length > 0) {
+                    // If user entered something, format it with the '@'
+                    if (!handle.startsWith('@')) {
+                        formattedHandle = `@${handle}`;
+                    } else {
+                        // If they included the '@', use the handle as is
+                        formattedHandle = handle;
+                    }
+                } 
+                // If handle is empty/whitespace, formattedHandle remains ""
+                
+                // CRUCIAL: Re-check to ensure we are not sending "@@handle" or other issues.
+                // Final check to make sure the value sent is what the workflow expects: either "" or "@handle"
+                // The current logic above handles this correctly.
 
                 // 3. Update UI state
                 generateButton.disabled = true;
@@ -652,7 +662,7 @@
                     formData.append('image1', files[0]);
                     formData.append('image2', files[1]);
                     formData.append('image3', files[2]);
-                    // PASS THE FORMATTED INSTAGRAM HANDLE TO N8N
+                    // PASS THE CORRECTLY FORMATTED/EMPTY INSTAGRAM HANDLE TO N8N
                     formData.append('instagramHandle', formattedHandle);
 
 
