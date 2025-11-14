@@ -1,12 +1,10 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">
-    <title>The Lined Comic - New Yorker Daily Comic Generator</title>
+    <title>Chef Tony's Daily Comic</title>
     <style>
         /* General Styling */
         body {
@@ -43,13 +41,12 @@
         /* HEADER SECTION */
         /* ------------------------------------------- */
         .header-section {
+            background-image: none; 
+            background-color: transparent;
+            
             margin: -40px -40px 30px -40px;
             padding: 40px 40px 20px 40px;
-            background-image: url('https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/Header.jpg');
-            background-size: cover;
-            background-position: 50% 35%;
-            background-repeat: no-repeat;
-            height: 180px;
+            height: auto;
             position: relative; 
             border-radius: 12px 12px 0 0;
             overflow: hidden;
@@ -60,7 +57,7 @@
         }
 
         .header-text-highlight {
-            background-color: rgba(240, 240, 240, 0.95);
+            background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 5px 10px;
             line-height: 1;
@@ -69,9 +66,8 @@
         }
 
         .logo-container {
-            position: absolute;
-            top: 30px;
-            right: 30px;
+            position: static;
+            margin: 0px auto 10px auto;
             z-index: 10;
         }
 
@@ -130,6 +126,16 @@
             margin: 0;
             line-height: 1.1;
         }
+        
+        /* New Instagram Input Field Styling */
+        .instagram-input-field {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-family: 'Handlee', cursive;
+            box-sizing: border-box;
+        }
 
         /* --- Collapsible Info Section --- */
         .info-container {
@@ -147,15 +153,24 @@
             margin-bottom: 10px;
         }
         .info-header h3 {
-            font-size: 2em;
+            font-size: 1.5em; 
             color: #E64A19;
             margin: 0;
         }
-        .info-content p {
+        .info-content p, .info-content ul {
             font-size: 1.3em;
             color: #5D4037;
             margin: 5px 0;
             text-align: left;
+        }
+        .info-content ul {
+            padding-left: 20px;
+            list-style-type: none; 
+        }
+        .info-content ul li::before {
+            content: "- "; 
+            color: #FF7043;
+            font-weight: bold;
         }
         
         /* --- Image Upload & Preview Section --- */
@@ -205,12 +220,11 @@
         }
 
         .upload-slot input[type="file"] {
-            display: none; /* Hide the default file input */
+            display: none; 
         }
         
         /* FIX: Styled Upload Label */
         .upload-label {
-            /* Matched to the main button style for continuity */
             background-color: #FF7043; 
             color: white;
             padding: 8px 15px;
@@ -229,7 +243,6 @@
 
 
         button {
-            /* General button styling for generate and toggle buttons */
             background-color: #FF7043;
             color: white;
             padding: 12px 20px;
@@ -264,7 +277,7 @@
             text-align: center;
         }
         
-        /* Chef Tony Info Section (Kept for branding) */
+        /* Chef Tony Info Section */
         .chef-tony-info {
             padding: 10px 0;
             margin-top: 15px;
@@ -390,13 +403,13 @@
     <div class="generator-container">
         <div class="header-section">
             <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/masoudassali/TLC/refs/heads/main/TLC%20Logo.png" alt="The Lined Canvas Logo">
+                <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Logo">
             </div>
             <h1>
-                <span class="header-text-highlight">The Lined Comic</span>
+                <span class="header-text-highlight">Chef Tony's Daily Comic</span>
             </h1>
             <p class="subtitle">
-                <span class="header-text-highlight">Chef Tony cooks up a daily comic!</span>
+                <span class="header-text-highlight">Let's cook you a daily comic!</span>
             </p>
         </div>
         
@@ -406,13 +419,18 @@
                 <button id="toggleInfoButton" type="button">Show</button>
             </div>
             <div id="infoContent" class="content-hidden info-content">
-                <p>Chef Tony takes **3 of your images**, analyzes their themes and content, and combines them into a single, cohesive comic panel in the style of **The New Yorker's Daily Cartoon**.</p>
+                <ul>
+                    <li>Chef Tony takes 3 of your images.</li>
+                    <li>He'll then whip up your very own unique and fun comic strip.</li>
+                    <li>The best results will be posted online.</li>
+                </ul>
+                <p style="text-align: center; margin-top: 15px;"><i>Give it a spin. You might even win a t-shirt!</i></p>
                 
                 <div class="chef-tony-info" style="border-top: 1px dashed #E64A19; padding-top: 15px; margin-top: 15px;">
                     <p>Who is Chef Tony?</p>
-                    <ol style="margin-top: 0; padding-left: 20px; text-align: left; font-size: 1em;">
-                        <li>Chef Tony is our chubbily cute and friendly "AI Chef" who cooks up creative outlines.</li>
-                    </ol>
+                    <p style="margin-top: 0; font-size: 1em; color: #5D4037; text-align: center;">
+                        Chef Tony is our chubbily cute and friendly "AI Chef" who cooks up creative outlines.
+                    </p>
                     <div class="chef-tony-images">
                         <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_3D.png" alt="Chef Tony 3D Illustration">
                         <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Flat Illustration">
@@ -422,6 +440,10 @@
         </div>
 
         <form class="prompt-form" id="imageGenerationForm">
+            
+            <!-- Instagram Handle Input -->
+            <label for="instagramHandle" style="font-size: 1.5em; text-align: center;">Add your Instagram handle to win a t-shirt:</label>
+            <input type="text" id="instagramHandle" name="instagramHandle" placeholder="@yourhandle" class="instagram-input-field" style="margin-bottom: 20px;">
             
             <label style="font-size: 1.5em; text-align: center;">Upload 3 images and Chef Tony will whip up a "comic-cake" for you:</label>
             <div class="image-upload-wrapper">
@@ -456,7 +478,7 @@
             </div>
 
             <div class="submit-button-wrapper">
-                <button type="submit" id="generateButton">Cook New Daily Comic Now!</button>
+                <button type="submit" id="generateButton">Let's Cook!</button>
                 <p style="font-size: 0.8em; color: #757575; margin-top: 5px;">
                     Please upload all three images before submitting. Max 7MB per file.
                 </p>
@@ -475,22 +497,23 @@
     </div>
     <script>
         // *** CORE CONFIG & DOM ELEMENTS ***
-        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/3c69a7e2-0266-48d6-af49-1cd4f246c3d9'; 
+        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/0ed236d6-1560-45a7-875b-65d69c22f178'; 
         const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
         
-        // Fixed style for the new project
+        // Fixed style prompt for the New Yorker Daily Cartoon aesthetic
         const NEW_YORKER_STYLE_PROMPT = "The final output must be a single, simple, black and white comic panel in the style of The New Yorker's Daily Cartoon. Analyze the three provided images for their main subject, theme, or concept, and combine these elements into a single, slightly humorous or ironic scene. Focus on clear outlines and minimal detail to capture the iconic New Yorker aesthetic.";
         
         // Wrap initialization so it runs after DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('imageGenerationForm');
+            const instagramHandleInput = document.getElementById('instagramHandle');
             const placeholderText = document.getElementById('placeholderText');
             const generatedImage = document.getElementById('generatedImage');
             const generateButton = document.getElementById('generateButton');
             const statusBar = document.getElementById('statusBar');
             const statusMessage = document.getElementById('statusMessage');
 
-            // FIX: Get the new collapsible elements
+            // Get the collapsible elements
             const infoContent = document.getElementById('infoContent');
             const toggleInfoButton = document.getElementById('toggleInfoButton');
 
@@ -511,7 +534,7 @@
                 document.getElementById('previewText3'),
             ];
             
-            // Status Bar Steps (Adjusted for the new workflow)
+            // Status Bar Steps 
             const STATUS_STEPS = [
                 "5% - Uploading 3 images to the server...",
                 "18% - Chef Tony is analyzing the content of the three images...",
@@ -552,7 +575,7 @@
 
                     if (file) {
                         if (file.size > MAX_FILE_SIZE_BYTES) {
-                            alert(`File size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose a smaller file.`);
+                            console.error(`File size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose a smaller file.`);
                             this.value = ''; // Clear the file input
                             previewImg.style.display = 'none';
                             previewText.style.display = 'block';
@@ -574,7 +597,7 @@
                 });
             });
 
-            // FIX: Toggle logic for the How it Works section
+            // Toggle logic for the How it Works section
             toggleInfoButton.addEventListener('click', () => {
                 const isHidden = infoContent.classList.toggle('content-hidden');
                 toggleInfoButton.textContent = isHidden ? 'Show' : 'Hide';
@@ -594,17 +617,36 @@
                 ];
 
                 if (files.some(file => !file)) {
-                    alert('Please upload all three images before submitting.');
+                    console.error('Please upload all three images before submitting.');
                     return;
                 }
                 
                 // Check file sizes
                 if (files.some(file => file.size > MAX_FILE_SIZE_BYTES)) {
-                    alert(`One or more files exceed the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose smaller files.`);
+                    console.error(`One or more files exceed the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose smaller files.`);
                     return;
                 }
 
-                // 2. Update UI state
+                // 2. Process Instagram Handle: Ensures correct format or empty string
+                let handle = instagramHandleInput.value.trim();
+                let formattedHandle = ""; // Default to empty string
+
+                if (handle.length > 0) {
+                    // If user entered something, format it with the '@'
+                    if (!handle.startsWith('@')) {
+                        formattedHandle = `@${handle}`;
+                    } else {
+                        // If they included the '@', use the handle as is
+                        formattedHandle = handle;
+                    }
+                } 
+                // If handle is empty/whitespace, formattedHandle remains ""
+                
+                // CRUCIAL: Re-check to ensure we are not sending "@@handle" or other issues.
+                // Final check to make sure the value sent is what the workflow expects: either "" or "@handle"
+                // The current logic above handles this correctly.
+
+                // 3. Update UI state
                 generateButton.disabled = true;
                 generateButton.textContent = "Cooking...";
                 updateStatus(true);
@@ -613,23 +655,23 @@
                 placeholderText.style.display = 'block';
 
                 try {
-                    // 3. Prepare FormData (Crucial change: sending files using FormData)
+                    // 4. Prepare FormData 
                     const formData = new FormData();
                     formData.append('prompt', NEW_YORKER_STYLE_PROMPT); // The prompt for the Gemini model
                     formData.append('image1', files[0]);
                     formData.append('image2', files[1]);
                     formData.append('image3', files[2]);
+                    // PASS THE CORRECTLY FORMATTED/EMPTY INSTAGRAM HANDLE TO N8N
+                    formData.append('instagramHandle', formattedHandle);
 
 
-                    // 4. Send request with FormData body
+                    // 5. Send request with FormData body
                     const response = await fetch(N8N_WEBHOOK_URL, {
                         method: 'POST',
-                        // Do NOT set Content-Type header manually for FormData.
-                        // The browser sets it automatically, including the necessary boundary=...
                         body: formData, 
                     });
 
-                    // 5. Check for HTTP errors
+                    // 6. Check for HTTP errors
                     if (!response.ok) {
                         let errorDetail = response.statusText;
                         try {
@@ -640,7 +682,7 @@
                         throw new Error(`HTTP Error! Status: ${response.status}. Detail: ${errorDetail.substring(0, 100)}...`);
                     }
                     
-                    // 6. Handle successful response (EXPECTING RAW BINARY/BLOB DATA)
+                    // 7. Handle successful response (EXPECTING RAW BINARY/BLOB DATA)
                     const imageBlob = await response.blob();
                     const imageUrl = URL.createObjectURL(imageBlob);
 
@@ -650,14 +692,15 @@
 
                 } catch (error) {
                     console.error('Generation failed:', error);
-                    alert(`Comic generation failed. Error: ${error.message}`);
                     placeholderText.innerHTML = `Generation Failed: ${error.message}. Please try again.`;
-                    placeholderText.style.display = 'block';
                     generatedImage.style.display = 'none';
+                    
+                    // Do not use alert(), just log the error in the console.
+                    console.error('Could not display error message to user, logging instead.');
                 } finally {
-                    // 7. Reset state
+                    // 8. Reset state
                     generateButton.disabled = false;
-                    generateButton.textContent = "Cook New Daily Comic Now!";
+                    generateButton.textContent = "Let's Cook!";
                     updateStatus(false);
                 }
             }
