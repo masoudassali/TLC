@@ -23,23 +23,49 @@
             padding: 25px; box-sizing: border-box; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
+        /* Fixed Header: Bottom-aligned items */
         .header {
-            display: flex; justify-content: space-between; align-items: flex-start;
-            margin-bottom: 30px; min-height: 80px; color: var(--text-dark);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end; /* Aligns Clue and Level box to the bottom of the header area */
+            margin-bottom: 25px; 
+            min-height: 70px; 
+            color: var(--text-dark);
         }
 
         #clue-display {
-            font-size: 1rem; font-weight: 800; max-width: 65%;
-            line-height: 1.2; text-transform: uppercase;
+            font-size: 1rem; 
+            font-weight: 800; 
+            max-width: 70%;
+            line-height: 1.1; 
+            text-transform: uppercase;
+            margin: 0;
         }
 
+        /* Compact Toughness Box */
         .level-box {
-            background: rgba(255,255,255,0.7); padding: 10px 15px;
-            border-radius: 15px; text-align: right; min-width: 70px;
+            background: rgba(255,255,255,0.7); 
+            padding: 6px 10px; /* Reduced padding to fit text */
+            border-radius: 10px; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .level-label { font-size: 0.7rem; font-weight: bold; opacity: 0.8; display: block;}
-        #level-display { font-size: 1.2rem; font-weight: 900; }
+        .level-label { 
+            font-size: 0.65rem; 
+            font-weight: bold; 
+            opacity: 0.8; 
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        #level-display { 
+            font-size: 1rem; 
+            font-weight: 900; 
+            white-space: nowrap; /* Prevents wrapping */
+        }
 
         .grid-container {
             flex-grow: 1; display: grid;
@@ -55,17 +81,14 @@
             border-radius: 3px; aspect-ratio: 1 / 1;
         }
 
-        /* Main Puzzle Word Boxes (Empty) */
         .cell.main {
             background: white; border: 2px solid var(--text-dark); color: transparent;
         }
 
-        /* Seed Words (Visible) */
         .cell.seed {
             background: white; color: var(--text-dark);
         }
 
-        /* Intersection Point */
         .cell.overlap {
             background: var(--text-dark); color: white !important;
             border: 2px solid var(--text-dark);
@@ -84,7 +107,7 @@
             <div id="clue-display">CLUE: LOADING...</div>
             <div class="level-box">
                 <span class="level-label">Level:</span>
-                <span id="level-display">-/-</span>
+                <span id="level-display">-</span>
             </div>
         </div>
 
@@ -101,15 +124,11 @@
                 const res = await fetch(CSV_URL);
                 const text = await res.text();
                 
-                // Parse CSV and map to headers
                 const rows = text.split(/\r?\n/).map(row => row.split(',').map(cell => cell.replace(/"/g, '').trim()));
                 const headers = rows[0];
                 const pool = rows.slice(1).filter(r => r[0] !== "");
                 
-                // Get a random puzzle row
                 const rawData = pool[Math.floor(Math.random() * pool.length)];
-                
-                // Create data object based on your specific headers
                 const data = {};
                 headers.forEach((header, i) => { data[header] = rawData[i]; });
 
@@ -120,30 +139,27 @@
         }
 
         function render(data) {
-            // Using your specific header names
             const mainWord = data.Word.toUpperCase();
             const seed1 = data.Seed_Word_1.toUpperCase();
             const seed2 = data.Seed_Word_2.toUpperCase();
             
+            // Fix 1: Pull the exact string from the CSV column
             document.getElementById('clue-display').innerText = `CLUE: ${data.Clue}`;
-            document.getElementById('level-display').innerText = `${data.Toughness_Level}/5`;
+            document.getElementById('level-display').innerText = data.Toughness_Level;
             document.getElementById('ref-display').innerText = data.P_Number;
 
             const grid = document.getElementById('grid');
             grid.innerHTML = '';
             const matrix = Array(16).fill().map(() => Array(9).fill(null));
 
-            // Place Main Word (Row 8)
             const mainRow = 8;
             const startCol = Math.floor((9 - mainWord.length) / 2);
             for(let i=0; i < mainWord.length; i++) {
                 matrix[mainRow][startCol + i] = { char: mainWord[i], type: 'main' };
             }
 
-            // Connection Logic for Seeds
             [seed1, seed2].forEach((seed, idx) => {
                 let placed = false;
-                // Seed 1 looks for overlap in start of main word, Seed 2 looks at end
                 const searchOrder = idx === 0 ? 
                     [...Array(mainWord.length).keys()] : 
                     [...Array(mainWord.length).keys()].reverse();
@@ -155,7 +171,6 @@
 
                     if (seedIndex !== -1) {
                         let col = startCol + i;
-                        // Check if vertical seed fits on grid
                         let startRow = mainRow - seedIndex;
                         if (startRow >= 0 && (startRow + seed.length) <= 16) {
                             for (let j=0; j < seed.length; j++) {
@@ -172,7 +187,6 @@
                 }
             });
 
-            // Draw Matrix
             for (let r=0; r < 16; r++) {
                 for (let c=0; c < 9; c++) {
                     const div = document.createElement('div');
