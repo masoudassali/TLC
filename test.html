@@ -1,710 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Handlee&display=swap" rel="stylesheet">
-    <title>Chef Tony's Daily Comic</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossword Generator</title>
     <style>
-        /* General Styling */
+        :root {
+            --bg-rainbow: linear-gradient(180deg, #ff9aa2, #ffb7b2, #ffdac1, #e2f0cb, #b5ead7, #c7ceea);
+            --text-dark: #2d3436;
+        }
+
         body {
-            font-family: 'Handlee', cursive;
-            background-color: #f4f7f6;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            line-height: 1.25;
+            margin: 0; padding: 0; background-color: #1a1a1a;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; font-family: 'Helvetica Neue', Arial, sans-serif;
         }
 
-        /* Container for the App */
-        .generator-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            max-width: 900px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            position: relative;
-            box-sizing: border-box;
+        .app-container {
+            width: 90vw; max-width: 450px; aspect-ratio: 9 / 16;
+            background: var(--bg-rainbow); position: relative;
+            display: flex; flex-direction: column; border-radius: 30px;
+            padding: 25px; box-sizing: border-box; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        /* ------------------------------------------- */
-        /* HEADER SECTION */
-        /* ------------------------------------------- */
-        .header-section {
-            background-image: none; 
-            background-color: transparent;
-            
-            margin: -40px -40px 30px -40px;
-            padding: 40px 40px 20px 40px;
-            height: auto;
-            position: relative; 
-            border-radius: 12px 12px 0 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
+        .header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 30px; min-height: 80px; color: var(--text-dark);
         }
 
-        .header-text-highlight {
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 5px 10px;
-            line-height: 1;
-            box-decoration-break: clone;
-            display: inline-block;
+        #clue-display {
+            font-size: 1rem; font-weight: 800; max-width: 65%;
+            line-height: 1.2; text-transform: uppercase;
         }
 
-        .logo-container {
-            position: static;
-            margin: 0px auto 10px auto;
-            z-index: 10;
+        .level-box {
+            background: rgba(255,255,255,0.7); padding: 10px 15px;
+            border-radius: 15px; text-align: right; min-width: 70px;
         }
 
-        .logo-container img {
-            width: 80px;
-            height: auto;
-            filter: none;
-            display: block;
+        .level-label { font-size: 0.7rem; font-weight: bold; opacity: 0.8; display: block;}
+        #level-display { font-size: 1.2rem; font-weight: 900; }
+
+        .grid-container {
+            flex-grow: 1; display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: repeat(16, 1fr);
+            gap: 2px; padding: 5px; border-radius: 20px;
+            background: rgba(255,255,255,0.1);
         }
 
-        .header-section h1 {
-            font-family: 'Amatic SC', cursive;
-            color: #222;
-            text-align: center;
-            margin-top: 5px;
-            margin-bottom: 0;
-            font-weight: 700;
-            font-size: 3.8em;
-            padding-right: 0;
-            padding-left: 0;
-            line-height: 1.2;
-            text-shadow: none;
+        .cell {
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; font-weight: bold; text-transform: uppercase;
+            border-radius: 3px; aspect-ratio: 1 / 1;
         }
 
-        .header-section .subtitle {
-            color: #444;
-            text-align: center;
-            margin-top: 5px;
-            margin-bottom: 0;
-            font-style: normal;
-            font-size: 2.2em;
-            line-height: 1.2;
-            padding-right: 0;
-            padding-left: 0;
-            text-shadow: none;
-        }
-        /* ------------------------------------------- */
-        /* END HEADER SECTION STYLES */
-        /* ------------------------------------------- */
-
-        /* Simplified Form Styling */
-        .prompt-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fafafa;
-            box-sizing: border-box;
+        /* Main Puzzle Word Boxes (Empty) */
+        .cell.main {
+            background: white; border: 2px solid var(--text-dark); color: transparent;
         }
 
-        .prompt-form label {
-            font-size: 1.5em;
-            color: #5D4037;
-            margin: 0;
-            line-height: 1.1;
-        }
-        
-        /* New Instagram Input Field Styling */
-        .instagram-input-field {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1.1em;
-            font-family: 'Handlee', cursive;
-            box-sizing: border-box;
+        /* Seed Words (Visible) */
+        .cell.seed {
+            background: white; color: var(--text-dark);
         }
 
-        /* --- Collapsible Info Section --- */
-        .info-container {
-            padding: 15px 20px;
-            background-color: #fff9f5;
-            border: 2px solid #E64A19;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .info-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .info-header h3 {
-            font-size: 1.5em; 
-            color: #E64A19;
-            margin: 0;
-        }
-        .info-content p, .info-content ul {
-            font-size: 1.3em;
-            color: #5D4037;
-            margin: 5px 0;
-            text-align: left;
-        }
-        .info-content ul {
-            padding-left: 20px;
-            list-style-type: none; 
-        }
-        .info-content ul li::before {
-            content: "- "; 
-            color: #FF7043;
-            font-weight: bold;
-        }
-        
-        /* --- Image Upload & Preview Section --- */
-        .image-upload-wrapper {
-            display: flex;
-            justify-content: space-around;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+        /* Intersection Point */
+        .cell.overlap {
+            background: var(--text-dark); color: white !important;
+            border: 2px solid var(--text-dark);
         }
 
-        .upload-slot {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        /* New class for the clickable preview box */
-        .image-preview-box {
-            width: 150px;
-            height: 150px;
-            border: 2px dashed #BDBDBD;
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .image-preview-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .image-preview-box span {
-            font-size: 0.9em;
-            color: #9E9E9E;
-            text-align: center;
-            padding: 10px;
-            display: block;
-        }
-
-        .upload-slot input[type="file"] {
-            display: none; 
-        }
-        
-        /* FIX: Styled Upload Label */
-        .upload-label {
-            background-color: #FF7043; 
-            color: white;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-            font-family: 'Handlee', cursive;
-            line-height: 1;
-        }
-
-        .upload-label:hover {
-            background-color: #E64A19;
-        }
-        /* ----------------------------------- */
-
-
-        button {
-            background-color: #FF7043;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.8em;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            font-family: 'Handlee', cursive;
-            line-height: 1;
-            margin-top: 0;
-        }
-        
-        /* Override for the smaller toggle button */
-        #toggleInfoButton {
-            padding: 8px 12px;
-            font-size: 1.1em;
-            font-weight: normal;
-            min-width: 70px;
-            box-sizing: border-box;
-            border-radius: 6px;
-        }
-
-        button:hover {
-            background-color: #E64A19;
-        }
-
-        /* Centering the generate button */
-        .submit-button-wrapper {
-            margin-top: 20px;
-            text-align: center;
-        }
-        
-        /* Chef Tony Info Section */
-        .chef-tony-info {
-            padding: 10px 0;
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        .chef-tony-info p {
-            font-size: 1.3em;
-            color: #5D4037;
-            font-weight: bold;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-        .chef-tony-images {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .chef-tony-images img {
-            width: 120px;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 2px solid #FF7043;
-        }
-
-        /* Status Bar Styling */
-        .status-bar {
-            text-align: center;
-            min-height: 20px;
-            margin-top: -15px;
-            color: #FF7043;
-            font-size: 1.5em;
-            font-weight: 700;
-            transition: opacity 0.3s ease-in-out;
-            opacity: 0;
-            font-family: 'Handlee', cursive;
-            line-height: 1;
-        }
-
-        .status-bar.visible {
-            opacity: 1;
-        }
-        
-        /* Class for hiding content */
-        .content-hidden {
-            display: none;
-        }
-
-        /* Image Display Area */
-        .image-display {
-            border: 2px dashed #BDBDBD;
-            border-radius: 8px;
-            min-height: 350px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            background-color: #FAFAFA;
-            box-sizing: border-box;
-        }
-
-        .image-placeholder {
-            color: #9E9E9E;
-            font-style: italic;
-            font-size: 1.5em;
-            font-family: 'Handlee', cursive;
-            line-height: 1.25;
-        }
-
-        .generated-image {
-            max-width: 100%;
-            max-height: 350px;
-            border-radius: 6px;
-            display: none;
-        }
-
-        /* Responsive tweaks */
-        @media (max-width: 600px) {
-            .header-section h1 { font-size: 2.8em; padding-right: 0; margin-top: 5px; }
-            .header-section .subtitle { font-size: 1.6em; padding-right: 0; } 
-            
-            .image-upload-wrapper {
-                flex-direction: column;
-                align-items: center;
-            }
-            .upload-slot {
-                width: 100%;
-                max-width: 250px;
-            }
-        }
-
-        /* Logo above title for small screens (5in = 480px) */
-        @media (max-width: 5in) {
-            .generator-container { padding: 20px; gap: 20px; }
-            .header-section {
-                height: auto;
-                padding: 20px 20px 5px 20px;
-                margin: -20px -20px 20px -20px;
-            }
-            .logo-container {
-                position: static;
-                margin: 0px auto 10px auto;
-                right: auto;
-                top: auto;
-            }
-            .header-section h1 {
-                margin-top: 0;
-            }
-            .chef-tony-images {
-                flex-direction: column;
-                gap: 15px;
-            }
+        .footer {
+            margin-top: 20px; text-align: center; font-family: monospace;
+            color: var(--text-dark); font-weight: bold; font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
-    <div class="generator-container">
-        <div class="header-section">
-            <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Logo">
-            </div>
-            <h1>
-                <span class="header-text-highlight">Chef Tony's Daily Comic</span>
-            </h1>
-            <p class="subtitle">
-                <span class="header-text-highlight">Let's cook you a daily comic!</span>
-            </p>
-        </div>
-        
-        <div class="info-container">
-            <div class="info-header">
-                <h3>How it works...</h3>
-                <button id="toggleInfoButton" type="button">Show</button>
-            </div>
-            <div id="infoContent" class="content-hidden info-content">
-                <ul>
-                    <li>Chef Tony takes 3 of your images.</li>
-                    <li>He'll then whip up your very own unique and fun comic strip.</li>
-                    <li>The best results will be posted online.</li>
-                </ul>
-                <p style="text-align: center; margin-top: 15px;"><i>Give it a spin. You might even win a t-shirt!</i></p>
-                
-                <div class="chef-tony-info" style="border-top: 1px dashed #E64A19; padding-top: 15px; margin-top: 15px;">
-                    <p>Who is Chef Tony?</p>
-                    <p style="margin-top: 0; font-size: 1em; color: #5D4037; text-align: center;">
-                        Chef Tony is our chubbily cute and friendly "AI Chef" who cooks up creative outlines.
-                    </p>
-                    <div class="chef-tony-images">
-                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_3D.png" alt="Chef Tony 3D Illustration">
-                        <img src="https://raw.githubusercontent.com/masoudassali/TLC/main/Chef_Tony_Flatt.png" alt="Chef Tony Flat Illustration">
-                    </div>
-                </div>
+
+    <div class="app-container">
+        <div class="header">
+            <div id="clue-display">CLUE: LOADING...</div>
+            <div class="level-box">
+                <span class="level-label">Level:</span>
+                <span id="level-display">-/-</span>
             </div>
         </div>
 
-        <form class="prompt-form" id="imageGenerationForm">
-            
-            <!-- Instagram Handle Input -->
-            <label for="instagramHandle" style="font-size: 1.5em; text-align: center;">Add your Instagram handle to be tagged. You might even win a t-shirt:</label>
-            <input type="text" id="instagramHandle" name="instagramHandle" placeholder="@yourhandle" class="instagram-input-field" style="margin-bottom: 20px;">
-            
-            <label style="font-size: 1.5em; text-align: center;">Add 3 images and Chef Tony will whip up a unique comic for you:</label>
-            <div class="image-upload-wrapper">
-                
-                <div class="upload-slot">
-                    <label for="imageUpload1" class="image-preview-box">
-                        <img id="imagePreview1" src="" alt="Image 1 Preview" style="display:none;">
-                        <span id="previewText1">Image 1</span>
-                    </label>
-                    <input type="file" id="imageUpload1" name="image1" accept="image/png, image/jpeg, image/tiff" required>
-                    <label for="imageUpload1" class="upload-label">Upload Image 1</label>
-                </div>
+        <div class="grid-container" id="grid"></div>
 
-                <div class="upload-slot">
-                    <label for="imageUpload2" class="image-preview-box">
-                        <img id="imagePreview2" src="" alt="Image 2 Preview" style="display:none;">
-                        <span id="previewText2">Image 2</span>
-                    </label>
-                    <input type="file" id="imageUpload2" name="image2" accept="image/png, image/jpeg, image/tiff" required>
-                    <label for="imageUpload2" class="upload-label">Upload Image 2</label>
-                </div>
-
-                <div class="upload-slot">
-                    <label for="imageUpload3" class="image-preview-box">
-                        <img id="imagePreview3" src="" alt="Image 3 Preview" style="display:none;">
-                        <span id="previewText3">Image 3</span>
-                    </label>
-                    <input type="file" id="imageUpload3" name="image3" accept="image/png, image/jpeg, image/tiff" required>
-                    <label for="imageUpload3" class="upload-label">Upload Image 3</label>
-                </div>
-
-            </div>
-
-            <div class="submit-button-wrapper">
-                <button type="submit" id="generateButton">Let's Cook!</button>
-                <p style="font-size: 0.8em; color: #757575; margin-top: 5px;">
-                    Please upload all three images before submitting. Max 7MB per file.
-                </p>
-            </div>
-        </form>
-
-        <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #FF7043, rgba(0, 0, 0, 0));">
-        <div class="status-bar" id="statusBar">
-            <span id="statusMessage"></span>
-        </div>
-        <h2>Your Generated Comic Preview</h2>
-        <div class="image-display">
-            <p class="image-placeholder" id="placeholderText">Chef Tony is cooking. It'd show up here once he's done.</p>
-            <img src="" alt="AI Generated Comic" class="generated-image" id="generatedImage">
-        </div>
+        <div class="footer" id="ref-display">P-0000</div>
     </div>
+
     <script>
-        // *** CORE CONFIG & DOM ELEMENTS ***
-        const N8N_WEBHOOK_URL = 'https://steak.servequake.com/webhook/f5e47c1b-67ee-44b8-890e-bef79ded3b63'; 
-        const MAX_FILE_SIZE_BYTES = 7 * 1024 * 1024; // 7MB
-        
-        // Fixed style prompt for the New Yorker Daily Cartoon aesthetic
-        const NEW_YORKER_STYLE_PROMPT = "The final output must be a single, simple, black and white comic panel in the style of The New Yorker's Daily Cartoon. Analyze the three provided images for their main subject, theme, or concept, and combine these elements into a single, slightly humorous or ironic scene. Focus on clear outlines and minimal detail to capture the iconic New Yorker aesthetic.";
-        
-        // Wrap initialization so it runs after DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('imageGenerationForm');
-            const instagramHandleInput = document.getElementById('instagramHandle');
-            const placeholderText = document.getElementById('placeholderText');
-            const generatedImage = document.getElementById('generatedImage');
-            const generateButton = document.getElementById('generateButton');
-            const statusBar = document.getElementById('statusBar');
-            const statusMessage = document.getElementById('statusMessage');
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYw4nV9mR3zAmw9VF47cRhFDOmjLW9CGU4D6aJu97bcKYmeaGZTFjAXruKoIyOMAX4fWnFbBMWGFPA/pub?gid=1142718052&single=true&output=csv";
 
-            // Get the collapsible elements
-            const infoContent = document.getElementById('infoContent');
-            const toggleInfoButton = document.getElementById('toggleInfoButton');
+        async function init() {
+            try {
+                const res = await fetch(CSV_URL);
+                const text = await res.text();
+                
+                // Parse CSV and map to headers
+                const rows = text.split(/\r?\n/).map(row => row.split(',').map(cell => cell.replace(/"/g, '').trim()));
+                const headers = rows[0];
+                const pool = rows.slice(1).filter(r => r[0] !== "");
+                
+                // Get a random puzzle row
+                const rawData = pool[Math.floor(Math.random() * pool.length)];
+                
+                // Create data object based on your specific headers
+                const data = {};
+                headers.forEach((header, i) => { data[header] = rawData[i]; });
 
-            // Arrays to manage inputs and previews
-            const imageUploads = [
-                document.getElementById('imageUpload1'),
-                document.getElementById('imageUpload2'),
-                document.getElementById('imageUpload3'),
-            ];
-            const imagePreviews = [
-                document.getElementById('imagePreview1'),
-                document.getElementById('imagePreview2'),
-                document.getElementById('imagePreview3'),
-            ];
-            const previewTexts = [
-                document.getElementById('previewText1'),
-                document.getElementById('previewText2'),
-                document.getElementById('previewText3'),
-            ];
+                render(data);
+            } catch (e) {
+                document.getElementById('clue-display').innerText = "ERROR CONNECTING TO SHEET";
+            }
+        }
+
+        function render(data) {
+            // Using your specific header names
+            const mainWord = data.Word.toUpperCase();
+            const seed1 = data.Seed_Word_1.toUpperCase();
+            const seed2 = data.Seed_Word_2.toUpperCase();
             
-            // Status Bar Steps 
-            const STATUS_STEPS = [
-                "5% - Uploading 3 images to the server...",
-                "18% - Chef Tony is analyzing the content of the three images...",
-                "35% - Combining concepts for a single comic scene...",
-                "50% - Sketching the New Yorker style panel...",
-                "67% - Hang tight. This may take a couple of minutes...",
-                "93% - Sending image data back to your browser...",
-                "100% - Serving up your daily comic now..."
-            ];
+            document.getElementById('clue-display').innerText = `CLUE: ${data.Clue}`;
+            document.getElementById('level-display').innerText = `${data.Toughness_Level}/5`;
+            document.getElementById('ref-display').innerText = data.P_Number;
 
-            // Status Bar Control
-            let statusInterval;
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            const matrix = Array(16).fill().map(() => Array(9).fill(null));
 
-            function updateStatus(start) {
-                if (!start) {
-                    clearInterval(statusInterval);
-                    statusBar.classList.remove('visible');
-                    return;
-                }
-                let stepIndex = 0;
-                statusBar.classList.add('visible');
-                const cycleStatus = () => {
-                    statusMessage.innerHTML = STATUS_STEPS[stepIndex];
-                    stepIndex = (stepIndex + 1) % STATUS_STEPS.length;
-                    // Freeze on the main generation step (67%) for longer
-                    if (stepIndex === 6) stepIndex = 5; 
-                };
-                cycleStatus();
-                statusInterval = setInterval(cycleStatus, 3000);
+            // Place Main Word (Row 8)
+            const mainRow = 8;
+            const startCol = Math.floor((9 - mainWord.length) / 2);
+            for(let i=0; i < mainWord.length; i++) {
+                matrix[mainRow][startCol + i] = { char: mainWord[i], type: 'main' };
             }
 
-            // Image Preview Handler
-            imageUploads.forEach((upload, index) => {
-                upload.addEventListener('change', function() {
-                    const file = this.files[0];
-                    const previewImg = imagePreviews[index];
-                    const previewText = previewTexts[index];
+            // Connection Logic for Seeds
+            [seed1, seed2].forEach((seed, idx) => {
+                let placed = false;
+                // Seed 1 looks for overlap in start of main word, Seed 2 looks at end
+                const searchOrder = idx === 0 ? 
+                    [...Array(mainWord.length).keys()] : 
+                    [...Array(mainWord.length).keys()].reverse();
 
-                    if (file) {
-                        if (file.size > MAX_FILE_SIZE_BYTES) {
-                            console.error(`File size exceeds the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose a smaller file.`);
-                            this.value = ''; // Clear the file input
-                            previewImg.style.display = 'none';
-                            previewText.style.display = 'block';
-                            return;
+                for (let i of searchOrder) {
+                    if (placed) break;
+                    let overlapChar = mainWord[i];
+                    let seedIndex = seed.indexOf(overlapChar);
+
+                    if (seedIndex !== -1) {
+                        let col = startCol + i;
+                        // Check if vertical seed fits on grid
+                        let startRow = mainRow - seedIndex;
+                        if (startRow >= 0 && (startRow + seed.length) <= 16) {
+                            for (let j=0; j < seed.length; j++) {
+                                let currentRow = startRow + j;
+                                if (currentRow === mainRow) {
+                                    matrix[currentRow][col].type = 'overlap';
+                                } else {
+                                    matrix[currentRow][col] = { char: seed[j], type: 'seed' };
+                                }
+                            }
+                            placed = true;
                         }
-
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            previewImg.src = e.target.result;
-                            previewImg.style.display = 'block'; // Show the image
-                            previewText.style.display = 'none'; // Hide the text
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        previewImg.src = '';
-                        previewImg.style.display = 'none'; // Hide the image
-                        previewText.style.display = 'block'; // Show the text
                     }
-                });
+                }
             });
 
-            // Toggle logic for the How it Works section
-            toggleInfoButton.addEventListener('click', () => {
-                const isHidden = infoContent.classList.toggle('content-hidden');
-                toggleInfoButton.textContent = isHidden ? 'Show' : 'Hide';
-            });
-
-            // Function to handle form submission
-            form.addEventListener('submit', handleFormSubmit);
-
-            async function handleFormSubmit(event) {
-                event.preventDefault();
-
-                // 1. Check if all three images are uploaded
-                const files = [
-                    imageUploads[0].files[0],
-                    imageUploads[1].files[0],
-                    imageUploads[2].files[0],
-                ];
-
-                if (files.some(file => !file)) {
-                    console.error('Please upload all three images before submitting.');
-                    return;
-                }
-                
-                // Check file sizes
-                if (files.some(file => file.size > MAX_FILE_SIZE_BYTES)) {
-                    console.error(`One or more files exceed the limit of ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB. Please choose smaller files.`);
-                    return;
-                }
-
-                // 2. Process Instagram Handle: Ensures correct format or empty string
-                let handle = instagramHandleInput.value.trim();
-                let formattedHandle = ""; // Default to empty string
-
-                if (handle.length > 0) {
-                    // If user entered something, format it with the '@'
-                    if (!handle.startsWith('@')) {
-                        formattedHandle = `@${handle}`;
-                    } else {
-                        // If they included the '@', use the handle as is
-                        formattedHandle = handle;
+            // Draw Matrix
+            for (let r=0; r < 16; r++) {
+                for (let c=0; c < 9; c++) {
+                    const div = document.createElement('div');
+                    div.className = 'cell';
+                    if (matrix[r][c]) {
+                        div.innerText = matrix[r][c].char;
+                        div.classList.add(matrix[r][c].type);
                     }
-                } 
-                // If handle is empty/whitespace, formattedHandle remains ""
-                
-                // CRUCIAL: Re-check to ensure we are not sending "@@handle" or other issues.
-                // Final check to make sure the value sent is what the workflow expects: either "" or "@handle"
-                // The current logic above handles this correctly.
-
-                // 3. Update UI state
-                generateButton.disabled = true;
-                generateButton.textContent = "Cooking...";
-                updateStatus(true);
-                generatedImage.style.display = 'none';
-                placeholderText.innerHTML = "Chef Tony is cooking. It'd show up here once he's done.";
-                placeholderText.style.display = 'block';
-
-                try {
-                    // 4. Prepare FormData 
-                    const formData = new FormData();
-                    formData.append('prompt', NEW_YORKER_STYLE_PROMPT); // The prompt for the Gemini model
-                    formData.append('image1', files[0]);
-                    formData.append('image2', files[1]);
-                    formData.append('image3', files[2]);
-                    // PASS THE CORRECTLY FORMATTED/EMPTY INSTAGRAM HANDLE TO N8N
-                    formData.append('instagramHandle', formattedHandle);
-
-
-                    // 5. Send request with FormData body
-                    const response = await fetch(N8N_WEBHOOK_URL, {
-                        method: 'POST',
-                        body: formData, 
-                    });
-
-                    // 6. Check for HTTP errors
-                    if (!response.ok) {
-                        let errorDetail = response.statusText;
-                        try {
-                            const errorBody = await response.text();
-                            errorDetail = errorBody || response.statusText;
-                        } catch (e) { /* Ignore */ }
-                        
-                        throw new Error(`HTTP Error! Status: ${response.status}. Detail: ${errorDetail.substring(0, 100)}...`);
-                    }
-                    
-                    // 7. Handle successful response (EXPECTING RAW BINARY/BLOB DATA)
-                    const imageBlob = await response.blob();
-                    const imageUrl = URL.createObjectURL(imageBlob);
-
-                    generatedImage.src = imageUrl;
-                    generatedImage.style.display = 'block';
-                    placeholderText.style.display = 'none';
-
-                } catch (error) {
-                    console.error('Generation failed:', error);
-                    placeholderText.innerHTML = `Generation Failed: ${error.message}. Please try again.`;
-                    generatedImage.style.display = 'none';
-                    
-                    // Do not use alert(), just log the error in the console.
-                    console.error('Could not display error message to user, logging instead.');
-                } finally {
-                    // 8. Reset state
-                    generateButton.disabled = false;
-                    generateButton.textContent = "Let's Cook!";
-                    updateStatus(false);
+                    grid.appendChild(div);
                 }
             }
-        });
+        }
+
+        init();
     </script>
 </body>
 </html>
