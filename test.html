@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crossword Generator</title>
+    <title>Crossword Generator - 9:12 Ratio</title>
     <style>
         :root {
+            /* Rainbow background matching your stylized dragon logo theme */
             --bg-rainbow: linear-gradient(180deg, #ff9aa2, #ffb7b2, #ffdac1, #e2f0cb, #b5ead7, #c7ceea);
             --text-dark: #2d3436;
         }
@@ -17,17 +18,23 @@
         }
 
         .app-container {
-            width: 90vw; max-width: 450px; aspect-ratio: 9 / 16;
-            background: var(--bg-rainbow); position: relative;
-            display: flex; flex-direction: column; border-radius: 30px;
-            padding: 25px; box-sizing: border-box; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 90vw; 
+            max-width: 450px; 
+            aspect-ratio: 9 / 12; /* Updated to 9:12 Ratio */
+            background: var(--bg-rainbow); 
+            position: relative;
+            display: flex; 
+            flex-direction: column; 
+            border-radius: 30px;
+            padding: 25px; 
+            box-sizing: border-box; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        /* Fixed Header: Bottom-aligned items */
         .header {
             display: flex; 
             justify-content: space-between; 
-            align-items: flex-end; /* Aligns Clue and Level box to the bottom of the header area */
+            align-items: flex-end; 
             margin-bottom: 25px; 
             min-height: 70px; 
             color: var(--text-dark);
@@ -42,61 +49,49 @@
             margin: 0;
         }
 
-        /* Compact Toughness Box */
         .level-box {
             background: rgba(255,255,255,0.7); 
-            padding: 6px 10px; /* Reduced padding to fit text */
+            padding: 6px 10px; 
             border-radius: 10px; 
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
-        .level-label { 
-            font-size: 0.65rem; 
-            font-weight: bold; 
-            opacity: 0.8; 
-            display: block;
-            margin-bottom: 1px;
-        }
-
-        #level-display { 
-            font-size: 1rem; 
-            font-weight: 900; 
-            white-space: nowrap; /* Prevents wrapping */
-        }
+        .level-label { font-size: 0.65rem; font-weight: bold; opacity: 0.8; display: block; }
+        #level-display { font-size: 1rem; font-weight: 900; }
 
         .grid-container {
-            flex-grow: 1; display: grid;
+            flex-grow: 1; 
+            display: grid;
             grid-template-columns: repeat(9, 1fr);
-            grid-template-rows: repeat(16, 1fr);
-            gap: 2px; padding: 5px; border-radius: 20px;
+            grid-template-rows: repeat(12, 1fr); /* Updated to 12 rows */
+            gap: 2px; 
+            padding: 5px; 
+            border-radius: 20px;
             background: rgba(255,255,255,0.1);
         }
 
         .cell {
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.2rem; font-weight: bold; text-transform: uppercase;
-            border-radius: 3px; aspect-ratio: 1 / 1;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            border-radius: 3px; 
+            aspect-ratio: 1 / 1;
         }
 
-        .cell.main {
-            background: white; border: 2px solid var(--text-dark); color: transparent;
-        }
-
-        .cell.seed {
-            background: white; color: var(--text-dark);
-        }
-
-        .cell.overlap {
-            background: var(--text-dark); color: white !important;
-            border: 2px solid var(--text-dark);
-        }
+        .cell.main { background: white; border: 2px solid var(--text-dark); color: transparent; }
+        .cell.seed { background: white; color: var(--text-dark); }
+        .cell.overlap { background: var(--text-dark); color: white !important; border: 2px solid var(--text-dark); }
 
         .footer {
-            margin-top: 20px; text-align: center; font-family: monospace;
-            color: var(--text-dark); font-weight: bold; font-size: 1.1rem;
+            margin-top: 20px; 
+            text-align: center; 
+            font-family: monospace;
+            color: var(--text-dark); 
+            font-weight: bold; 
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -123,18 +118,15 @@
             try {
                 const res = await fetch(CSV_URL);
                 const text = await res.text();
-                
                 const rows = text.split(/\r?\n/).map(row => row.split(',').map(cell => cell.replace(/"/g, '').trim()));
                 const headers = rows[0];
                 const pool = rows.slice(1).filter(r => r[0] !== "");
-                
                 const rawData = pool[Math.floor(Math.random() * pool.length)];
                 const data = {};
                 headers.forEach((header, i) => { data[header] = rawData[i]; });
-
                 render(data);
             } catch (e) {
-                document.getElementById('clue-display').innerText = "ERROR CONNECTING TO SHEET";
+                document.getElementById('clue-display').innerText = "ERROR CONNECTING";
             }
         }
 
@@ -143,36 +135,32 @@
             const seed1 = data.Seed_Word_1.toUpperCase();
             const seed2 = data.Seed_Word_2.toUpperCase();
             
-            // Fix 1: Pull the exact string from the CSV column
             document.getElementById('clue-display').innerText = `CLUE: ${data.Clue}`;
             document.getElementById('level-display').innerText = data.Toughness_Level;
             document.getElementById('ref-display').innerText = data.P_Number;
 
             const grid = document.getElementById('grid');
             grid.innerHTML = '';
-            const matrix = Array(16).fill().map(() => Array(9).fill(null));
-
-            const mainRow = 8;
+            
+            // Grid matrix for 12 rows
+            const matrix = Array(12).fill().map(() => Array(9).fill(null));
+            const mainRow = 6; // Vertically centered
             const startCol = Math.floor((9 - mainWord.length) / 2);
+
             for(let i=0; i < mainWord.length; i++) {
                 matrix[mainRow][startCol + i] = { char: mainWord[i], type: 'main' };
             }
 
             [seed1, seed2].forEach((seed, idx) => {
                 let placed = false;
-                const searchOrder = idx === 0 ? 
-                    [...Array(mainWord.length).keys()] : 
-                    [...Array(mainWord.length).keys()].reverse();
-
+                const searchOrder = idx === 0 ? [...Array(mainWord.length).keys()] : [...Array(mainWord.length).keys()].reverse();
                 for (let i of searchOrder) {
                     if (placed) break;
-                    let overlapChar = mainWord[i];
-                    let seedIndex = seed.indexOf(overlapChar);
-
+                    let seedIndex = seed.indexOf(mainWord[i]);
                     if (seedIndex !== -1) {
                         let col = startCol + i;
                         let startRow = mainRow - seedIndex;
-                        if (startRow >= 0 && (startRow + seed.length) <= 16) {
+                        if (startRow >= 0 && (startRow + seed.length) <= 12) { // Bound for 12 rows
                             for (let j=0; j < seed.length; j++) {
                                 let currentRow = startRow + j;
                                 if (currentRow === mainRow) {
@@ -187,7 +175,7 @@
                 }
             });
 
-            for (let r=0; r < 16; r++) {
+            for (let r=0; r < 12; r++) { // Render 12 rows
                 for (let c=0; c < 9; c++) {
                     const div = document.createElement('div');
                     div.className = 'cell';
@@ -199,7 +187,6 @@
                 }
             }
         }
-
         init();
     </script>
 </body>
